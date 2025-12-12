@@ -260,3 +260,5 @@ Thumbs.db
 # MUST HAVE - Logs
 *.log
 logs/
+
+utility-management-frontend/prompt.md
