@@ -73,8 +73,8 @@ const Sidebar = ({ isOpen, onClose }) => {
           </button>
         </div>
         
-        {/* Navigation Menu with better spacing */}
-        <nav className="px-4 py-8 space-y-3 overflow-y-auto" style={{ height: 'calc(100vh - 10rem)' }}>
+        {/* Navigation Menu with relaxed spacing */}
+        <nav className="px-5 py-9 space-y-4 overflow-y-auto" style={{ height: 'calc(100vh - 10rem)' }}>
           {menuItems.map((item, index) => {
             const Icon = item.icon;
             const isActive = location.pathname === item.path;
@@ -85,14 +85,14 @@ const Sidebar = ({ isOpen, onClose }) => {
                 to={item.path}
                 onClick={onClose}
                 style={{ animationDelay: `${index * 50}ms` }}
-                className={`group relative flex items-center space-x-4 px-4 py-4 rounded-2xl transition-all duration-300 animate-slideIn ${
+                className={`group relative flex items-center space-x-4 px-5 py-5 rounded-2xl transition-all duration-300 animate-slideIn ${
                   isActive
                     ? 'bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow-xl shadow-blue-500/40 scale-[1.02]'
                     : 'text-slate-300 hover:bg-gradient-to-r hover:from-slate-700/50 hover:to-slate-700/30 hover:text-white hover:translate-x-2 hover:shadow-lg'
                 }`}
               >
                 {/* Icon with gradient background */}
-                <div className={`relative flex items-center justify-center w-10 h-10 rounded-xl transition-all duration-300 ${
+                <div className={`relative flex items-center justify-center w-11 h-11 rounded-xl transition-all duration-300 ${
                   isActive 
                     ? 'bg-white/20 shadow-lg' 
                     : `bg-gradient-to-br ${item.color} opacity-0 group-hover:opacity-20`

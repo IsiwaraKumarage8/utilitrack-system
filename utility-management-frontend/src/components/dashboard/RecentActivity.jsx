@@ -41,23 +41,23 @@ const RecentActivity = () => {
         <table className="w-full">
           <thead>
             <tr className="border-b-2 border-gradient bg-gradient-to-r from-blue-50 via-purple-50 to-blue-50">
-              <th className="text-left py-5 px-8 text-xs font-black text-gray-700 uppercase tracking-wider">Date</th>
-              <th className="text-left py-5 px-8 text-xs font-black text-gray-700 uppercase tracking-wider">Customer Name</th>
-              <th className="text-left py-5 px-8 text-xs font-black text-gray-700 uppercase tracking-wider">Bill Number</th>
-              <th className="text-left py-5 px-8 text-xs font-black text-gray-700 uppercase tracking-wider">Amount</th>
-              <th className="text-left py-5 px-8 text-xs font-black text-gray-700 uppercase tracking-wider">Status</th>
+              <th className="text-left py-6 px-10 text-xs font-black text-gray-700 uppercase tracking-wider">Date</th>
+              <th className="text-left py-6 px-10 text-xs font-black text-gray-700 uppercase tracking-wider">Customer Name</th>
+              <th className="text-left py-6 px-10 text-xs font-black text-gray-700 uppercase tracking-wider">Bill Number</th>
+              <th className="text-left py-6 px-10 text-xs font-black text-gray-700 uppercase tracking-wider">Amount</th>
+              <th className="text-left py-6 px-10 text-xs font-black text-gray-700 uppercase tracking-wider">Status</th>
             </tr>
           </thead>
           <tbody>
             {recentPayments.map((payment, index) => (
               <tr key={payment.id} className="border-b border-gray-100 hover:bg-gradient-to-r hover:from-blue-50/50 hover:to-purple-50/50 transition-all duration-300 group">
-                <td className="py-5 px-8 text-sm text-gray-700 font-medium">{payment.date}</td>
-                <td className="py-5 px-8 text-sm text-gray-900 font-bold group-hover:text-blue-600 transition-colors">{payment.customer}</td>
-                <td className="py-5 px-8 text-sm text-gray-700 font-medium">{payment.billNumber}</td>
-                <td className="py-5 px-8 text-base text-gray-900 font-bold group-hover:scale-105 transition-transform">
+                <td className="py-6 px-10 text-sm text-gray-700 font-medium">{payment.date}</td>
+                <td className="py-6 px-10 text-sm text-gray-900 font-bold group-hover:text-blue-600 transition-colors">{payment.customer}</td>
+                <td className="py-6 px-10 text-sm text-gray-700 font-medium">{payment.billNumber}</td>
+                <td className="py-6 px-10 text-base text-gray-900 font-bold group-hover:scale-105 transition-transform">
                   Rs {payment.amount.toLocaleString()}
                 </td>
-                <td className="py-3 px-4 text-sm">{getStatusBadge(payment.status)}</td>
+                <td className="py-6 px-10 text-sm">{getStatusBadge(payment.status)}</td>
               </tr>
             ))}
           </tbody>

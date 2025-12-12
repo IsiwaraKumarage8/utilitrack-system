@@ -17,7 +17,7 @@ const Dashboard = () => {
   };
   
   return (
-    <div className="space-y-8 animate-fadeIn">
+    <div className="space-y-10 animate-fadeIn">
       {/* Page Header */}
       <div className="mb-8">
         <h2 className="text-4xl font-black bg-gradient-to-r from-blue-600 via-purple-600 to-blue-600 bg-clip-text text-transparent">Dashboard Overview</h2>
@@ -25,7 +25,7 @@ const Dashboard = () => {
       </div>
       
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-7">
         <StatsCard
           icon={Users}
           title="Total Customers"
@@ -57,18 +57,18 @@ const Dashboard = () => {
       </div>
       
       {/* Charts Section */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-8">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-10">
         <RevenueChart />
         <UtilityPieChart />
       </div>
       
       {/* Recent Activity Table */}
-      <div className="mt-8">
+      <div className="mt-10">
         <RecentActivity />
       </div>
       
       {/* Quick Actions */}
-      <div className="mt-8 mb-8">
+      <div className="mt-10 mb-12">
         <QuickActions />
       </div>
     </div>
