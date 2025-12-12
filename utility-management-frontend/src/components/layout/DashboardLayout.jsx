@@ -23,7 +23,7 @@ const DashboardLayout = ({ children }) => {
         <Navbar onMenuClick={toggleSidebar} />
         
         {/* Page Content */}
-        <main className="flex-1 overflow-y-auto bg-gray-50 p-8 lg:p-10">
+        <main className="flex-1 overflow-y-auto bg-gradient-to-br from-gray-50 via-blue-50/30 to-purple-50/30 p-8 lg:p-10">
           {children}
         </main>
       </div>

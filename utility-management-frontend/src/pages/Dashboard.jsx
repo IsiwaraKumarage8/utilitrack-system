@@ -17,11 +17,11 @@ const Dashboard = () => {
   };
   
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 animate-fadeIn">
       {/* Page Header */}
       <div className="mb-8">
-        <h2 className="text-3xl font-bold text-gray-900">Dashboard Overview</h2>
-        <p className="text-gray-600 mt-2 text-lg">Welcome back! Here's what's happening today.</p>
+        <h2 className="text-4xl font-black bg-gradient-to-r from-blue-600 via-purple-600 to-blue-600 bg-clip-text text-transparent">Dashboard Overview</h2>
+        <p className="text-gray-600 mt-3 text-lg font-medium">Welcome back! Here's what's happening today.</p>
       </div>
       
       {/* Stats Cards */}

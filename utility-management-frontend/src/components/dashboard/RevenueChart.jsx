@@ -16,11 +16,12 @@ const RevenueChart = () => {
   
   return (
     <Card>
-      <div className="mb-6">
-        <h3 className="text-xl font-bold text-gray-900">Revenue Trends</h3>
-        <p className="text-sm text-gray-600 mt-1">Last 6 months performance</p>
+      <div className="mb-8">
+        <h3 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">Revenue Trends</h3>
+        <p className="text-sm text-gray-600 mt-2 font-medium">Last 6 months performance</p>
       </div>
-      <ResponsiveContainer width="100%" height={320}>
+      <div className="bg-gradient-to-br from-blue-50/50 to-cyan-50/50 rounded-xl p-4 border border-blue-100/50">
+        <ResponsiveContainer width="100%" height={320}>
         <LineChart data={data}>
           <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
           <XAxis 
@@ -51,6 +52,7 @@ const RevenueChart = () => {
           />
         </LineChart>
       </ResponsiveContainer>
+      </div>
     </Card>
   );
 };

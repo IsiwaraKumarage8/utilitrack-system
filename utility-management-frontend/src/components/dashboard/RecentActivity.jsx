@@ -30,31 +30,31 @@ const RecentActivity = () => {
   
   return (
     <Card>
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex items-center justify-between mb-8">
         <div>
-          <h3 className="text-xl font-bold text-gray-900">Recent Activity</h3>
-          <p className="text-sm text-gray-600 mt-1">Latest payment transactions</p>
+          <h3 className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">Recent Activity</h3>
+          <p className="text-sm text-gray-600 mt-2 font-medium">Latest payment transactions</p>
         </div>
       </div>
       
-      <div className="overflow-x-auto -mx-8">
+      <div className="overflow-x-auto -mx-8 rounded-xl">
         <table className="w-full">
           <thead>
-            <tr className="border-b-2 border-gray-200 bg-gray-50">
-              <th className="text-left py-4 px-8 text-sm font-semibold text-gray-700 uppercase tracking-wider">Date</th>
-              <th className="text-left py-4 px-8 text-sm font-semibold text-gray-700 uppercase tracking-wider">Customer Name</th>
-              <th className="text-left py-4 px-8 text-sm font-semibold text-gray-700 uppercase tracking-wider">Bill Number</th>
-              <th className="text-left py-4 px-8 text-sm font-semibold text-gray-700 uppercase tracking-wider">Amount</th>
-              <th className="text-left py-4 px-8 text-sm font-semibold text-gray-700 uppercase tracking-wider">Status</th>
+            <tr className="border-b-2 border-gradient bg-gradient-to-r from-blue-50 via-purple-50 to-blue-50">
+              <th className="text-left py-5 px-8 text-xs font-black text-gray-700 uppercase tracking-wider">Date</th>
+              <th className="text-left py-5 px-8 text-xs font-black text-gray-700 uppercase tracking-wider">Customer Name</th>
+              <th className="text-left py-5 px-8 text-xs font-black text-gray-700 uppercase tracking-wider">Bill Number</th>
+              <th className="text-left py-5 px-8 text-xs font-black text-gray-700 uppercase tracking-wider">Amount</th>
+              <th className="text-left py-5 px-8 text-xs font-black text-gray-700 uppercase tracking-wider">Status</th>
             </tr>
           </thead>
           <tbody>
-            {recentPayments.map((payment) => (
-              <tr key={payment.id} className="border-b border-gray-100 hover:bg-blue-50 transition-colors duration-150">
-                <td className="py-4 px-8 text-sm text-gray-700">{payment.date}</td>
-                <td className="py-4 px-8 text-sm text-gray-900 font-medium">{payment.customer}</td>
-                <td className="py-4 px-8 text-sm text-gray-700">{payment.billNumber}</td>
-                <td className="py-4 px-8 text-sm text-gray-900 font-semibold">
+            {recentPayments.map((payment, index) => (
+              <tr key={payment.id} className="border-b border-gray-100 hover:bg-gradient-to-r hover:from-blue-50/50 hover:to-purple-50/50 transition-all duration-300 group">
+                <td className="py-5 px-8 text-sm text-gray-700 font-medium">{payment.date}</td>
+                <td className="py-5 px-8 text-sm text-gray-900 font-bold group-hover:text-blue-600 transition-colors">{payment.customer}</td>
+                <td className="py-5 px-8 text-sm text-gray-700 font-medium">{payment.billNumber}</td>
+                <td className="py-5 px-8 text-base text-gray-900 font-bold group-hover:scale-105 transition-transform">
                   Rs {payment.amount.toLocaleString()}
                 </td>
                 <td className="py-3 px-4 text-sm">{getStatusBadge(payment.status)}</td>

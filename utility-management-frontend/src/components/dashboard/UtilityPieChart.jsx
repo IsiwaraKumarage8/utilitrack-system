@@ -13,11 +13,12 @@ const UtilityPieChart = () => {
   
   return (
     <Card>
-      <div className="mb-6">
-        <h3 className="text-xl font-bold text-gray-900">Utility Distribution</h3>
-        <p className="text-sm text-gray-600 mt-1">Current connection breakdown</p>
+      <div className="mb-8">
+        <h3 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">Utility Distribution</h3>
+        <p className="text-sm text-gray-600 mt-2 font-medium">Current connection breakdown</p>
       </div>
-      <ResponsiveContainer width="100%" height={320}>
+      <div className="bg-gradient-to-br from-purple-50/50 to-pink-50/50 rounded-xl p-4 border border-purple-100/50">
+        <ResponsiveContainer width="100%" height={320}>
         <PieChart>
           <Pie
             data={data}
@@ -41,6 +42,7 @@ const UtilityPieChart = () => {
           />
         </PieChart>
       </ResponsiveContainer>
+      </div>
     </Card>
   );
 };
