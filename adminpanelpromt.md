@@ -717,4 +717,77 @@ src/
 │           └── ... (other report modals)
 │
 ├── components/
+│└── common/
+│       ├── Button/
+│       │   ├── Button.jsx
+│       │   └── Button.css
+│       ├── Card/
+│       │   ├── Card.jsx
+│       │   └── Card.css
+│       ├── Modal/
+│       │   ├── Modal.jsx
+│       │   └── Modal.css
+│       ├── Badge/
+│       │   ├── Badge.jsx
+│       │   └── Badge.css
+│       ├── Table/
+│       │   ├── Table.jsx
+│       │   └── Table.css
+│       ├── SearchBar/
+│       │   ├── SearchBar.jsx
+│       │   └── SearchBar.css
+│       └── Pagination/
+│           ├── Pagination.jsx
+│           └── Pagination.css
 │
+└── api/
+├── customerApi.js
+├── connectionApi.js
+├── meterApi.js
+├── readingApi.js
+├── billingApi.js
+├── paymentApi.js
+├── complaintApi.js
+└── reportApi.js
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+API INTEGRATION EXAMPLES:
+Each page should use axios to fetch data from backend:
+// customerApi.js example
+import axios from 'axios';
+const API_BASE_URL = 'http://localhost:5000/api';
+export const customerApi = {
+getAll: () => axios.get(${API_BASE_URL}/customers),
+getById: (id) => axios.get(${API_BASE_URL}/customers/${id}),
+create: (data) => axios.post(${API_BASE_URL}/customers, data),
+update: (id, data) => axios.put(${API_BASE_URL}/customers/${id}, data),
+delete: (id) => axios.delete(${API_BASE_URL}/customers/${id}),
+search: (query) => axios.get(${API_BASE_URL}/customers/search?q=${query}),
+filterByType: (type) => axios.get(${API_BASE_URL}/customers?type=${type})
+};
+For now, use MOCK DATA (hardcoded arrays) for each page until backend is ready.
+Include comments like: // TODO: Replace with API call
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+IMPLEMENTATION PRIORITY:
+Please create the pages in this order:
+
+Customers (most important, foundational)
+Service Connections
+Meters
+Meter Readings
+Billing
+Payments
+Complaints
+Reports (can be last as it's summary)
+
+For each page, create:
+
+Main page component with all features described
+Separate CSS file with modern styling
+Modal components for forms/details
+Mock data arrays (10-15 sample records)
+Loading states, error states, empty states
+Responsive layout for mobile/tablet/desktop
+
+Start with the Customers page first with complete functionality, then move to the next.
+Make the UI modern, clean, professional, and user-friendly. Focus on usability and visual appeal.
+Use consistent design patterns across all pages.

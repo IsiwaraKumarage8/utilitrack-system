@@ -2,8 +2,8 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { Toaster } from 'react-hot-toast';
 import DashboardLayout from './components/layout/DashboardLayout';
 import Dashboard from './pages/Dashboard';
-import Customers from './pages/Customers';
-import Connections from './pages/Connections';
+import Customers from './pages/Customers/Customers';
+import Connections from './pages/Connections/Connections';
 import Meters from './pages/Meters';
 import Readings from './pages/Readings';
 import Billing from './pages/Billing';
@@ -13,6 +13,9 @@ import Reports from './pages/Reports';
 import Settings from './pages/Settings';
 
 function App() {
+  // TODO: Replace with actual user role from authentication
+  const userRole = 'Admin';
+
   return (
     <Router>
       <Toaster position="top-right" />
@@ -22,7 +25,7 @@ function App() {
         
         {/* Dashboard Routes */}
         <Route path="/*" element={
-          <DashboardLayout>
+          <DashboardLayout userRole={userRole}>
             <Routes>
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/customers" element={<Customers />} />
