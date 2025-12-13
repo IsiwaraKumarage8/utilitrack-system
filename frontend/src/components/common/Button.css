@@ -1,0 +1,106 @@
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  border-radius: 0.75rem;
+  transition: all 0.3s;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.button:focus {
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.5), 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.button:hover {
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  transform: scale(1.05);
+}
+
+/* Variants */
+.button--primary {
+  background: linear-gradient(to right, #3b82f6, #2563eb);
+  color: #ffffff;
+}
+
+.button--primary:hover {
+  background: linear-gradient(to right, #2563eb, #1d4ed8);
+}
+
+.button--primary:focus {
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.5), 0 10px 15px -3px rgba(59, 130, 246, 0.3);
+}
+
+.button--primary {
+  box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.3);
+}
+
+.button--secondary {
+  background: linear-gradient(to right, #e5e7eb, #d1d5db);
+  color: #1f2937;
+}
+
+.button--secondary:hover {
+  background: linear-gradient(to right, #d1d5db, #9ca3af);
+}
+
+.button--secondary:focus {
+  box-shadow: 0 0 0 4px rgba(107, 114, 128, 0.5), 0 10px 15px -3px rgba(209, 213, 217, 0.3);
+}
+
+.button--secondary {
+  box-shadow: 0 10px 15px -3px rgba(209, 213, 217, 0.3);
+}
+
+.button--success {
+  background: linear-gradient(to right, #10b981, #059669);
+  color: #ffffff;
+}
+
+.button--success:hover {
+  background: linear-gradient(to right, #059669, #047857);
+}
+
+.button--success:focus {
+  box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.5), 0 10px 15px -3px rgba(16, 185, 129, 0.3);
+}
+
+.button--success {
+  box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.3);
+}
+
+.button--danger {
+  background: linear-gradient(to right, #ef4444, #dc2626);
+  color: #ffffff;
+}
+
+.button--danger:hover {
+  background: linear-gradient(to right, #dc2626, #b91c1c);
+}
+
+.button--danger:focus {
+  box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.5), 0 10px 15px -3px rgba(239, 68, 68, 0.3);
+}
+
+.button--danger {
+  box-shadow: 0 10px 15px -3px rgba(239, 68, 68, 0.3);
+}
+
+/* Sizes */
+.button--sm {
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+}
+
+.button--md {
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+}
+
+.button--lg {
+  padding: 1rem 2rem;
+  font-size: 1.125rem;
+}

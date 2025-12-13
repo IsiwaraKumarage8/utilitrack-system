@@ -1,0 +1,249 @@
+.navbar {
+  position: relative;
+  background: linear-gradient(to right, #ffffff, rgba(239, 246, 255, 0.3), #ffffff);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  border-bottom: 1px solid rgba(219, 234, 254, 0.5);
+  height: 5rem;
+  padding: 0 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  backdrop-filter: blur(4px);
+}
+
+.navbar__gradient-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right, rgba(59, 130, 246, 0.05), transparent, rgba(168, 85, 247, 0.05));
+  pointer-events: none;
+}
+
+.navbar__left {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 1.75rem;
+}
+
+.navbar__menu-button {
+  padding: 0.875rem;
+  border-radius: 0.75rem;
+  transition: all 0.3s;
+}
+
+.navbar__menu-button:hover {
+  background: linear-gradient(to right, #dbeafe, #e9d5ff);
+}
+
+.navbar__menu-button svg {
+  width: 1.5rem;
+  height: 1.5rem;
+  color: #374151;
+  transition: transform 0.3s;
+}
+
+.navbar__menu-button:hover svg {
+  transform: scale(1.1);
+}
+
+.navbar__title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  background: linear-gradient(to right, #2563eb, #9333ea, #2563eb);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.navbar__subtitle {
+  font-size: 0.75rem;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.navbar__right {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 1.75rem;
+}
+
+.navbar__search {
+  display: none;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1.25rem;
+  border-radius: 0.75rem;
+  background: linear-gradient(to right, #f3f4f6, #f9fafb);
+  transition: all 0.3s;
+}
+
+.navbar__search:hover {
+  background: linear-gradient(to right, #dbeafe, #e9d5ff);
+}
+
+.navbar__search svg {
+  width: 1rem;
+  height: 1rem;
+  color: #4b5563;
+  transition: color 0.3s;
+}
+
+.navbar__search:hover svg {
+  color: #2563eb;
+}
+
+.navbar__search span {
+  font-size: 0.875rem;
+  color: #4b5563;
+  transition: color 0.3s;
+}
+
+.navbar__search:hover span {
+  color: #2563eb;
+}
+
+@media (min-width: 768px) {
+  .navbar__search {
+    display: flex;
+  }
+}
+
+.navbar__notifications {
+  position: relative;
+  padding: 0.875rem;
+  border-radius: 0.75rem;
+  background: linear-gradient(to bottom right, #fed7aa, #fecaca);
+  transition: all 0.3s;
+}
+
+.navbar__notifications:hover {
+  background: linear-gradient(to bottom right, #fdba74, #fca5a5);
+  transform: scale(1.1);
+}
+
+.navbar__notifications svg {
+  width: 1.25rem;
+  height: 1.25rem;
+  color: #ea580c;
+  transition: transform 0.3s;
+}
+
+.navbar__notifications:hover svg {
+  transform: rotate(12deg);
+}
+
+.navbar__notification-badge {
+  position: absolute;
+  top: -0.25rem;
+  right: -0.25rem;
+  width: 1.25rem;
+  height: 1.25rem;
+  background: linear-gradient(to bottom right, #ef4444, #dc2626);
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.625rem;
+  font-weight: 700;
+  color: #ffffff;
+  box-shadow: 0 0 20px rgba(239, 68, 68, 0.5);
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.navbar__user-section {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  padding-left: 1.75rem;
+  border-left: 2px solid #e5e7eb;
+}
+
+.navbar__user-info {
+  text-align: right;
+  display: none;
+}
+
+@media (min-width: 640px) {
+  .navbar__user-info {
+    display: block;
+  }
+}
+
+.navbar__user-name {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.navbar__user-avatar {
+  position: relative;
+  width: 3rem;
+  height: 3rem;
+  background: linear-gradient(to bottom right, #3b82f6, #2563eb, #9333ea);
+  border-radius: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 25px 50px -12px rgba(59, 130, 246, 0.4);
+  transition: transform 0.3s;
+  cursor: pointer;
+}
+
+.navbar__user-avatar:hover {
+  transform: scale(1.1);
+}
+
+.navbar__user-avatar svg {
+  width: 1.5rem;
+  height: 1.5rem;
+  color: #ffffff;
+  transition: transform 0.3s;
+}
+
+.navbar__user-avatar:hover svg {
+  transform: scale(1.1);
+}
+
+.navbar__user-avatar-glow {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom right, #60a5fa, #a78bfa);
+  border-radius: 1rem;
+  filter: blur(12px);
+  opacity: 0.5;
+  z-index: -10;
+}
+
+.navbar__logout {
+  padding: 0.875rem;
+  border-radius: 0.75rem;
+  background: linear-gradient(to bottom right, #fecaca, #fbcfe8);
+  color: #dc2626;
+  transition: all 0.3s;
+}
+
+.navbar__logout:hover {
+  background: linear-gradient(to bottom right, #fca5a5, #f9a8d4);
+  transform: scale(1.1);
+}
+
+.navbar__logout svg {
+  width: 1.25rem;
+  height: 1.25rem;
+  transition: transform 0.3s;
+}
+
+.navbar__logout:hover svg {
+  transform: translateX(0.25rem);
+}
+
+@media (min-width: 1024px) {
+  .navbar {
+    padding: 0 3rem;
+  }
+
+  .navbar__menu-button {
+    display: none;
+  }
+}

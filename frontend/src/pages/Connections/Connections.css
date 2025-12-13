@@ -1,0 +1,339 @@
+/* Connections Page */
+.connections-page {
+  padding: 2rem;
+}
+
+/* Page Header */
+.connections-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+}
+
+.page-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #F9FAFB;
+  margin-bottom: 0.25rem;
+}
+
+.page-subtitle {
+  color: #9CA3AF;
+  font-size: 0.875rem;
+}
+
+/* Filters */
+.connections-filters {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.search-bar {
+  position: relative;
+  flex: 1;
+}
+
+.search-icon {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #9CA3AF;
+  pointer-events: none;
+}
+
+.search-input {
+  width: 100%;
+  padding: 0.75rem 1rem 0.75rem 3rem;
+  background-color: #1F2937;
+  border: 1px solid #374151;
+  border-radius: 0.5rem;
+  color: #F9FAFB;
+  font-size: 0.875rem;
+  transition: all 0.2s;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #3B82F6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.search-input::placeholder {
+  color: #6B7280;
+}
+
+.filter-select {
+  padding: 0.75rem 1rem;
+  background-color: #1F2937;
+  border: 1px solid #374151;
+  border-radius: 0.5rem;
+  color: #F9FAFB;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  min-width: 12rem;
+}
+
+.filter-select:focus {
+  outline: none;
+  border-color: #3B82F6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Connections Grid */
+.connections-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(22rem, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+/* Connection Card */
+.connection-card {
+  background-color: #1F2937;
+  border-radius: 0.75rem;
+  border: 1px solid #374151;
+  overflow: hidden;
+  transition: all 0.3s;
+  display: flex;
+  flex-direction: column;
+}
+
+.connection-card:hover {
+  border-color: #4B5563;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+  transform: translateY(-2px);
+}
+
+/* Card Header */
+.connection-card-header {
+  padding: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  position: relative;
+}
+
+.connection-card-header.electricity {
+  background: linear-gradient(135deg, #3B82F6, #1D4ED8);
+}
+
+.connection-card-header.water {
+  background: linear-gradient(135deg, #06B6D4, #0891B2);
+}
+
+.connection-card-header.gas {
+  background: linear-gradient(135deg, #F59E0B, #D97706);
+}
+
+.connection-card-header.sewage {
+  background: linear-gradient(135deg, #8B5CF6, #6D28D9);
+}
+
+.connection-card-header.street-lighting {
+  background: linear-gradient(135deg, #FBBF24, #F59E0B);
+}
+
+.utility-icon-wrapper {
+  width: 3rem;
+  height: 3rem;
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  backdrop-filter: blur(10px);
+}
+
+.utility-info {
+  flex: 1;
+}
+
+.utility-type {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: white;
+  margin-bottom: 0.125rem;
+}
+
+.connection-type {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* Card Body */
+.connection-card-body {
+  padding: 1.25rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+}
+
+.connection-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.detail-label {
+  font-size: 0.75rem;
+  color: #9CA3AF;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.detail-value {
+  font-size: 0.875rem;
+  color: #F9FAFB;
+  font-weight: 500;
+}
+
+.detail-value.location {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.375rem;
+  color: #D1D5DB;
+}
+
+.detail-value.highlight {
+  color: #10B981;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.connection-detail.consumption {
+  padding-top: 0.5rem;
+  border-top: 1px solid #374151;
+  margin-top: 0.25rem;
+}
+
+/* Card Footer */
+.connection-card-footer {
+  display: flex;
+  gap: 0.5rem;
+  padding: 1rem 1.25rem;
+  background-color: #111827;
+  border-top: 1px solid #374151;
+}
+
+.action-btn {
+  flex: 1;
+  padding: 0.625rem;
+  background-color: #374151;
+  border: none;
+  border-radius: 0.375rem;
+  color: #9CA3AF;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.action-btn:hover {
+  background-color: #4B5563;
+  color: #F9FAFB;
+}
+
+.action-btn.view:hover {
+  background-color: #1E40AF;
+  color: white;
+}
+
+.action-btn.edit:hover {
+  background-color: #059669;
+  color: white;
+}
+
+.action-btn.delete:hover {
+  background-color: #DC2626;
+  color: white;
+}
+
+/* Pagination */
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.pagination-btn {
+  padding: 0.625rem 1.25rem;
+  background-color: #374151;
+  border: 1px solid #4B5563;
+  border-radius: 0.5rem;
+  color: #F9FAFB;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.pagination-btn:hover:not(:disabled) {
+  background-color: #4B5563;
+  border-color: #6B7280;
+}
+
+.pagination-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pagination-info {
+  color: #9CA3AF;
+  font-size: 0.875rem;
+}
+
+/* Empty State */
+.empty-state {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: #9CA3AF;
+}
+
+/* Responsive Design */
+@media (max-width: 1280px) {
+  .connections-grid {
+    grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
+  }
+}
+
+@media (max-width: 1024px) {
+  .connections-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .connections-page {
+    padding: 1rem;
+  }
+
+  .connections-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .connections-header button {
+    width: 100%;
+  }
+
+  .connections-filters {
+    flex-direction: column;
+  }
+
+  .filter-select {
+    width: 100%;
+    min-width: auto;
+  }
+
+  .connections-grid {
+    grid-template-columns: 1fr;
+  }
+}

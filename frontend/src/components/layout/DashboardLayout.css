@@ -1,0 +1,25 @@
+.dashboard-layout {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.dashboard-layout__content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.dashboard-layout__main {
+  flex: 1;
+  overflow-y: auto;
+  background: linear-gradient(to bottom right, #f9fafb, rgba(239, 246, 255, 0.3), rgba(250, 245, 255, 0.3));
+  padding: 2rem;
+}
+
+@media (min-width: 1024px) {
+  .dashboard-layout__main {
+    padding: 2.5rem;
+  }
+}

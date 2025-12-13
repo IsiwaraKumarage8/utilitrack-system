@@ -1,0 +1,32 @@
+.utility-pie-chart__header {
+  margin-bottom: 2rem;
+}
+
+.utility-pie-chart__title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  background: linear-gradient(to right, #9333ea, #ec4899);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.utility-pie-chart__subtitle {
+  font-size: 0.875rem;
+  color: #4b5563;
+  margin-top: 0.5rem;
+  font-weight: 500;
+}
+
+.utility-pie-chart__container {
+  background: linear-gradient(to bottom right, rgba(250, 245, 255, 0.5), rgba(253, 242, 248, 0.5));
+  border-radius: 1rem;
+  padding: 1.5rem;
+  border: 1px solid rgba(243, 232, 255, 0.5);
+}
+
+@media (min-width: 1024px) {
+  .utility-pie-chart__container {
+    padding: 1.75rem;
+  }
+}

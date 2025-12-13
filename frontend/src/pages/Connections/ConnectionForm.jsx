@@ -1,0 +1,476 @@
+import { useState, useEffect } from 'react';
+import { X, ChevronLeft, ChevronRight } from 'lucide-react';
+import Button from '../../components/common/Button';
+import './ConnectionForm.css';
+
+const ConnectionForm = ({ mode, connection, onClose, onSave }) => {
+  const [currentStep, setCurrentStep] = useState(1);
+  const [formData, setFormData] = useState({
+    // Step 1: Customer Selection
+    customer_id: '',
+    customer_name: '',
+    
+    // Step 2: Utility & Connection Details
+    utility_type_id: 1, // Will be set based on utility_type selection
+    utility_type: 'Electricity',
+    connection_number: '',
+    connection_date: '',
+    property_address: '',
+    
+    // Step 3: Meter Details
+    meter_number: '',
+    meter_type: '',
+    initial_reading: '',
+    
+    // Step 4: Tariff & Status
+    tariff_id: '', // Will be set based on tariff_plan selection
+    tariff_plan: '',
+    connection_status: 'Active',
+    notes: ''
+  });
+
+  const [errors, setErrors] = useState({});
+
+  // Mock customers for dropdown
+  const MOCK_CUSTOMERS = [
+    { customer_id: 1, customer_name: 'Nuwan Bandara' },
+    { customer_id: 2, customer_name: 'Samantha Silva' },
+    { customer_id: 3, customer_name: 'Lakshmi Perera' },
+    { customer_id: 4, customer_name: 'Rajesh Kumar' },
+    { customer_id: 5, customer_name: 'Chaminda Fernando' }
+  ];
+
+  // Utility Type ID mapping (from database)
+  const utilityTypeIds = {
+    'Electricity': 1,
+    'Water': 2,
+    'Gas': 3,
+    'Sewage': 4,
+    'Street Lighting': 5
+  };
+
+  // Tariff plan options based on utility
+  const tariffPlanOptions = {
+    'Electricity': [
+      'Residential Electricity Standard',
+      'Commercial Electricity Rate',
+      'Industrial Electricity Rate',
+      'Government Electricity Rate'
+    ],
+    'Water': [
+      'Residential Water Standard',
+      'Commercial Water Rate',
+      'Industrial Water Rate',
+      'Government Water Rate'
+    ],
+    'Gas': [
+      'Residential Gas Standard',
+      'Commercial Gas Rate'
+    ],
+    'Sewage': [
+      'Residential Sewage Standard',
+      'Commercial Sewage Rate'
+    ],
+    'Street Lighting': [
+      'Street Lighting Standard'
+    ]
+  };
+
+  useEffect(() => {
+    if (mode === 'edit' && connection) {
+      setFormData({
+        customer_id: connection.customer_id,
+        customer_name: connection.customer_name,
+        utility_type_id: connection.utility_type_id,
+        utility_type: connection.utility_type,
+        connection_number: connection.connection_number,
+        connection_date: connection.connection_date,
+        property_address: connection.property_address,
+        meter_number: connection.meter_number,
+        meter_type: connection.meter_type || '',
+        initial_reading: '',
+        tariff_id: connection.tariff_id || '',
+        tariff_plan: connection.tariff_plan,
+        connection_status: connection.connection_status,
+        notes: connection.notes || ''
+      });
+    }
+  }, [mode, connection]);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+    // Clear error when user types
+    if (errors[name]) {
+      setErrors(prev => ({
+        ...prev,
+        [name]: ''
+      }));
+    }
+
+    // Reset tariff when utility changes and set utility_type_id
+    if (name === 'utility_type') {
+      setFormData(prev => ({
+        ...prev,
+        utility_type_id: utilityTypeIds[value],
+        tariff_plan: '',
+        tariff_id: ''
+      }));
+    }
+  };
+
+  const handleCustomerSelect = (e) => {
+    const customerId = parseInt(e.target.value);
+    const customer = MOCK_CUSTOMERS.find(c => c.customer_id === customerId);
+    setFormData(prev => ({
+      ...prev,
+      customer_id: customerId,
+      customer_name: customer ? customer.customer_name : ''
+    }));
+    if (errors.customer_id) {
+      setErrors(prev => ({ ...prev, customer_id: '' }));
+    }
+  };
+
+  const validateStep = (step) => {
+    const newErrors = {};
+
+    if (step === 1) {
+      if (!formData.customer_id) {
+        newErrors.customer_id = 'Please select a customer';
+      }
+    }
+
+    if (step === 2) {
+      if (!formData.connection_number.trim()) {
+        newErrors.connection_number = 'Connection number is required';
+      }
+      if (!formData.connection_date) {
+        newErrors.connection_date = 'Connection date is required';
+      }
+      if (!formData.property_address.trim()) {
+        newErrors.property_address = 'Property address is required';
+      }
+    }
+
+    if (step === 3) {
+      if (!formData.meter_number.trim()) {
+        newErrors.meter_number = 'Meter number is required';
+      }
+      if (!formData.meter_type) {
+        newErrors.meter_type = 'Meter type is required';
+      }
+      if (mode === 'add' && !formData.initial_reading) {
+        newErrors.initial_reading = 'Initial reading is required';
+      }
+    }
+
+    if (step === 4) {
+      if (!formData.tariff_plan) {
+        newErrors.tariff_plan = 'Tariff plan is required';
+      }
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleNext = () => {
+    if (validateStep(currentStep)) {
+      setCurrentStep(prev => Math.min(prev + 1, 4));
+    }
+  };
+
+  const handlePrevious = () => {
+    setCurrentStep(prev => Math.max(prev - 1, 1));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    
+    if (validateStep(4)) {
+      // TODO: Implement API call
+      console.log('Save connection:', formData);
+      onSave(formData);
+    }
+  };
+
+  const steps = [
+    { number: 1, title: 'Customer' },
+    { number: 2, title: 'Connection' },
+    { number: 3, title: 'Meter' },
+    { number: 4, title: 'Tariff & Status' }
+  ];
+
+  return (
+    <div className="modal-overlay" onClick={onClose}>
+      <div className="modal-content connection-form-modal" onClick={(e) => e.stopPropagation()}>
+        {/* Modal Header */}
+        <div className="modal-header">
+          <div>
+            <h2 className="modal-title">
+              {mode === 'add' ? 'Add New Connection' : 'Edit Connection'}
+            </h2>
+            <p className="modal-subtitle">Step {currentStep} of 4: {steps[currentStep - 1].title}</p>
+          </div>
+          <button className="modal-close" onClick={onClose}>
+            <X />
+          </button>
+        </div>
+
+        {/* Step Indicator */}
+        <div className="step-indicator">
+          {steps.map(step => (
+            <div
+              key={step.number}
+              className={`step ${currentStep >= step.number ? 'active' : ''} ${currentStep === step.number ? 'current' : ''}`}
+            >
+              <div className="step-number">{step.number}</div>
+              <div className="step-title">{step.title}</div>
+            </div>
+          ))}
+        </div>
+
+        {/* Modal Body */}
+        <form onSubmit={handleSubmit}>
+          <div className="modal-body">
+            {/* Step 1: Customer Selection */}
+            {currentStep === 1 && (
+              <div className="form-step">
+                <h3 className="step-heading">Select Customer</h3>
+                <div className="form-field">
+                  <label className="form-label">
+                    Customer <span className="required">*</span>
+                  </label>
+                  <select
+                    name="customer_id"
+                    className={`form-input ${errors.customer_id ? 'error' : ''}`}
+                    value={formData.customer_id}
+                    onChange={handleCustomerSelect}
+                  >
+                    <option value="">-- Select Customer --</option>
+                    {MOCK_CUSTOMERS.map(customer => (
+                      <option key={customer.customer_id} value={customer.customer_id}>
+                        {customer.customer_name}
+                      </option>
+                    ))}
+                  </select>
+                  {errors.customer_id && <span className="error-message">{errors.customer_id}</span>}
+                </div>
+              </div>
+            )}
+
+            {/* Step 2: Connection Details */}
+            {currentStep === 2 && (
+              <div className="form-step">
+                <h3 className="step-heading">Connection Details</h3>
+                <div className="form-grid">
+                  <div className="form-field">
+                    <label className="form-label">
+                      Utility Type <span className="required">*</span>
+                    </label>
+                    <select
+                      name="utility_type"
+                      className="form-input"
+                      value={formData.utility_type}
+                      onChange={handleChange}
+                    >
+                      <option value="Electricity">Electricity</option>
+                      <option value="Water">Water</option>
+                      <option value="Gas">Gas</option>
+                      <option value="Sewage">Sewage</option>
+                      <option value="Street Lighting">Street Lighting</option>
+                    </select>
+                  </div>
+
+                  <div className="form-field">
+                    <label className="form-label">
+                      Connection Number <span className="required">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      name="connection_number"
+                      className={`form-input ${errors.connection_number ? 'error' : ''}`}
+                      value={formData.connection_number}
+                      onChange={handleChange}
+                      placeholder="e.g., ELEC-2024-001"
+                    />
+                    {errors.connection_number && <span className="error-message">{errors.connection_number}</span>}
+                  </div>
+
+                  <div className="form-field">
+                    <label className="form-label">
+                      Connection Date <span className="required">*</span>
+                    </label>
+                    <input
+                      type="date"
+                      name="connection_date"
+                      className={`form-input ${errors.connection_date ? 'error' : ''}`}
+                      value={formData.connection_date}
+                      onChange={handleChange}
+                    />
+                    {errors.connection_date && <span className="error-message">{errors.connection_date}</span>}
+                  </div>
+
+                  <div className="form-field full-width">
+                    <label className="form-label">
+                      Property Address <span className="required">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      name="property_address"
+                      className={`form-input ${errors.property_address ? 'error' : ''}`}
+                      value={formData.property_address}
+                      onChange={handleChange}
+                      placeholder="Enter property address"
+                    />
+                    {errors.property_address && <span className="error-message">{errors.property_address}</span>}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Step 3: Meter Details */}
+            {currentStep === 3 && (
+              <div className="form-step">
+                <h3 className="step-heading">Meter Information</h3>
+                <div className="form-grid">
+                  <div className="form-field">
+                    <label className="form-label">
+                      Meter Number <span className="required">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      name="meter_number"
+                      className={`form-input ${errors.meter_number ? 'error' : ''}`}
+                      value={formData.meter_number}
+                      onChange={handleChange}
+                      placeholder="e.g., MTR-ELC-1001"
+                    />
+                    {errors.meter_number && <span className="error-message">{errors.meter_number}</span>}
+                  </div>
+
+                  <div className="form-field">
+                    <label className="form-label">
+                      Meter Type <span className="required">*</span>
+                    </label>
+                    <select
+                      name="meter_type"
+                      className={`form-input ${errors.meter_type ? 'error' : ''}`}
+                      value={formData.meter_type}
+                      onChange={handleChange}
+                    >
+                      <option value="">-- Select Type --</option>
+                      <option value="Digital">Digital</option>
+                      <option value="Analog">Analog</option>
+                      <option value="Smart Meter">Smart Meter</option>
+                    </select>
+                    {errors.meter_type && <span className="error-message">{errors.meter_type}</span>}
+                  </div>
+
+                  {mode === 'add' && (
+                    <div className="form-field">
+                      <label className="form-label">
+                        Initial Reading <span className="required">*</span>
+                      </label>
+                      <input
+                        type="number"
+                        name="initial_reading"
+                        className={`form-input ${errors.initial_reading ? 'error' : ''}`}
+                        value={formData.initial_reading}
+                        onChange={handleChange}
+                        placeholder="0"
+                        step="0.01"
+                      />
+                      {errors.initial_reading && <span className="error-message">{errors.initial_reading}</span>}
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {/* Step 4: Tariff & Status */}
+            {currentStep === 4 && (
+              <div className="form-step">
+                <h3 className="step-heading">Tariff Plan & Status</h3>
+                <div className="form-grid">
+                  <div className="form-field">
+                    <label className="form-label">
+                      Tariff Plan <span className="required">*</span>
+                    </label>
+                    <select
+                      name="tariff_plan"
+                      className={`form-input ${errors.tariff_plan ? 'error' : ''}`}
+                      value={formData.tariff_plan}
+                      onChange={handleChange}
+                    >
+                      <option value="">-- Select Plan --</option>
+                      {tariffPlanOptions[formData.utility_type].map(plan => (
+                        <option key={plan} value={plan}>{plan}</option>
+                      ))}
+                    </select>
+                    {errors.tariff_plan && <span className="error-message">{errors.tariff_plan}</span>}
+                  </div>
+
+                  <div className="form-field">
+                    <label className="form-label">Connection Status</label>
+                    <select
+                      name="connection_status"
+                      className="form-input"
+                      value={formData.connection_status}
+                      onChange={handleChange}
+                    >
+                      <option value="Active">Active</option>
+                      <option value="Disconnected">Disconnected</option>
+                      <option value="Suspended">Suspended</option>
+                      <option value="Pending">Pending</option>
+                    </select>
+                  </div>
+
+                  <div className="form-field full-width">
+                    <label className="form-label">Notes</label>
+                    <textarea
+                      name="notes"
+                      className="form-textarea"
+                      value={formData.notes}
+                      onChange={handleChange}
+                      rows="3"
+                      placeholder="Add any additional notes (e.g., Single phase meter, Three-phase commercial connection)..."
+                    />
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Modal Footer */}
+          <div className="modal-footer">
+            <div className="footer-actions">
+              {currentStep > 1 && (
+                <Button variant="secondary" size="md" type="button" onClick={handlePrevious}>
+                  <ChevronLeft size={20} />
+                  <span>Previous</span>
+                </Button>
+              )}
+              {currentStep < 4 ? (
+                <Button variant="primary" size="md" type="button" onClick={handleNext}>
+                  <span>Next</span>
+                  <ChevronRight size={20} />
+                </Button>
+              ) : (
+                <Button variant="primary" size="md" type="submit">
+                  {mode === 'add' ? 'Create Connection' : 'Update Connection'}
+                </Button>
+              )}
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+};
+
+export default ConnectionForm;

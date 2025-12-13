@@ -1,0 +1,277 @@
+/* Customer Details Modal */
+.customer-details-modal {
+  max-width: 72rem;
+}
+
+/* Details Layout */
+.details-layout {
+  display: grid;
+  grid-template-columns: 60% 40%;
+  gap: 1.5rem;
+}
+
+.details-main {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.details-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Details Section */
+.details-section {
+  background-color: #374151;
+  border-radius: 0.5rem;
+  padding: 1.25rem;
+}
+
+.section-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #F9FAFB;
+  margin-bottom: 1rem;
+}
+
+/* Info Grid */
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.info-label {
+  font-size: 0.75rem;
+  color: #9CA3AF;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.info-value {
+  font-size: 0.875rem;
+  color: #F9FAFB;
+  font-weight: 500;
+}
+
+/* Contact List */
+.contact-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.contact-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  color: #9CA3AF;
+}
+
+.contact-item > div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  flex: 1;
+}
+
+.contact-label {
+  font-size: 0.75rem;
+  color: #9CA3AF;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.contact-value {
+  font-size: 0.875rem;
+  color: #F9FAFB;
+}
+
+/* Connections List */
+.connections-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.connection-card {
+  background-color: #1F2937;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  border: 1px solid #4B5563;
+  transition: all 0.2s;
+}
+
+.connection-card:hover {
+  border-color: #6B7280;
+  background-color: #273548;
+}
+
+.connection-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+
+.connection-utility {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.utility-icon {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 0.5rem;
+  background: linear-gradient(135deg, #3B82F6, #1D4ED8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+.connection-type {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #F9FAFB;
+}
+
+.connection-meter {
+  font-size: 0.75rem;
+  color: #9CA3AF;
+}
+
+.connection-footer {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  color: #9CA3AF;
+}
+
+/* Activity List */
+.activity-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  max-height: 20rem;
+  overflow-y: auto;
+}
+
+.activity-item {
+  background-color: #1F2937;
+  border-radius: 0.5rem;
+  padding: 0.875rem;
+  border: 1px solid #4B5563;
+  transition: all 0.2s;
+}
+
+.activity-item:hover {
+  border-color: #6B7280;
+  background-color: #273548;
+}
+
+.activity-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.activity-title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #F9FAFB;
+  flex: 1;
+}
+
+.activity-utility {
+  font-size: 0.75rem;
+  color: #9CA3AF;
+  margin-bottom: 0.5rem;
+}
+
+.activity-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.75rem;
+}
+
+.activity-amount {
+  font-weight: 600;
+  color: #10B981;
+}
+
+.activity-date {
+  color: #9CA3AF;
+}
+
+/* Scrollbar Styling */
+.activity-list::-webkit-scrollbar {
+  width: 0.375rem;
+}
+
+.activity-list::-webkit-scrollbar-track {
+  background-color: #1F2937;
+  border-radius: 0.25rem;
+}
+
+.activity-list::-webkit-scrollbar-thumb {
+  background-color: #4B5563;
+  border-radius: 0.25rem;
+}
+
+.activity-list::-webkit-scrollbar-thumb:hover {
+  background-color: #6B7280;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .details-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .info-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .activity-list {
+    max-height: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .customer-details-modal {
+    max-width: 100%;
+  }
+
+  .modal-body {
+    padding: 1rem;
+  }
+
+  .details-section {
+    padding: 1rem;
+  }
+
+  .connection-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .activity-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
