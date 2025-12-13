@@ -1,0 +1,32 @@
+.revenue-chart__header {
+  margin-bottom: 2rem;
+}
+
+.revenue-chart__title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  background: linear-gradient(to right, #2563eb, #06b6d4);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.revenue-chart__subtitle {
+  font-size: 0.875rem;
+  color: #4b5563;
+  margin-top: 0.5rem;
+  font-weight: 500;
+}
+
+.revenue-chart__container {
+  background: linear-gradient(to bottom right, rgba(239, 246, 255, 0.5), rgba(236, 254, 255, 0.5));
+  border-radius: 1rem;
+  padding: 1.5rem;
+  border: 1px solid rgba(219, 234, 254, 0.5);
+}
+
+@media (min-width: 1024px) {
+  .revenue-chart__container {
+    padding: 1.75rem;
+  }
+}

@@ -1,0 +1,100 @@
+.recent-activity__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+}
+
+.recent-activity__title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  background: linear-gradient(to right, #4f46e5, #9333ea);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.recent-activity__subtitle {
+  font-size: 0.875rem;
+  color: #4b5563;
+  margin-top: 0.5rem;
+  font-weight: 500;
+}
+
+.recent-activity__table-wrapper {
+  overflow-x: auto;
+  margin: 0 -2rem;
+  border-radius: 0.75rem;
+}
+
+.recent-activity__table {
+  width: 100%;
+}
+
+.recent-activity__table thead tr {
+  border-bottom: 2px solid;
+  border-image: linear-gradient(to right, #dbeafe, #f3e8ff, #dbeafe) 1;
+  background: linear-gradient(to right, #eff6ff, #faf5ff, #eff6ff);
+}
+
+.recent-activity__table th {
+  text-align: left;
+  padding: 1.5rem 2.5rem;
+  font-size: 0.75rem;
+  font-weight: 900;
+  color: #374151;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.recent-activity__table tbody tr {
+  border-bottom: 1px solid #f3f4f6;
+  transition: all 0.3s;
+}
+
+.recent-activity__table tbody tr:hover {
+  background: linear-gradient(to right, rgba(239, 246, 255, 0.5), rgba(250, 245, 255, 0.5));
+}
+
+.recent-activity__table td {
+  padding: 1.5rem 2.5rem;
+  font-size: 0.875rem;
+}
+
+.recent-activity__table-date {
+  color: #374151;
+  font-weight: 500;
+}
+
+.recent-activity__table-customer {
+  color: #111827;
+  font-weight: 700;
+  transition: color 0.3s;
+}
+
+.recent-activity__table tbody tr:hover .recent-activity__table-customer {
+  color: #2563eb;
+}
+
+.recent-activity__table-bill {
+  color: #374151;
+  font-weight: 500;
+}
+
+.recent-activity__table-amount {
+  font-size: 1rem;
+  color: #111827;
+  font-weight: 700;
+  transition: transform 0.3s;
+}
+
+.recent-activity__table tbody tr:hover .recent-activity__table-amount {
+  transform: scale(1.05);
+}
+
+.recent-activity__footer {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #e5e7eb;
+  text-align: center;
+}
