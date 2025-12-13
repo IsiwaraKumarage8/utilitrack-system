@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
+import toast from 'react-hot-toast';
 import Button from '../../components/common/Button';
+import customerApi from '../../api/customerApi';
 import './CustomerForm.css';
 
 const CustomerForm = ({ mode, customer, onClose, onSave }) => {
@@ -18,6 +20,7 @@ const CustomerForm = ({ mode, customer, onClose, onSave }) => {
   });
 
   const [errors, setErrors] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     if (mode === 'edit' && customer) {
@@ -94,13 +97,30 @@ const CustomerForm = ({ mode, customer, onClose, onSave }) => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     
     if (validate()) {
-      // TODO: Implement API call
-      console.log('Save customer:', formData);
-      onSave(formData);
+      setIsSubmitting(true);
+      
+      try {
+        if (mode === 'add') {
+          // Create new customer
+          await customerApi.create(formData);
+          toast.success('Customer created successfully!');
+        } else {
+          // Update existing customer
+          await customerApi.update(customer.customer_id, formData);
+          toast.success('Customer updated successfully!');
+        }
+        
+        onSave(); // Trigger parent refresh
+      } catch (error) {
+        console.error('Error saving customer:', error);
+        toast.error(error.message || 'Failed to save customer');
+      } finally {
+        setIsSubmitting(false);
+      }
     }
   };
 
@@ -285,11 +305,11 @@ const CustomerForm = ({ mode, customer, onClose, onSave }) => {
 
           {/* Modal Footer */}
           <div className="modal-footer">
-            <Button variant="secondary" size="md" type="button" onClick={onClose}>
+            <Button variant="secondary" size="md" type="button" onClick={onClose} disabled={isSubmitting}>
               Cancel
             </Button>
-            <Button variant="primary" size="md" type="submit">
-              {mode === 'add' ? 'Create Customer' : 'Update Customer'}
+            <Button variant="primary" size="md" type="submit" disabled={isSubmitting}>
+              {isSubmitting ? 'Saving...' : (mode === 'add' ? 'Create Customer' : 'Update Customer')}
             </Button>
           </div>
         </form>

@@ -117,6 +117,37 @@ const customerApi = {
   getStats: async () => {
     const response = await api.get('/customers/stats/count');
     return response.data;
+  },
+
+  /**
+   * Create new customer
+   * @param {Object} customerData - Customer data
+   * @returns {Promise<Object>} Response with created customer
+   */
+  create: async (customerData) => {
+    const response = await api.post('/customers', customerData);
+    return response.data;
+  },
+
+  /**
+   * Update existing customer
+   * @param {number} id - Customer ID
+   * @param {Object} customerData - Updated customer data
+   * @returns {Promise<Object>} Response with updated customer
+   */
+  update: async (id, customerData) => {
+    const response = await api.put(`/customers/${id}`, customerData);
+    return response.data;
+  },
+
+  /**
+   * Delete customer
+   * @param {number} id - Customer ID
+   * @returns {Promise<Object>} Response with success message
+   */
+  delete: async (id) => {
+    const response = await api.delete(`/customers/${id}`);
+    return response.data;
   }
 };
 

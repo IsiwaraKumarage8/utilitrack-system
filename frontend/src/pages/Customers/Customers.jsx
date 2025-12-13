@@ -239,10 +239,16 @@ const Customers = () => {
     setShowDetails(true);
   };
 
-  const handleDeleteCustomer = (customer) => {
+  const handleDeleteCustomer = async (customer) => {
     if (window.confirm(`Are you sure you want to delete ${customer.first_name} ${customer.last_name}?`)) {
-      // TODO: Implement delete API call
-      console.log('Delete customer:', customer.customer_id);
+      try {
+        await customerApi.delete(customer.customer_id);
+        toast.success('Customer deleted successfully!');
+        fetchCustomers(); // Refresh list
+      } catch (error) {
+        console.error('Error deleting customer:', error);
+        toast.error(error.message || 'Failed to delete customer');
+      }
     }
   };
 
