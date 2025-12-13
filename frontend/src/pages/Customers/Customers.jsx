@@ -1,13 +1,15 @@
-import { useState, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Search, Plus, Eye, Edit2, Trash2 } from 'lucide-react';
+import toast from 'react-hot-toast';
 import Button from '../../components/common/Button';
 import Badge from '../../components/common/Badge';
 import CustomerForm from './CustomerForm';
 import CustomerDetails from './CustomerDetails';
+import customerApi from '../../api/customerApi';
 import './Customers.css';
 
-// Mock data - TODO: Replace with API call
-const MOCK_CUSTOMERS = [
+// Mock data - REMOVED, now using API
+const MOCK_CUSTOMERS_BACKUP = [
   {
     customer_id: 1,
     customer_type: 'Residential',
@@ -141,7 +143,10 @@ const MOCK_CUSTOMERS = [
 ];
 
 const Customers = () => {
-  const [customers] = useState(MOCK_CUSTOMERS);
+  // State management
+  const [customers, setCustomers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [typeFilter, setTypeFilter] = useState('All Types');
   const [statusFilter, setStatusFilter] = useState('All Status');
@@ -152,6 +157,48 @@ const Customers = () => {
   const [formMode, setFormMode] = useState('add'); // 'add' or 'edit'
 
   const itemsPerPage = 10;
+
+  // Fetch customers on component mount
+  useEffect(() => {
+    fetchCustomers();
+  }, []);
+
+  // Fetch customers function
+  const fetchCustomers = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      
+      const response = await customerApi.getAll();
+      
+      setCustomers(response.data);
+      setLoading(false);
+    } catch (err) {
+      console.error('Error fetching customers:', err);
+      setError(err.message || 'Failed to load customers');
+      setLoading(false);
+      toast.error('Failed to load customers');
+    }
+  };
+
+  // Handle search with API
+  const handleSearchChange = (value) => {
+    setSearchQuery(value);
+    // Reset to page 1 when searching
+    setCurrentPage(1);
+  };
+
+  // Handle type filter change
+  const handleTypeFilterChange = (value) => {
+    setTypeFilter(value);
+    setCurrentPage(1);
+  };
+
+  // Handle status filter change
+  const handleStatusFilterChange = (value) => {
+    setStatusFilter(value);
+    setCurrentPage(1);
+  };
 
   // Filter and search customers
   const filteredCustomers = useMemo(() => {
@@ -227,6 +274,32 @@ const Customers = () => {
     return statusMap[status] || 'info';
   };
 
+  // Loading state
+  if (loading) {
+    return (
+      <div className="customers-page">
+        <div className="loading-container">
+          <div className="spinner"></div>
+          <p>Loading customers...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Error state
+  if (error) {
+    return (
+      <div className="customers-page">
+        <div className="error-container">
+          <p className="error-message">❌ {error}</p>
+          <button onClick={fetchCustomers} className="retry-button">
+            Retry
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="customers-page">
       {/* Page Header */}
@@ -251,7 +324,7 @@ const Customers = () => {
             className="search-input"
             placeholder="Search by name, email, or phone..."
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={(e) => handleSearchChange(e.target.value)}
           />
         </div>
 
@@ -260,7 +333,7 @@ const Customers = () => {
           <select
             className="filter-select"
             value={typeFilter}
-            onChange={(e) => setTypeFilter(e.target.value)}
+            onChange={(e) => handleTypeFilterChange(e.target.value)}
           >
             <option>All Types</option>
             <option>Residential</option>
@@ -272,7 +345,7 @@ const Customers = () => {
           <select
             className="filter-select"
             value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
+            onChange={(e) => handleStatusFilterChange(e.target.value)}
           >
             <option>All Status</option>
             <option>Active</option>
@@ -411,7 +484,7 @@ const Customers = () => {
           onClose={() => setShowForm(false)}
           onSave={() => {
             setShowForm(false);
-            // TODO: Refresh customer list
+            fetchCustomers(); // Refresh customer list after save
           }}
         />
       )}
