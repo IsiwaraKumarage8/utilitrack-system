@@ -323,6 +323,50 @@ const customerModel = {
     } catch (error) {
       throw new Error(`Error deleting customer: ${error.message}`);
     }
+  },
+
+  /**
+   * Get customer's total outstanding balance using fn_GetCustomerBalance UDF
+   * @param {number} customerId - Customer ID
+   * @returns {Promise<number>} Total outstanding balance
+   */
+  getBalance: async (customerId) => {
+    const queryString = `
+      SELECT dbo.fn_GetCustomerBalance(@customerId) AS total_balance
+    `;
+    
+    try {
+      const result = await query(queryString, { customerId });
+      return result.recordset[0]?.total_balance || 0;
+    } catch (error) {
+      throw new Error(`Error fetching customer balance: ${error.message}`);
+    }
+  },
+
+  /**
+   * Get customer with balance details
+   * @param {number} customerId - Customer ID
+   * @returns {Promise<Object>} Customer record with balance information
+   */
+  getCustomerWithBalance: async (customerId) => {
+    const queryString = `
+      SELECT 
+        c.*,
+        dbo.fn_GetCustomerBalance(c.customer_id) AS total_outstanding_balance,
+        (SELECT COUNT(*) FROM Service_Connection sc WHERE sc.customer_id = c.customer_id) AS connection_count,
+        (SELECT COUNT(*) FROM Billing b 
+         INNER JOIN Service_Connection sc ON b.connection_id = sc.connection_id 
+         WHERE sc.customer_id = c.customer_id AND b.outstanding_balance > 0) AS unpaid_bills_count
+      FROM Customer c
+      WHERE c.customer_id = @customerId
+    `;
+    
+    try {
+      const result = await query(queryString, { customerId });
+      return result.recordset[0];
+    } catch (error) {
+      throw new Error(`Error fetching customer with balance: ${error.message}`);
+    }
   }
 };
 

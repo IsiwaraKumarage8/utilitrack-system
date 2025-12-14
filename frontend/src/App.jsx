@@ -1,47 +1,82 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
+import { AuthProvider, useAuth } from './contexts/AuthContext';
+import Auth from './pages/Auth/Auth';
 import DashboardLayout from './components/layout/DashboardLayout';
 import Dashboard from './pages/Dashboard';
 import Customers from './pages/Customers/Customers';
 import Connections from './pages/Connections/Connections';
 import Meters from './pages/Meters/Meters';
 import Readings from './pages/Readings/Readings';
-import Billing from './pages/Billing';
-import Payments from './pages/Payments';
-import Complaints from './pages/Complaints';
+import Billing from './pages/Billing/Billing';
+import Payments from './pages/Payments/Payments';
+import Complaints from './pages/Complaints/Complaints';
 import Reports from './pages/Reports';
 import Settings from './pages/Settings';
 
-function App() {
-  // TODO: Replace with actual user role from authentication
-  const userRole = 'Admin';
+// Protected Route wrapper
+const ProtectedRoute = ({ children }) => {
+  const { isAuthenticated, loading } = useAuth();
+  
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+  
+  if (!isAuthenticated) {
+    return <Navigate to="/auth" replace />;
+  }
+  
+  return children;
+};
+
+function AppRoutes() {
+  const { isAuthenticated, user } = useAuth();
 
   return (
-    <Router>
+    <>
       <Toaster position="top-right" />
       <Routes>
-        {/* Redirect root to dashboard */}
-        <Route path="/" element={<Navigate to="/dashboard" replace />} />
+        {/* Auth Route */}
+        <Route path="/auth" element={
+          isAuthenticated ? <Navigate to="/dashboard" replace /> : <Auth />
+        } />
         
-        {/* Dashboard Routes */}
+        {/* Redirect root based on authentication */}
+        <Route path="/" element={
+          isAuthenticated ? <Navigate to="/dashboard" replace /> : <Navigate to="/auth" replace />
+        } />
+        
+        {/* Dashboard Routes - Protected */}
         <Route path="/*" element={
-          <DashboardLayout userRole={userRole}>
-            <Routes>
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/customers" element={<Customers />} />
-              <Route path="/connections" element={<Connections />} />
-              <Route path="/meters" element={<Meters />} />
-              <Route path="/readings" element={<Readings />} />
-              <Route path="/billing" element={<Billing />} />
-              <Route path="/payments" element={<Payments />} />
-              <Route path="/complaints" element={<Complaints />} />
-              <Route path="/reports" element={<Reports />} />
-              <Route path="/settings" element={<Settings />} />
-            </Routes>
-          </DashboardLayout>
+          <ProtectedRoute>
+            <DashboardLayout userRole={user?.role || 'Admin'}>
+              <Routes>
+                <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/customers" element={<Customers />} />
+                <Route path="/connections" element={<Connections />} />
+                <Route path="/meters" element={<Meters />} />
+                <Route path="/readings" element={<Readings />} />
+                <Route path="/billing" element={<Billing />} />
+                <Route path="/payments" element={<Payments />} />
+                <Route path="/complaints" element={<Complaints />} />
+                <Route path="/reports" element={<Reports />} />
+                <Route path="/settings" element={<Settings />} />
+              </Routes>
+            </DashboardLayout>
+          </ProtectedRoute>
         } />
       </Routes>
-    </Router>
+    </>
+  );
+}
+
+function App() {
+  return (
+    <AuthProvider>
+      <Router>
+        <AppRoutes />
+      </Router>
+    </AuthProvider>
   );
 }
 

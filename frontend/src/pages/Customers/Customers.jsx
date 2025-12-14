@@ -6,6 +6,7 @@ import Badge from '../../components/common/Badge';
 import CustomerForm from './CustomerForm';
 import CustomerDetails from './CustomerDetails';
 import customerApi from '../../api/customerApi';
+import '../../styles/table.css';
 import './Customers.css';
 
 // Mock data - REMOVED, now using API
@@ -362,7 +363,7 @@ const Customers = () => {
       </div>
 
       {/* Data Table */}
-      <div className="customers-table-container">
+      <div className="table-container">
         {filteredCustomers.length === 0 ? (
           <div className="empty-state">
             <p className="empty-state-text">No customers found</p>
@@ -370,7 +371,7 @@ const Customers = () => {
           </div>
         ) : (
           <>
-            <table className="customers-table">
+            <table className="data-table customers-table">
               <thead>
                 <tr>
                   <th>Customer</th>

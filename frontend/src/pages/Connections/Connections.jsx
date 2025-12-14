@@ -1,136 +1,18 @@
-import { useState, useMemo } from 'react';
-import { Search, Plus, Zap, Droplet, Flame, Wind, Eye, Edit2, Trash2, MapPin } from 'lucide-react';
+import { useState, useMemo, useEffect } from 'react';
+import { Search, Plus, Zap, Droplet, Flame, Wind, Eye, Edit2, Trash2 } from 'lucide-react';
+import axios from 'axios';
 import Button from '../../components/common/Button';
 import Badge from '../../components/common/Badge';
 import ConnectionForm from './ConnectionForm';
 import ConnectionDetails from './ConnectionDetails';
 import './Connections.css';
 
-// Mock data - TODO: Replace with API call
-const MOCK_CONNECTIONS = [
-  {
-    connection_id: 1,
-    customer_id: 1,
-    customer_name: 'Nuwan Bandara',
-    utility_type: 'Electricity',
-    meter_number: 'MTR-ELEC-2020-00001',
-    connection_number: 'ELEC-2020-001',
-    tariff_plan: 'Residential Electricity Standard',
-    installation_date: '2020-01-25',
-    status: 'Active',
-    location: '45/2 Galle Road, Colombo 03',
-    last_reading: '2024-01-15',
-    current_consumption: 245.5,
-    notes: 'Single phase digital meter'
-  },
-  {
-    connection_id: 2,
-    customer_id: 1,
-    customer_name: 'Nuwan Bandara',
-    utility_type: 'Water',
-    meter_number: 'MTR-WATER-2020-00001',
-    connection_number: 'WATER-2020-001',
-    tariff_plan: 'Residential Water Standard',
-    installation_date: '2020-01-25',
-    status: 'Active',
-    location: '45/2 Galle Road, Colombo 03',
-    last_reading: '2024-01-15',
-    current_consumption: 18.2,
-    notes: 'Residential water meter'
-  },
-  {
-    connection_id: 3,
-    customer_id: 2,
-    customer_name: 'Samantha Silva',
-    utility_type: 'Electricity',
-    meter_number: 'MTR-ELEC-2020-00003',
-    connection_number: 'ELEC-2020-003',
-    tariff_plan: 'Commercial Electricity Rate',
-    installation_date: '2020-05-15',
-    status: 'Active',
-    location: '78 Main Street, Negombo',
-    last_reading: '2024-01-14',
-    current_consumption: 1250.8,
-    notes: 'Three-phase commercial connection'
-  },
-  {
-    connection_id: 4,
-    customer_id: 3,
-    customer_name: 'Lakshmi Perera',
-    utility_type: 'Gas',
-    meter_number: 'MTR-GAS-2023-00001',
-    connection_number: 'GAS-2023-001',
-    tariff_plan: 'Residential Gas Standard',
-    installation_date: '2023-03-10',
-    status: 'Active',
-    location: '789 Green Avenue, Galle',
-    last_reading: '2024-01-13',
-    current_consumption: 45.3,
-    notes: 'LPG Pipeline connection'
-  },
-  {
-    connection_id: 5,
-    customer_id: 4,
-    customer_name: 'Rajesh Kumar',
-    utility_type: 'Electricity',
-    meter_number: 'MTR-ELEC-2020-00005',
-    connection_number: 'ELEC-2020-005',
-    tariff_plan: 'Industrial Electricity Rate',
-    installation_date: '2020-10-10',
-    status: 'Active',
-    location: 'Industrial Zone, Plot 15, Ratmalana',
-    last_reading: '2024-01-15',
-    current_consumption: 3450.2,
-    notes: 'High voltage industrial connection'
-  },
-  {
-    connection_id: 6,
-    customer_id: 5,
-    customer_name: 'Chaminda Fernando',
-    utility_type: 'Water',
-    meter_number: 'MTR-WATER-2020-00003',
-    connection_number: 'WATER-2020-003',
-    tariff_plan: 'Commercial Water Rate',
-    installation_date: '2020-05-15',
-    status: 'Active',
-    location: '78 Main Street, Negombo',
-    last_reading: '2024-01-12',
-    current_consumption: 52.7,
-    notes: 'Commercial water supply'
-  },
-  {
-    connection_id: 7,
-    customer_id: 6,
-    customer_name: 'Priya Jayasinghe',
-    utility_type: 'Sewage',
-    meter_number: 'MTR-SEW-2023-00001',
-    connection_number: 'SEW-2023-001',
-    tariff_plan: 'Residential Sewage Standard',
-    installation_date: '2023-06-18',
-    status: 'Active',
-    location: '987 Sunset Road, Jaffna',
-    last_reading: '2024-01-15',
-    current_consumption: 12.5,
-    notes: 'Residential sewage connection'
-  },
-  {
-    connection_id: 8,
-    customer_id: 7,
-    customer_name: 'Anil Wickramasinghe',
-    utility_type: 'Street Lighting',
-    meter_number: 'MTR-LIGHT-2023-00001',
-    connection_number: 'LIGHT-2023-001',
-    tariff_plan: 'Street Lighting Standard',
-    installation_date: '2023-07-22',
-    status: 'Active',
-    location: 'Main Street Area, Moratuwa',
-    last_reading: '2024-01-15',
-    current_consumption: 850.5,
-    notes: 'Public street lighting zone'
-  }
-];
+const API_URL = 'http://localhost:5000/api';
 
 const Connections = () => {
+  const [connections, setConnections] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [utilityFilter, setUtilityFilter] = useState('All');
   const [statusFilter, setStatusFilter] = useState('All');
@@ -140,22 +22,42 @@ const Connections = () => {
   const [selectedConnection, setSelectedConnection] = useState(null);
   const [formMode, setFormMode] = useState('add'); // 'add' or 'edit'
 
-  const itemsPerPage = 9; // 3x3 grid
+  const itemsPerPage = 10;
+
+  // Fetch connections from API
+  useEffect(() => {
+    fetchConnections();
+  }, []);
+
+  const fetchConnections = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const response = await axios.get(`${API_URL}/connections`);
+      setConnections(response.data.data || []);
+    } catch (err) {
+      console.error('Error fetching connections:', err);
+      setError('Failed to load connections. Please try again later.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // Filter connections
   const filteredConnections = useMemo(() => {
-    return MOCK_CONNECTIONS.filter(connection => {
+    return connections.filter(connection => {
       const matchesSearch = 
-        connection.customer_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        connection.meter_number.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        connection.location.toLowerCase().includes(searchQuery.toLowerCase());
+        connection.customer_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        connection.meter_number?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        connection.property_address?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        connection.connection_number?.toLowerCase().includes(searchQuery.toLowerCase());
       
-      const matchesUtility = utilityFilter === 'All' || connection.utility_type === utilityFilter;
+      const matchesUtility = utilityFilter === 'All' || connection.utility_name === utilityFilter;
       const matchesStatus = statusFilter === 'All' || connection.connection_status === statusFilter;
 
       return matchesSearch && matchesUtility && matchesStatus;
     });
-  }, [searchQuery, utilityFilter, statusFilter]);
+  }, [connections, searchQuery, utilityFilter, statusFilter]);
 
   // Pagination
   const totalPages = Math.ceil(filteredConnections.length / itemsPerPage);
@@ -179,9 +81,19 @@ const Connections = () => {
     setSelectedConnection(connection);
     setShowDetails(true);
   };
+async (connection) => {
+    if (!window.confirm(`Are you sure you want to disconnect ${connection.connection_number}?`)) {
+      return;
+    }
 
-  const handleDeleteConnection = (connection) => {
-    // TODO: Implement delete confirmation and API call
+    try {
+      await axios.delete(`${API_URL}/connections/${connection.connection_id}`);
+      // Refresh the list
+      fetchConnections();
+    } catch (err) {
+      console.error('Error deleting connection:', err);
+      alert('Failed to disconnect service connection');
+    } call
     console.log('Delete connection:', connection);
   };
 
@@ -207,6 +119,27 @@ const Connections = () => {
     };
     return colors[utilityType] || 'electricity';
   };
+
+  if (loading) {
+    return (
+      <div className="connections-page">
+        <div className="loading-state">
+          <p>Loading connections...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="connections-page">
+        <div className="error-state">
+          <p>{error}</p>
+          <Button onClick={fetchConnections}>Retry</Button>
+        </div>
+      </div>
+    );
+  }
 
   const getStatusVariant = (status) => {
     const variants = {
@@ -271,109 +204,122 @@ const Connections = () => {
         </select>
       </div>
 
-      {/* Connections Grid */}
-      {paginatedConnections.length === 0 ? (
-        <div className="empty-state">
-          <p>No connections found</p>
-        </div>
-      ) : (
-        <div className="connections-grid">
-          {paginatedConnections.map(connection => (
-            <div key={connection.connection_id} className="connection-card">
-              {/* Card Header */}
-              <div className={`connection-card-header ${getUtilityColor(connection.utility_type)}`}>
-                <div className="utility-icon-wrapper">
-                  {getUtilityIcon(connection.utility_type)}
-                </div>
-                <div className="utility-info">
-                  <h3 className="utility-type">{connection.utility_type}</h3>
-                  <p className="connection-type">{connection.connection_number}</p>
-                </div>
-                <Badge variant={getStatusVariant(connection.connection_status)} text={connection.connection_status} />
-              </div>
-
-              {/* Card Body */}
-              <div className="connection-card-body">
-                <div className="connection-detail">
-                  <span className="detail-label">Customer</span>
-                  <span className="detail-value">{connection.customer_name}</span>
-                </div>
-                <div className="connection-detail">
-                  <span className="detail-label">Meter Number</span>
-                  <span className="detail-value">{connection.meter_number}</span>
-                </div>
-                <div className="connection-detail">
-                  <span className="detail-label">Tariff Plan</span>
-                  <span className="detail-value">{connection.tariff_plan}</span>
-                </div>
-                <div className="connection-detail">
-                  <span className="detail-label">Location</span>
-                  <span className="detail-value location">
-                    <MapPin size={14} />
-                    {connection.property_address}
-                  </span>
-                </div>
-                <div className="connection-detail">
-                  <span className="detail-label">Installation Date</span>
-                  <span className="detail-value">
-                    {new Date(connection.connection_date).toLocaleDateString()}
-                  </span>
-                </div>
-                {connection.connection_status === 'Active' && (
-                  <div className="connection-detail consumption">
-                    <span className="detail-label">Current Consumption</span>
-                    <span className="detail-value highlight">
-                      {connection.current_consumption} {connection.utility_type === 'Electricity' || connection.utility_type === 'Street Lighting' ? 'kWh' : 'Cubic Meters'}
-                    </span>
-                  </div>
-                )}
-              </div>
-
-              {/* Card Footer */}
-              <div className="connection-card-footer">
-                <button
-                  className="action-btn view"
-                  onClick={() => handleViewConnection(connection)}
-                  title="View Details"
-                >
-                  <Eye size={18} />
-                </button>
-                <button
-                  className="action-btn edit"
-                  onClick={() => handleEditConnection(connection)}
-                  title="Edit"
-                >
-                  <Edit2 size={18} />
-                </button>
-                <button
-                  className="action-btn delete"
-                  onClick={() => handleDeleteConnection(connection)}
-                  title="Delete"
-                >
-                  <Trash2 size={18} />
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
+      {/* Connections Table */}
+      <div className="table-container">
+        {paginatedConnections.length === 0 ? (
+          <div className="empty-state">
+            <p className="empty-state-text">No connections found</p>
+            <p className="empty-state-subtext">Try adjusting your search or filters</p>
+          </div>
+        ) : (
+          <table className="data-table connections-table">
+            <thead>
+              <tr>
+                <th>Utility</th>
+                <th>Connection No.</th>
+                <th>Customer</th>
+                <th>Meter Number</th>
+                <th>Tariff Plan</th>
+                <th>Location</th>
+                <th>Installation Date</th>
+                <th>Status</th>
+                <th>Consumption</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {paginatedConnections.map(connection => (
+                <tr key={connection.connection_id}>
+                  <td>
+                    <div className="utility-cell">
+                      <div className={`utility-icon ${getUtilityColor(connection.utility_name)}`}>
+                        {getUtilityIcon(connection.utility_name)}
+                      </div>
+                      <span className="utility-name">{connection.utility_name}</span>
+                    </div>
+                  </td>
+                  <td>
+                    <span className="connection-number">{connection.connection_number}</span>
+                  </td>
+                  <td>{connection.customer_name}</td>
+                  <td>
+                    <span className="meter-number">{connection.meter_number || 'N/A'}</span>
+                  </td>
+                  <td>{connection.tariff_name || 'N/A'}</td>
+                  <td>
+                    <span className="location-text">{connection.property_address}</span>
+                  </td>
+                  <td>{new Date(connection.connection_date).toLocaleDateString()}</td>
+                  <td>
+                    <Badge variant={getStatusVariant(connection.connection_status)} text={connection.connection_status} />
+                  </td>
+                  <td>
+                    {connection.connection_status === 'Active' ? (
+                      <span className="consumption-value">
+                        {connection.current_consumption || 0} {connection.utility_name === 'Electricity' || connection.utility_name === 'Street Lighting' ? 'kWh' : 'm³'}
+                      </span>
+                    ) : (
+                      <span className="text-muted">-</span>
+                    )}
+                  </td>
+                  <td>
+                    <div className="action-buttons">
+                      <button
+                        className="action-btn action-btn-view"
+                        onClick={() => handleViewConnection(connection)}
+                        title="View Details"
+                      >
+                        <Eye />
+                      </button>
+                      <button
+                        className="action-btn action-btn-edit"
+                        onClick={() => handleEditConnection(connection)}
+                        title="Edit"
+                      >
+                        <Edit2 />
+                      </button>
+                      <button
+                        className="action-btn action-btn-delete"
+                        onClick={() => handleDeleteConnection(connection)}
+                        title="Delete"
+                      >
+                        <Trash2 />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+      </div>
 
       {/* Pagination */}
-      {totalPages > 1 && (
+      {paginatedConnections.length > 0 && totalPages > 1 && (
         <div className="pagination">
           <button
             className="pagination-btn"
-            onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+            onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
             disabled={currentPage === 1}
           >
             Previous
           </button>
-          <span className="pagination-info">
-            Page {currentPage} of {totalPages}
-          </span>
+          
+          <div className="pagination-pages">
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
+              <button
+                key={page}
+                className={`pagination-page ${currentPage === page ? 'active' : ''}`}
+                onClick={() => setCurrentPage(page)}
+              >
+                {page}
+              </button>
+            ))}
+          </div>
+
           <button
             className="pagination-btn"
-            onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+            onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
             disabled={currentPage === totalPages}
           >
             Next
@@ -389,7 +335,7 @@ const Connections = () => {
           onClose={() => setShowForm(false)}
           onSave={() => {
             setShowForm(false);
-            // TODO: Refresh connections list
+            fetchConnections(); // Refresh the list
           }}
         />
       )}

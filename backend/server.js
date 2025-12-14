@@ -41,6 +41,13 @@ app.use(morgan('dev'));
 })();
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// SCHEDULED JOBS INITIALIZATION
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+const { initBillingJobs } = require('./jobs/billingJobs');
+initBillingJobs();
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // HEALTH CHECK ROUTE
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
@@ -56,17 +63,32 @@ app.get('/health', (req, res) => {
 // API ROUTES
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
+// Authentication routes
+app.use('/api/auth', require('./routes/authRoutes'));
+
 // Customer routes
 app.use('/api/customers', require('./routes/customerRoutes'));
 
-// TODO: Uncomment as routes are created
-// app.use('/api/auth', require('./routes/authRoutes'));
-// app.use('/api/connections', require('./routes/connectionRoutes'));
-// app.use('/api/meters', require('./routes/meterRoutes'));
-// app.use('/api/readings', require('./routes/readingRoutes'));
-// app.use('/api/billing', require('./routes/billingRoutes'));
-// app.use('/api/payments', require('./routes/paymentRoutes'));
-// app.use('/api/reports', require('./routes/reportRoutes'));
+// Service Connection routes
+app.use('/api/connections', require('./routes/connectionRoutes'));
+
+// Billing routes
+app.use('/api/billing', require('./routes/billingRoutes'));
+
+// Payment routes
+app.use('/api/payments', require('./routes/paymentRoutes'));
+
+// Complaint routes
+app.use('/api/complaints', require('./routes/complaintRoutes'));
+
+// Meter and Reading routes
+app.use('/api/meters', require('./routes/meterRoutes'));
+
+// Report routes
+app.use('/api/reports', require('./routes/reportRoutes'));
+
+// User routes
+app.use('/api/users', require('./routes/userRoutes'));
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // ERROR HANDLERS
