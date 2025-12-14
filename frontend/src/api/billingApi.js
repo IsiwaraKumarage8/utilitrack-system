@@ -95,11 +95,14 @@ const billingApi = {
 
   /**
    * Get billing statistics
+   * @param {string} period - 'current' for current month, 'all' for all time
    * @returns {Promise} - Promise resolving to stats object
    */
-  getBillingStats: async () => {
+  getBillingStats: async (period = 'all') => {
     try {
-      const response = await api.get('/billing/stats/summary');
+      const response = await api.get('/billing/stats/summary', {
+        params: { period }
+      });
       return response.data;
     } catch (error) {
       console.error('Error fetching billing stats:', error);
@@ -152,6 +155,58 @@ const billingApi = {
       return response.data;
     } catch (error) {
       console.error(`Error filtering bills by status ${status}:`, error);
+      throw error;
+    }
+  },
+
+  /**
+   * Get unprocessed meter readings (readings without bills)
+   * @param {string} utilityType - Optional utility type filter
+   * @returns {Promise} - Promise resolving to readings array
+   */
+  getUnprocessedReadings: async (utilityType = 'All') => {
+    try {
+      const url = utilityType === 'All' 
+        ? '/billing/unprocessed-readings'
+        : `/billing/unprocessed-readings?utility_type=${utilityType}`;
+      const response = await api.get(url);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching unprocessed readings:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * Get bill preview before generation
+   * @param {number} readingId - Meter reading ID
+   * @returns {Promise} - Promise resolving to preview data
+   */
+  getBillPreview: async (readingId) => {
+    try {
+      const response = await api.get(`/billing/preview/${readingId}`);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching bill preview:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * Generate bill from meter reading
+   * @param {number} readingId - Meter reading ID
+   * @param {string} dueDate - Due date (YYYY-MM-DD format)
+   * @returns {Promise} - Promise resolving to generated bill
+   */
+  generateBill: async (readingId, dueDate) => {
+    try {
+      const response = await api.post('/billing/generate', {
+        reading_id: readingId,
+        due_date: dueDate
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error generating bill:', error);
       throw error;
     }
   }

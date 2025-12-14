@@ -3,6 +3,7 @@ import { Search, FileText, DollarSign, CheckCircle, AlertCircle, Eye, Download, 
 import Button from '../../components/common/Button';
 import Badge from '../../components/common/Badge';
 import billingApi from '../../api/billingApi';
+import GenerateBillModal from './GenerateBillModal';
 import '../../styles/table.css';
 import './Billing.css';
 
@@ -18,6 +19,8 @@ const Billing = () => {
   const [error, setError] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('All');
+  const [statsPeriod, setStatsPeriod] = useState('all'); // 'all' or 'current'
+  const [showGenerateBillModal, setShowGenerateBillModal] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
@@ -62,7 +65,7 @@ const Billing = () => {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const response = await billingApi.getBillingStats();
+        const response = await billingApi.getBillingStats(statsPeriod);
         if (response.success) {
           setStats({
             totalBills: response.data.total_bills || 0,
@@ -77,7 +80,7 @@ const Billing = () => {
     };
 
     fetchStats();
-  }, []);
+  }, [statsPeriod]);
 
   // Pagination (bills are already filtered from API)
   const totalPages = Math.ceil(bills.length / itemsPerPage);
@@ -177,10 +180,26 @@ const Billing = () => {
           <h1 className="billing-title">Billing Management</h1>
           <p className="billing-subtitle">Manage bills and generate invoices</p>
         </div>
-        <Button variant="primary" size="md">
-          <FileText size={20} />
-          <span>Generate Bill</span>
-        </Button>
+        <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+          <div className="period-toggle">
+            <button 
+              className={`period-toggle-btn ${statsPeriod === 'current' ? 'active' : ''}`}
+              onClick={() => setStatsPeriod('current')}
+            >
+              This Month
+            </button>
+            <button 
+              className={`period-toggle-btn ${statsPeriod === 'all' ? 'active' : ''}`}
+              onClick={() => setStatsPeriod('all')}
+            >
+              All Time
+            </button>
+          </div>
+          <Button variant="primary" size="md" onClick={() => setShowGenerateBillModal(true)}>
+            <FileText size={20} />
+            <span>Generate Bill</span>
+          </Button>
+        </div>
       </div>
 
       {/* Stats Cards */}
@@ -318,7 +337,9 @@ const Billing = () => {
                   </td>
                   <td>{bill.customer_name}</td>
                   <td>
-                    <Badge variant={getUtilityBadge(bill.utility_type)} text={bill.utility_type} />
+                    <Badge status={getUtilityBadge(bill.utility_type)}>
+                      {bill.utility_type || 'N/A'}
+                    </Badge>
                   </td>
                   <td>{new Date(bill.bill_date).toLocaleDateString()}</td>
                   <td className={isOverdue(bill.due_date, bill.bill_status) ? 'overdue-date' : ''}>
@@ -329,7 +350,9 @@ const Billing = () => {
                     {formatCurrency(bill.outstanding_balance)}
                   </td>
                   <td>
-                    <Badge variant={getStatusBadge(bill.bill_status)} text={bill.bill_status} />
+                    <Badge status={getStatusBadge(bill.bill_status)}>
+                      {bill.bill_status || 'N/A'}
+                    </Badge>
                   </td>
                   <td>
                     <div className="action-buttons">
@@ -392,6 +415,15 @@ const Billing = () => {
           </button>
         </div>
       )}
+
+      <GenerateBillModal
+        isOpen={showGenerateBillModal}
+        onClose={() => setShowGenerateBillModal(false)}
+        onSuccess={() => {
+          fetchBills();
+          toast.success('Bill generated successfully!');
+        }}
+      />
     </div>
   );
 };

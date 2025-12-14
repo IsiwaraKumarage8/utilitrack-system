@@ -793,6 +793,8 @@ BEGIN
     DECLARE @tariff_id INT;
     DECLARE @rate_per_unit DECIMAL(10,2);
     DECLARE @fixed_charge DECIMAL(10,2);
+    DECLARE @consumption_charge DECIMAL(10,2);
+    DECLARE @total_amount DECIMAL(10,2);
     DECLARE @bill_number VARCHAR(50);
     DECLARE @bill_date DATE = GETDATE();
     DECLARE @due_date DATE = DATEADD(day, 30, GETDATE());
@@ -841,6 +843,10 @@ BEGIN
             RETURN;
         END
         
+        -- Calculate charges
+        SET @consumption_charge = @consumption * @rate_per_unit;
+        SET @total_amount = @consumption_charge + @fixed_charge;
+        
         -- Generate unique bill number
         DECLARE @year INT = YEAR(@bill_date);
         DECLARE @sequence INT;
@@ -851,20 +857,19 @@ BEGIN
         
         SET @bill_number = 'BILL-' + CAST(@year AS VARCHAR(4)) + '-' + RIGHT('0000' + CAST(@sequence AS VARCHAR(4)), 4);
         
-        -- Insert the bill
+        -- Insert the bill with calculated values
         INSERT INTO Billing (
             connection_id, reading_id, tariff_id, bill_number,
             bill_date, due_date, billing_period_start, billing_period_end,
-            consumption, rate_per_unit, fixed_charge
+            consumption, rate_per_unit, fixed_charge,
+            consumption_charge, total_amount, outstanding_balance, amount_paid
         )
         VALUES (
             @connection_id, @reading_id, @tariff_id, @bill_number,
             @bill_date, @due_date, @period_start, @period_end,
-            @consumption, @rate_per_unit, @fixed_charge
+            @consumption, @rate_per_unit, @fixed_charge,
+            @consumption_charge, @total_amount, @total_amount, 0
         );
-        
-        -- Note: consumption_charge, total_amount, and outstanding_balance 
-        -- will be calculated by the trg_CalculateBillingAmounts trigger
         
         -- Return the bill number
         SET @bill_number_out = @bill_number;
