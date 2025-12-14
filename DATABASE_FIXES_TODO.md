@@ -7,40 +7,68 @@
 
 ## 🔴 HIGH PRIORITY - Critical Fixes (Must Fix for System to Work)
 
-### 1. Fix sp_GenerateBill Stored Procedure
-- [ ] **Issue**: Procedure doesn't accept `due_date` parameter but backend tries to pass it
-- [ ] **Location**: `ums_db.sql` line ~795 and `backend/models/billingModel.js` line ~314
-- [ ] **Fix Options**:
-  - Option A: Add `@due_date` parameter to stored procedure
+### 1. Fix sp_GenerateBill Stored Procedure ✅
+- [x] **Issue**: Procedure doesn't accept `due_date` parameter but backend tries to pass it
+- [x] **Location**: `ums_db.sql` line ~795 and `backend/models/billingModel.js` line ~314
+- [x] **Fix Options**:
+  - Option A: Add `@due_date` parameter to stored procedure ✅ (IMPLEMENTED)
   - Option B: Remove due_date from backend call
-- [ ] **Test**: Generate a bill via API and verify due_date is correctly set
+- [x] **Test**: Generate a bill via API and verify due_date is correctly set
+- **Solution Applied**: Added optional `@due_date DATE = NULL` parameter to stored procedure with default of 30 days if not provided. Backend now passes the calculated due_date parameter.
 
-### 2. Implement Complaint Controller
-- [ ] **Issue**: `backend/controllers/complaintController.js` is empty
-- [ ] **Required Actions**:
-  - [ ] Create complaintModel.js with CRUD operations
-  - [ ] Implement controller methods (getAll, getById, create, update, delete)
-  - [ ] Add filtering by status, type, priority
-  - [ ] Add search functionality
-  - [ ] Create routes in `backend/routes/complaintRoutes.js`
-- [ ] **Test**: CRUD operations via API
+### 2. Implement Complaint Controller ✅
+- [x] **Issue**: `backend/controllers/complaintController.js` is empty
+- [x] **Required Actions**:
+  - [x] Create complaintModel.js with CRUD operations
+  - [x] Implement controller methods (getAll, getById, create, update, delete)
+  - [x] Add filtering by status, type, priority
+  - [x] Add search functionality
+  - [x] Create routes in `backend/routes/complaintRoutes.js`
+- [x] **Test**: CRUD operations via API
+- **Solution Applied**: 
+  - Created `complaintModel.js` with full CRUD operations
+  - Implemented filtering by status, type, priority
+  - Added search by complaint number, customer name, description
+  - Created dedicated endpoints for customer complaints and assigned complaints
+  - Added statistics endpoint for complaint metrics
+  - Implemented status updates and assignment functionality
+  - Auto-generates complaint numbers (COMP-YYYY-NNNN format)
+  - Routes registered in server.js
 
-### 3. Implement Meter Controller & Reading Management
-- [ ] **Issue**: `backend/controllers/meterController.js` is empty
-- [ ] **Required Actions**:
-  - [ ] Create meterModel.js with meter CRUD operations
-  - [ ] Create meterReadingModel.js for readings management
-  - [ ] Implement meterController methods
-  - [ ] Implement meterReadingController methods
-  - [ ] Create routes for both meters and readings
-  - [ ] Integrate with `sp_BulkMeterReadingEntry` stored procedure
-- [ ] **Test**: Create meter, submit readings, verify calculations
+### 3. Implement Meter Controller & Reading Management ✅
+- [x] **Issue**: `backend/controllers/meterController.js` is empty
+- [x] **Required Actions**:
+  - [x] Create meterModel.js with meter CRUD operations
+  - [x] Create meterReadingModel.js for readings management
+  - [x] Implement meterController methods
+  - [x] Implement meterReadingController methods
+  - [x] Create routes for both meters and readings
+  - [x] Integrate with `sp_BulkMeterReadingEntry` stored procedure
+- [x] **Test**: Create meter, submit readings, verify calculations
+- **Solution Applied**:
+  - Created `meterModel.js` with full CRUD operations for meters
+  - Created `meterReadingModel.js` for meter reading management
+  - Single unified `meterController.js` handles both meters and readings
+  - Integrated `sp_BulkMeterReadingEntry` SP for reading creation
+  - Auto-calculates consumption and validates readings
+  - Filter by meter status, reading type, unprocessed readings
+  - Search by meter number, customer name, connection number
+  - Statistics endpoints for both meters and readings
+  - Maintenance tracking with last_maintenance_date
+  - Routes registered in server.js
 
-### 4. Fix Multi-Meter Query Issue in Billing
-- [ ] **Issue**: Queries assume one meter per connection, may return duplicates
-- [ ] **Location**: `backend/models/billingModel.js` line ~58
-- [ ] **Fix**: Add DISTINCT or handle multiple meters properly
-- [ ] **Test**: Create connection with 2+ meters, verify bill generation
+### 4. Fix Multi-Meter Query Issue in Billing ✅
+- [x] **Issue**: Queries assume one meter per connection, may return duplicates
+- [x] **Location**: `backend/models/billingModel.js` line ~58
+- [x] **Fix**: Add DISTINCT or handle multiple meters properly
+- [x] **Test**: Create connection with 2+ meters, verify bill generation
+- **Solution Applied**:
+  - Fixed `findById` query: Now joins Meter through Meter_Reading (via reading_id)
+  - Fixed `findByBillNumber` query: Now joins Meter through Meter_Reading
+  - Each bill is linked to a specific reading, which is linked to a specific meter
+  - This ensures one-to-one relationship and prevents duplicate rows
+  - Added meter_type to output for better information
+  - Connections with multiple meters will have separate bills per meter
 
 ---
 
@@ -170,10 +198,10 @@
 ## 📊 PROGRESS TRACKING
 
 - **Total Items**: 14 major tasks
-- **Completed**: 0
+- **Completed**: 4
 - **In Progress**: 0
-- **Not Started**: 14
-- **Overall Progress**: 0%
+- **Not Started**: 10
+- **Overall Progress**: 29%
 
 ---
 

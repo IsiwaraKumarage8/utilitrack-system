@@ -58,12 +58,14 @@ const billingModel = {
         sc.connection_number,
         sc.property_address,
         m.meter_number,
+        m.meter_type,
         tp.tariff_name
       FROM Billing b
       INNER JOIN Service_Connection sc ON b.connection_id = sc.connection_id
       INNER JOIN Customer c ON sc.customer_id = c.customer_id
       INNER JOIN Utility_Type ut ON sc.utility_type_id = ut.utility_type_id
-      INNER JOIN Meter m ON sc.connection_id = m.connection_id
+      INNER JOIN Meter_Reading mr ON b.reading_id = mr.reading_id
+      INNER JOIN Meter m ON mr.meter_id = m.meter_id
       INNER JOIN Tariff_Plan tp ON b.tariff_id = tp.tariff_id
       WHERE b.bill_id = @billId
     `;
@@ -305,6 +307,7 @@ const billingModel = {
       
       const request = pool.request();
       request.input('reading_id', sql.Int, readingId);
+      request.input('due_date', sql.Date, finalDueDate);
       request.output('bill_number_out', sql.VarChar(50));
       
       const result = await request.execute('sp_GenerateBill');
@@ -335,12 +338,14 @@ const billingModel = {
         c.phone,
         ut.utility_name AS utility_type,
         sc.connection_number,
-        m.meter_number
+        m.meter_number,
+        m.meter_type
       FROM Billing b
       INNER JOIN Service_Connection sc ON b.connection_id = sc.connection_id
       INNER JOIN Customer c ON sc.customer_id = c.customer_id
       INNER JOIN Utility_Type ut ON sc.utility_type_id = ut.utility_type_id
-      INNER JOIN Meter m ON sc.connection_id = m.connection_id
+      INNER JOIN Meter_Reading mr ON b.reading_id = mr.reading_id
+      INNER JOIN Meter m ON mr.meter_id = m.meter_id
       WHERE b.bill_number = @billNumber
     `;
     

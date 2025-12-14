@@ -780,6 +780,7 @@ GO
 
 CREATE PROCEDURE sp_GenerateBill
     @reading_id INT,
+    @due_date DATE = NULL,
     @bill_number_out VARCHAR(50) OUTPUT
 AS
 BEGIN
@@ -797,7 +798,10 @@ BEGIN
     DECLARE @total_amount DECIMAL(10,2);
     DECLARE @bill_number VARCHAR(50);
     DECLARE @bill_date DATE = GETDATE();
-    DECLARE @due_date DATE = DATEADD(day, 30, GETDATE());
+    
+    -- Set default due_date if not provided (30 days from bill date)
+    IF @due_date IS NULL
+        SET @due_date = DATEADD(day, 30, GETDATE());
     DECLARE @period_start DATE;
     DECLARE @period_end DATE;
     

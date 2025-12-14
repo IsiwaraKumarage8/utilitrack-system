@@ -68,11 +68,14 @@ app.use('/api/billing', require('./routes/billingRoutes'));
 // Payment routes
 app.use('/api/payments', require('./routes/paymentRoutes'));
 
+// Complaint routes
+app.use('/api/complaints', require('./routes/complaintRoutes'));
+
+// Meter and Reading routes
+app.use('/api/meters', require('./routes/meterRoutes'));
+
 // TODO: Uncomment as routes are created
-// app.use('/api/complaints', require('./routes/complaintRoutes'));
 // app.use('/api/auth', require('./routes/authRoutes'));
-// app.use('/api/meters', require('./routes/meterRoutes'));
-// app.use('/api/readings', require('./routes/readingRoutes'));
 // app.use('/api/reports', require('./routes/reportRoutes'));
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
