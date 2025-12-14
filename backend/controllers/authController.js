@@ -21,6 +21,14 @@ const authController = {
 
       // Find user by username
       const user = await userModel.findByUsername(username);
+      
+      console.log('DEBUG: Login attempt for username:', username);
+      console.log('DEBUG: User found:', user ? 'Yes' : 'No');
+      if (user) {
+        console.log('DEBUG: User role:', user.user_role);
+        console.log('DEBUG: User status:', user.user_status);
+        console.log('DEBUG: Password hash length:', user.password_hash ? user.password_hash.length : 0);
+      }
 
       if (!user) {
         return res.status(401).json({
@@ -38,7 +46,9 @@ const authController = {
       }
 
       // Compare password with hash
+      console.log('DEBUG: Comparing password...');
       const isPasswordValid = await bcrypt.compare(password, user.password_hash);
+      console.log('DEBUG: Password valid:', isPasswordValid);
 
       if (!isPasswordValid) {
         return res.status(401).json({

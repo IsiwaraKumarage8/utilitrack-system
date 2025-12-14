@@ -1,6 +1,8 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
+import toast from 'react-hot-toast';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
+import { canAccessRoute } from './utils/permissions';
 import Auth from './pages/Auth/Auth';
 import DashboardLayout from './components/layout/DashboardLayout';
 import Dashboard from './pages/Dashboard';
@@ -29,6 +31,23 @@ const ProtectedRoute = ({ children }) => {
   return children;
 };
 
+// Role-based Protected Route wrapper
+const RoleProtectedRoute = ({ children, path }) => {
+  const { user } = useAuth();
+  
+  if (!user) {
+    return <Navigate to="/auth" replace />;
+  }
+  
+  // Check if user's role has access to this route
+  if (!canAccessRoute(user.user_role, path)) {
+    toast.error('Access denied. You do not have permission to view this page.');
+    return <Navigate to="/dashboard" replace />;
+  }
+  
+  return children;
+};
+
 function AppRoutes() {
   const { isAuthenticated, user } = useAuth();
 
@@ -49,18 +68,54 @@ function AppRoutes() {
         {/* Dashboard Routes - Protected */}
         <Route path="/*" element={
           <ProtectedRoute>
-            <DashboardLayout userRole={user?.role || 'Admin'}>
+            <DashboardLayout userRole={user?.user_role || 'Admin'}>
               <Routes>
                 <Route path="/dashboard" element={<Dashboard />} />
-                <Route path="/customers" element={<Customers />} />
-                <Route path="/connections" element={<Connections />} />
-                <Route path="/meters" element={<Meters />} />
-                <Route path="/readings" element={<Readings />} />
-                <Route path="/billing" element={<Billing />} />
-                <Route path="/payments" element={<Payments />} />
-                <Route path="/complaints" element={<Complaints />} />
-                <Route path="/reports" element={<Reports />} />
-                <Route path="/settings" element={<Settings />} />
+                <Route path="/customers" element={
+                  <RoleProtectedRoute path="/customers">
+                    <Customers />
+                  </RoleProtectedRoute>
+                } />
+                <Route path="/connections" element={
+                  <RoleProtectedRoute path="/connections">
+                    <Connections />
+                  </RoleProtectedRoute>
+                } />
+                <Route path="/meters" element={
+                  <RoleProtectedRoute path="/meters">
+                    <Meters />
+                  </RoleProtectedRoute>
+                } />
+                <Route path="/readings" element={
+                  <RoleProtectedRoute path="/readings">
+                    <Readings />
+                  </RoleProtectedRoute>
+                } />
+                <Route path="/billing" element={
+                  <RoleProtectedRoute path="/billing">
+                    <Billing />
+                  </RoleProtectedRoute>
+                } />
+                <Route path="/payments" element={
+                  <RoleProtectedRoute path="/payments">
+                    <Payments />
+                  </RoleProtectedRoute>
+                } />
+                <Route path="/complaints" element={
+                  <RoleProtectedRoute path="/complaints">
+                    <Complaints />
+                  </RoleProtectedRoute>
+                } />
+                <Route path="/reports" element={
+                  <RoleProtectedRoute path="/reports">
+                    <Reports />
+                  </RoleProtectedRoute>
+                } />
+                <Route path="/settings" element={
+                  <RoleProtectedRoute path="/settings">
+                    <Settings />
+                  </RoleProtectedRoute>
+                } />
               </Routes>
             </DashboardLayout>
           </ProtectedRoute>
