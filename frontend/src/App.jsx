@@ -6,9 +6,9 @@ import Customers from './pages/Customers/Customers';
 import Connections from './pages/Connections/Connections';
 import Meters from './pages/Meters/Meters';
 import Readings from './pages/Readings/Readings';
-import Billing from './pages/Billing';
-import Payments from './pages/Payments';
-import Complaints from './pages/Complaints';
+import Billing from './pages/Billing/Billing';
+import Payments from './pages/Payments/Payments';
+import Complaints from './pages/Complaints/Complaints';
 import Reports from './pages/Reports';
 import Settings from './pages/Settings';
 
