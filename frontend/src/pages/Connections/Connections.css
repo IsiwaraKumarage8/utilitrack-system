@@ -1,261 +1,370 @@
-/* Connections Page */
+/* Connections Page Specific Styles */
+/* All styles are self-contained - no shared CSS dependencies */
+
 .connections-page {
-  padding: 2rem;
-  overflow-x: hidden;
+  padding: 24px;
   width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+/* Table Container */
+.connections-page .table-container {
+  background-color: #ffffff;
+  border-radius: 12px 12px 0 0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  width: 100%;
+  max-width: 100%;
+  position: relative;
+  display: block;
+  margin-bottom: 0;
+}
+
+/* Scrollbar styling */
+.connections-page .table-container::-webkit-scrollbar {
+  height: 12px;
+}
+
+.connections-page .table-container::-webkit-scrollbar-track {
+  background: #f3f4f6;
+  border-radius: 0 0 12px 12px;
+}
+
+.connections-page .table-container::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 4px;
+}
+
+.connections-page .table-container::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
+/* Data Table */
+.connections-page .data-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: auto;
+}
+
+/* Connections table needs more width for 10 columns */
+.connections-page .connections-table {
+  min-width: 1400px;
+  width: max-content;
+}
+
+.connections-page .data-table thead tr {
+  background-color: #f9fafb;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+.connections-page .data-table th {
+  padding: 16px 20px;
+  text-align: left;
+  font-size: 12px;
+  font-weight: 600;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+
+.connections-page .data-table tbody tr {
+  border-bottom: 1px solid #f3f4f6;
+  transition: background-color 0.2s ease;
+}
+
+.connections-page .data-table tbody tr:hover {
+  background-color: #f9fafb;
+}
+
+.connections-page .data-table tbody tr:last-child {
+  border-bottom: none;
+}
+
+.connections-page .data-table td {
+  padding: 16px 20px;
+  font-size: 14px;
+  color: #1f2937;
+  vertical-align: middle;
+}
+
+.connections-page .data-table td {
+  padding: 16px 20px;
+  font-size: 14px;
+  color: #1f2937;
+  vertical-align: middle;
+}
+
+/* Sticky Actions Column */
+.connections-page .data-table th:last-child,
+.connections-page .data-table td:last-child {
+  position: sticky;
+  right: 0;
+  background-color: #f9fafb;
+  box-shadow: -2px 0 4px rgba(0, 0, 0, 0.05);
+  z-index: 1;
+}
+
+.connections-page .data-table tbody tr:hover td:last-child {
+  background-color: #f9fafb;
+}
+
+.connections-page .data-table td:last-child {
+  background-color: #ffffff;
+}
+
+.connections-page .data-table tbody tr:hover td:last-child {
+  background-color: #f9fafb;
+}
+
+/* Action Buttons */
+.connections-page .action-buttons {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-start;
+}
+
+.connections-page .action-btn {
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background-color: transparent;
+}
+
+.connections-page .action-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+.connections-page .action-btn-view {
+  color: #3b82f6;
+}
+
+.connections-page .action-btn-view:hover {
+  background-color: #eff6ff;
+}
+
+.connections-page .action-btn-edit {
+  color: #10b981;
+}
+
+.connections-page .action-btn-edit:hover {
+  background-color: #f0fdf4;
+}
+
+.connections-page .action-btn-delete {
+  color: #ef4444;
+}
+
+.connections-page .action-btn-delete:hover {
+  background-color: #fef2f2;
+}
+
+/* Pagination */
+.connections-page .pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-top: 1px solid #e5e7eb;
+  background-color: #ffffff;
+  border-radius: 0 0 12px 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  margin-top: 0;
+}
+
+.connections-page .pagination-btn {
+  padding: 8px 16px;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  background-color: #ffffff;
+  color: #374151;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.connections-page .pagination-btn:hover:not(:disabled) {
+  background-color: #f9fafb;
+  border-color: #3b82f6;
+  color: #3b82f6;
+}
+
+.connections-page .pagination-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.connections-page .pagination-pages {
+  display: flex;
+  gap: 4px;
+}
+
+.connections-page .pagination-page {
+  width: 32px;
+  height: 32px;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  background-color: #ffffff;
+  color: #374151;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.connections-page .pagination-page:hover {
+  background-color: #f9fafb;
+  border-color: #3b82f6;
+  color: #3b82f6;
+}
+
+.connections-page .pagination-page.active {
+  background-color: #3b82f6;
+  border-color: #3b82f6;
+  color: #ffffff;
+}
+
+/* Empty State */
+.connections-page .empty-state {
+  padding: 80px 20px;
+  text-align: center;
+}
+
+.connections-page .empty-state-text {
+  font-size: 18px;
+  font-weight: 500;
+  color: #1f2937;
+  margin: 0 0 8px 0;
+}
+
+.connections-page .empty-state-subtext {
+  font-size: 14px;
+  color: #6b7280;
+  margin: 0;
 }
 
 /* Page Header */
 .connections-header {
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  margin-bottom: 2rem;
+  align-items: flex-start;
+  margin-bottom: 32px;
 }
 
 .page-title {
-  font-size: 2rem;
-  font-weight: 700;
-  color: #F9FAFB;
-  margin-bottom: 0.25rem;
+  font-size: 28px;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0 0 8px 0;
 }
 
 .page-subtitle {
-  color: #9CA3AF;
-  font-size: 0.875rem;
+  font-size: 14px;
+  color: #6b7280;
+  margin: 0;
 }
 
-/* Filters */
+.button-icon {
+  width: 18px;
+  height: 18px;
+  margin-right: 8px;
+}
+
+/* Filters Section */
 .connections-filters {
   display: flex;
-  gap: 1rem;
-  margin-bottom: 2rem;
+  gap: 16px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
 }
 
 .search-bar {
   position: relative;
   flex: 1;
+  min-width: 300px;
 }
 
 .search-icon {
   position: absolute;
-  left: 1rem;
+  left: 12px;
   top: 50%;
   transform: translateY(-50%);
-  color: #9CA3AF;
+  width: 18px;
+  height: 18px;
+  color: #9ca3af;
   pointer-events: none;
 }
 
 .search-input {
   width: 100%;
-  padding: 0.75rem 1rem 0.75rem 3rem;
-  background-color: #1F2937;
-  border: 1px solid #374151;
-  border-radius: 0.5rem;
-  color: #F9FAFB;
-  font-size: 0.875rem;
-  transition: all 0.2s;
+  padding: 10px 12px 10px 40px;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  font-size: 14px;
+  transition: all 0.2s ease;
 }
 
 .search-input:focus {
   outline: none;
-  border-color: #3B82F6;
+  border-color: #3b82f6;
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
-.search-input::placeholder {
-  color: #6B7280;
+.filter-group {
+  display: flex;
+  gap: 12px;
 }
 
 .filter-select {
-  padding: 0.75rem 1rem;
-  background-color: #1F2937;
-  border: 1px solid #374151;
-  border-radius: 0.5rem;
-  color: #F9FAFB;
-  font-size: 0.875rem;
+  padding: 10px 12px;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  font-size: 14px;
+  background-color: #ffffff;
   cursor: pointer;
-  transition: all 0.2s;
-  min-width: 12rem;
+  transition: all 0.2s ease;
+}
+
+.filter-select:hover {
+  border-color: #3b82f6;
 }
 
 .filter-select:focus {
   outline: none;
-  border-color: #3B82F6;
+  border-color: #3b82f6;
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
-/* Table Container */
-.table-container {
-  background-color: #1F2937;
-  border-radius: 0.75rem;
-  border: 1px solid #374151;
-  margin-bottom: 2rem;
-  width: 100%;
-  max-width: 100%;
-  overflow-x: auto !important;
-  overflow-y: visible;
-  position: relative;
-  display: block;
-}
-
-/* Scrollbar styling */
-.table-container::-webkit-scrollbar {
-  height: 12px;
-}
-
-.table-container::-webkit-scrollbar-track {
-  background: #111827;
-  border-radius: 0 0 0.75rem 0.75rem;
-}
-
-.table-container::-webkit-scrollbar-thumb {
-  background: #4B5563;
-  border-radius: 6px;
-}
-
-.table-container::-webkit-scrollbar-thumb:hover {
-  background: #6B7280;
-}
-
-/* Connections Table */
+/* Table Override - Connections table needs more width for 10 columns */
 .connections-table {
-  width: 100%;
   min-width: 1400px;
-  border-collapse: collapse;
-  table-layout: auto;
+  width: max-content;
 }
 
-.connections-table thead {
-  background-color: #111827;
-  border-bottom: 2px solid #374151;
-}
-
-.connections-table thead th {
-  padding: 0.75rem 0.5rem;
-  text-align: left;
-  font-size: 0.7rem;
-  font-weight: 600;
-  color: #9CA3AF;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  white-space: nowrap;
-}
-
-.connections-table tbody tr {
-  background-color: #1F2937;
-  border-bottom: 1px solid #374151;
-  transition: background-color 0.2s;
-}
-
-.connections-table tbody tr:hover {
-  background-color: #374151;
-}
-
-.connections-table tbody tr:last-child {
-  border-bottom: none;
-}
-
-.connections-table tbody td {
-  padding: 0.75rem 0.5rem;
-  color: #F9FAFB;
-  font-size: 0.8rem;
-  vertical-align: middle;
-}
-
-/* Column Widths */
-/* Utility Type */
-.connections-table th:nth-child(1),
-.connections-table td:nth-child(1) {
-  min-width: 140px;
-}
-
-/* Connection No. */
-.connections-table th:nth-child(2),
-.connections-table td:nth-child(2) {
-  min-width: 140px;
-}
-
-/* Customer */
-.connections-table th:nth-child(3),
-.connections-table td:nth-child(3) {
-  min-width: 120px;
-}
-
-/* Meter Number */
-.connections-table th:nth-child(4),
-.connections-table td:nth-child(4) {
-  min-width: 160px;
-}
-
-/* Tariff Plan */
-.connections-table th:nth-child(5),
-.connections-table td:nth-child(5) {
-  min-width: 180px;
-}
-
-/* Location */
-.connections-table th:nth-child(6),
-.connections-table td:nth-child(6) {
-  min-width: 200px;
-  max-width: 250px;
-}
-
-/* Installation Date */
-.connections-table th:nth-child(7),
-.connections-table td:nth-child(7) {
-  min-width: 120px;
-}
-
-/* Status */
-.connections-table th:nth-child(8),
-.connections-table td:nth-child(8) {
-  min-width: 100px;
-}
-
-/* Consumption */
-.connections-table th:nth-child(9),
-.connections-table td:nth-child(9) {
-  min-width: 120px;
-}
-
-/* Actions */
-.connections-table th:nth-child(10),
-.connections-table td:nth-child(10) {
-  min-width: 120px;
-}
-
-/* Utility Cell */
+/* Utility Cell (Specific to Connections Table) */
 .utility-cell {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 8px;
 }
 
-.utility-cell.electricity .utility-icon-wrapper {
-  background: linear-gradient(135deg, #3B82F6, #1D4ED8);
-}
-
-.utility-cell.water .utility-icon-wrapper {
-  background: linear-gradient(135deg, #06B6D4, #0891B2);
-}
-
-.utility-cell.gas .utility-icon-wrapper {
-  background: linear-gradient(135deg, #F59E0B, #D97706);
-}
-
-.utility-cell.sewage .utility-icon-wrapper {
-  background: linear-gradient(135deg, #8B5CF6, #6D28D9);
-}
-
-.utility-cell.street-lighting .utility-icon-wrapper {
-  background: linear-gradient(135deg, #FBBF24, #F59E0B);
-}
-
-.utility-icon-wrapper {
-  width: 2rem;
-  height: 2rem;
-  border-radius: 0.375rem;
+.utility-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -263,143 +372,87 @@
   flex-shrink: 0;
 }
 
-.utility-icon-wrapper svg {
+.utility-icon svg {
   width: 16px;
   height: 16px;
 }
 
-.utility-cell span {
-  font-weight: 500;
+.utility-cell.electricity .utility-icon {
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
 }
 
-/* Table Specific Cells */
+.utility-cell.water .utility-icon {
+  background: linear-gradient(135deg, #06b6d4, #0891b2);
+}
+
+.utility-cell.gas .utility-icon {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+}
+
+.utility-cell.sewage .utility-icon {
+  background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+}
+
+.utility-cell.street-lighting .utility-icon {
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+}
+
+.utility-name {
+  font-weight: 500;
+  color: #1f2937;
+}
+
 .connection-number,
 .meter-number {
   font-family: 'Courier New', monospace;
-  color: #60A5FA;
+  color: #3b82f6;
   font-weight: 500;
 }
 
-.location-cell {
-  display: block;
-  color: #D1D5DB;
-  font-size: 0.75rem;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+.location-text {
+  color: #6b7280;
+  font-size: 14px;
 }
 
-.location-cell svg {
-  display: none;
+.consumption-value {
+  color: #10b981;
+  font-weight: 500;
 }
 
-/* Action Buttons */
-.action-buttons {
-  display: flex;
-  gap: 0.5rem;
-  justify-content: flex-end;
+.text-muted {
+  color: #9ca3af;
 }
 
-.action-btn {
-  padding: 0.5rem;
-  background-color: #374151;
-  border: none;
-  border-radius: 0.375rem;
-  color: #9CA3AF;
-  cursor: pointer;
-  transition: all 0.2s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.action-btn:hover {
-  background-color: #4B5563;
-  color: #F9FAFB;
-}
-
-.action-btn.view:hover {
-  background-color: #1E40AF;
-  color: white;
-}
-
-.action-btn.edit:hover {
-  background-color: #059669;
-  color: white;
-}
-
-.action-btn.delete:hover {
-  background-color: #DC2626;
-  color: white;
-}
-
-/* Pagination */
-.pagination {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
-}
-
-.pagination-btn {
-  padding: 0.625rem 1.25rem;
-  background-color: #374151;
-  border: 1px solid #4B5563;
-  border-radius: 0.5rem;
-  color: #F9FAFB;
-  font-size: 0.875rem;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.pagination-btn:hover:not(:disabled) {
-  background-color: #4B5563;
-  border-color: #6B7280;
-}
-
-.pagination-btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.pagination-info {
-  color: #9CA3AF;
-  font-size: 0.875rem;
-}
-
-/* Empty State */
-.empty-state {
-  text-align: center;
-  padding: 4rem 2rem;
-  color: #9CA3AF;
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-  .connections-page {
-    padding: 1rem;
-  }
-
+/* Responsive */
+@media (max-width: 1024px) {
   .connections-header {
     flex-direction: column;
-    align-items: flex-start;
-    gap: 1rem;
-  }
-
-  .connections-header button {
-    width: 100%;
+    gap: 16px;
   }
 
   .connections-filters {
     flex-direction: column;
   }
 
-  .filter-select {
-    width: 100%;
-    min-width: auto;
+  .search-bar {
+    min-width: 100%;
   }
 
-  .connections-table {
-    min-width: 1000px;
+  .filter-group {
+    flex-direction: column;
+  }
+
+  .filter-select {
+    width: 100%;
+  }
+}
+
+@media (max-width: 640px) {
+  .connections-page {
+    padding: 16px;
+  }
+
+  .page-title {
+    font-size: 24px;
   }
 }

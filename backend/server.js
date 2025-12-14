@@ -59,9 +59,11 @@ app.get('/health', (req, res) => {
 // Customer routes
 app.use('/api/customers', require('./routes/customerRoutes'));
 
+// Service Connection routes
+app.use('/api/connections', require('./routes/connectionRoutes'));
+
 // TODO: Uncomment as routes are created
 // app.use('/api/auth', require('./routes/authRoutes'));
-// app.use('/api/connections', require('./routes/connectionRoutes'));
 // app.use('/api/meters', require('./routes/meterRoutes'));
 // app.use('/api/readings', require('./routes/readingRoutes'));
 // app.use('/api/billing', require('./routes/billingRoutes'));

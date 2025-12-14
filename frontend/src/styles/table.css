@@ -1,0 +1,244 @@
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   SHARED TABLE STYLES
+   Standard table styling for all data tables in the system
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+/* Table Container */
+.table-container {
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  width: 100%;
+  max-width: 100%;
+  position: relative;
+  display: block;
+}
+
+/* Scrollbar styling */
+.table-container::-webkit-scrollbar {
+  height: 12px;
+}
+
+.table-container::-webkit-scrollbar-track {
+  background: #f3f4f6;
+  border-radius: 0 0 12px 12px;
+}
+
+.table-container::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 4px;
+}
+
+.table-container::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
+/* Data Table */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 800px;
+}
+
+.data-table thead tr {
+  background-color: #f9fafb;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+.data-table th {
+  padding: 16px 20px;
+  text-align: left;
+  font-size: 12px;
+  font-weight: 600;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+
+.data-table tbody tr {
+  border-bottom: 1px solid #f3f4f6;
+  transition: background-color 0.2s ease;
+}
+
+.data-table tbody tr:hover {
+  background-color: #f9fafb;
+}
+
+.data-table tbody tr:last-child {
+  border-bottom: none;
+}
+
+.data-table td {
+  padding: 16px 20px;
+  font-size: 14px;
+  color: #1f2937;
+  vertical-align: middle;
+}
+
+/* Action Buttons */
+.action-buttons {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-start;
+}
+
+.action-btn {
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background-color: transparent;
+}
+
+.action-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+.action-btn-view {
+  color: #3b82f6;
+}
+
+.action-btn-view:hover {
+  background-color: #eff6ff;
+}
+
+.action-btn-edit {
+  color: #10b981;
+}
+
+.action-btn-edit:hover {
+  background-color: #f0fdf4;
+}
+
+.action-btn-delete {
+  color: #ef4444;
+}
+
+.action-btn-delete:hover {
+  background-color: #fef2f2;
+}
+
+/* Pagination */
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-top: 1px solid #e5e7eb;
+  background-color: #ffffff;
+}
+
+.pagination-btn {
+  padding: 8px 16px;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  background-color: #ffffff;
+  color: #374151;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.pagination-btn:hover:not(:disabled) {
+  background-color: #f9fafb;
+  border-color: #3b82f6;
+  color: #3b82f6;
+}
+
+.pagination-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pagination-pages {
+  display: flex;
+  gap: 4px;
+}
+
+.pagination-page {
+  width: 32px;
+  height: 32px;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  background-color: #ffffff;
+  color: #374151;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pagination-page:hover {
+  background-color: #f9fafb;
+  border-color: #3b82f6;
+  color: #3b82f6;
+}
+
+.pagination-page.active {
+  background-color: #3b82f6;
+  border-color: #3b82f6;
+  color: #ffffff;
+}
+
+/* Empty State */
+.empty-state {
+  padding: 80px 20px;
+  text-align: center;
+}
+
+.empty-state-text {
+  font-size: 18px;
+  font-weight: 500;
+  color: #1f2937;
+  margin: 0 0 8px 0;
+}
+
+.empty-state-subtext {
+  font-size: 14px;
+  color: #6b7280;
+  margin: 0;
+}
+
+/* Loading State */
+.loading-state {
+  padding: 80px 20px;
+  text-align: center;
+  color: #6b7280;
+}
+
+/* Error State */
+.error-state {
+  padding: 80px 20px;
+  text-align: center;
+}
+
+.error-state p {
+  font-size: 16px;
+  color: #ef4444;
+  margin-bottom: 16px;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .pagination {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .pagination-pages {
+    order: -1;
+  }
+}
