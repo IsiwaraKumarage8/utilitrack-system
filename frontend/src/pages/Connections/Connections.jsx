@@ -271,90 +271,91 @@ const Connections = () => {
         </select>
       </div>
 
-      {/* Connections Grid */}
+      {/* Connections Table */}
       {paginatedConnections.length === 0 ? (
         <div className="empty-state">
           <p>No connections found</p>
         </div>
       ) : (
-        <div className="connections-grid">
-          {paginatedConnections.map(connection => (
-            <div key={connection.connection_id} className="connection-card">
-              {/* Card Header */}
-              <div className={`connection-card-header ${getUtilityColor(connection.utility_type)}`}>
-                <div className="utility-icon-wrapper">
-                  {getUtilityIcon(connection.utility_type)}
-                </div>
-                <div className="utility-info">
-                  <h3 className="utility-type">{connection.utility_type}</h3>
-                  <p className="connection-type">{connection.connection_number}</p>
-                </div>
-                <Badge variant={getStatusVariant(connection.connection_status)} text={connection.connection_status} />
-              </div>
-
-              {/* Card Body */}
-              <div className="connection-card-body">
-                <div className="connection-detail">
-                  <span className="detail-label">Customer</span>
-                  <span className="detail-value">{connection.customer_name}</span>
-                </div>
-                <div className="connection-detail">
-                  <span className="detail-label">Meter Number</span>
-                  <span className="detail-value">{connection.meter_number}</span>
-                </div>
-                <div className="connection-detail">
-                  <span className="detail-label">Tariff Plan</span>
-                  <span className="detail-value">{connection.tariff_plan}</span>
-                </div>
-                <div className="connection-detail">
-                  <span className="detail-label">Location</span>
-                  <span className="detail-value location">
-                    <MapPin size={14} />
-                    {connection.property_address}
-                  </span>
-                </div>
-                <div className="connection-detail">
-                  <span className="detail-label">Installation Date</span>
-                  <span className="detail-value">
-                    {new Date(connection.connection_date).toLocaleDateString()}
-                  </span>
-                </div>
-                {connection.connection_status === 'Active' && (
-                  <div className="connection-detail consumption">
-                    <span className="detail-label">Current Consumption</span>
-                    <span className="detail-value highlight">
-                      {connection.current_consumption} {connection.utility_type === 'Electricity' || connection.utility_type === 'Street Lighting' ? 'kWh' : 'Cubic Meters'}
-                    </span>
-                  </div>
-                )}
-              </div>
-
-              {/* Card Footer */}
-              <div className="connection-card-footer">
-                <button
-                  className="action-btn view"
-                  onClick={() => handleViewConnection(connection)}
-                  title="View Details"
-                >
-                  <Eye size={18} />
-                </button>
-                <button
-                  className="action-btn edit"
-                  onClick={() => handleEditConnection(connection)}
-                  title="Edit"
-                >
-                  <Edit2 size={18} />
-                </button>
-                <button
-                  className="action-btn delete"
-                  onClick={() => handleDeleteConnection(connection)}
-                  title="Delete"
-                >
-                  <Trash2 size={18} />
-                </button>
-              </div>
-            </div>
-          ))}
+        <div className="table-container">
+          <table className="connections-table">
+            <thead>
+              <tr>
+                <th>Utility Type</th>
+                <th>Connection No.</th>
+                <th>Customer</th>
+                <th>Meter Number</th>
+                <th>Tariff Plan</th>
+                <th>Location</th>
+                <th>Installation Date</th>
+                <th>Status</th>
+                <th>Consumption</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {paginatedConnections.map(connection => (
+                <tr key={connection.connection_id}>
+                  <td>
+                    <div className={`utility-cell ${getUtilityColor(connection.utility_type)}`}>
+                      <div className="utility-icon-wrapper">
+                        {getUtilityIcon(connection.utility_type)}
+                      </div>
+                      <span>{connection.utility_type}</span>
+                    </div>
+                  </td>
+                  <td className="connection-number">{connection.connection_number}</td>
+                  <td>{connection.customer_name}</td>
+                  <td className="meter-number">{connection.meter_number}</td>
+                  <td>{connection.tariff_plan}</td>
+                  <td>
+                    <div className="location-cell">
+                      <MapPin size={14} />
+                      <span>{connection.property_address}</span>
+                    </div>
+                  </td>
+                  <td>{new Date(connection.connection_date).toLocaleDateString()}</td>
+                  <td>
+                    <Badge variant={getStatusVariant(connection.connection_status)} text={connection.connection_status} />
+                  </td>
+                  <td>
+                    {connection.connection_status === 'Active' ? (
+                      <span className="consumption-value">
+                        {connection.current_consumption} {connection.utility_type === 'Electricity' || connection.utility_type === 'Street Lighting' ? 'kWh' : 'm³'}
+                      </span>
+                    ) : (
+                      <span className="text-muted">-</span>
+                    )}
+                  </td>
+                  <td>
+                    <div className="action-buttons">
+                      <button
+                        className="action-btn view"
+                        onClick={() => handleViewConnection(connection)}
+                        title="View Details"
+                      >
+                        <Eye size={18} />
+                      </button>
+                      <button
+                        className="action-btn edit"
+                        onClick={() => handleEditConnection(connection)}
+                        title="Edit"
+                      >
+                        <Edit2 size={18} />
+                      </button>
+                      <button
+                        className="action-btn delete"
+                        onClick={() => handleDeleteConnection(connection)}
+                        title="Delete"
+                      >
+                        <Trash2 size={18} />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       )}
 

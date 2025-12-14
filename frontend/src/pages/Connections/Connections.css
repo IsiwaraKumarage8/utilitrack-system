@@ -1,6 +1,8 @@
 /* Connections Page */
 .connections-page {
   padding: 2rem;
+  overflow-x: hidden;
+  width: 100%;
 }
 
 /* Page Header */
@@ -83,147 +85,223 @@
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
-/* Connections Grid */
-.connections-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(22rem, 1fr));
-  gap: 1.5rem;
-  margin-bottom: 2rem;
-}
-
-/* Connection Card */
-.connection-card {
+/* Table Container */
+.table-container {
   background-color: #1F2937;
   border-radius: 0.75rem;
   border: 1px solid #374151;
-  overflow: hidden;
-  transition: all 0.3s;
-  display: flex;
-  flex-direction: column;
+  margin-bottom: 2rem;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto !important;
+  overflow-y: visible;
+  position: relative;
+  display: block;
 }
 
-.connection-card:hover {
-  border-color: #4B5563;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
-  transform: translateY(-2px);
+/* Scrollbar styling */
+.table-container::-webkit-scrollbar {
+  height: 12px;
 }
 
-/* Card Header */
-.connection-card-header {
-  padding: 1.25rem;
+.table-container::-webkit-scrollbar-track {
+  background: #111827;
+  border-radius: 0 0 0.75rem 0.75rem;
+}
+
+.table-container::-webkit-scrollbar-thumb {
+  background: #4B5563;
+  border-radius: 6px;
+}
+
+.table-container::-webkit-scrollbar-thumb:hover {
+  background: #6B7280;
+}
+
+/* Connections Table */
+.connections-table {
+  width: 100%;
+  min-width: 1400px;
+  border-collapse: collapse;
+  table-layout: auto;
+}
+
+.connections-table thead {
+  background-color: #111827;
+  border-bottom: 2px solid #374151;
+}
+
+.connections-table thead th {
+  padding: 0.75rem 0.5rem;
+  text-align: left;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #9CA3AF;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+
+.connections-table tbody tr {
+  background-color: #1F2937;
+  border-bottom: 1px solid #374151;
+  transition: background-color 0.2s;
+}
+
+.connections-table tbody tr:hover {
+  background-color: #374151;
+}
+
+.connections-table tbody tr:last-child {
+  border-bottom: none;
+}
+
+.connections-table tbody td {
+  padding: 0.75rem 0.5rem;
+  color: #F9FAFB;
+  font-size: 0.8rem;
+  vertical-align: middle;
+}
+
+/* Column Widths */
+/* Utility Type */
+.connections-table th:nth-child(1),
+.connections-table td:nth-child(1) {
+  min-width: 140px;
+}
+
+/* Connection No. */
+.connections-table th:nth-child(2),
+.connections-table td:nth-child(2) {
+  min-width: 140px;
+}
+
+/* Customer */
+.connections-table th:nth-child(3),
+.connections-table td:nth-child(3) {
+  min-width: 120px;
+}
+
+/* Meter Number */
+.connections-table th:nth-child(4),
+.connections-table td:nth-child(4) {
+  min-width: 160px;
+}
+
+/* Tariff Plan */
+.connections-table th:nth-child(5),
+.connections-table td:nth-child(5) {
+  min-width: 180px;
+}
+
+/* Location */
+.connections-table th:nth-child(6),
+.connections-table td:nth-child(6) {
+  min-width: 200px;
+  max-width: 250px;
+}
+
+/* Installation Date */
+.connections-table th:nth-child(7),
+.connections-table td:nth-child(7) {
+  min-width: 120px;
+}
+
+/* Status */
+.connections-table th:nth-child(8),
+.connections-table td:nth-child(8) {
+  min-width: 100px;
+}
+
+/* Consumption */
+.connections-table th:nth-child(9),
+.connections-table td:nth-child(9) {
+  min-width: 120px;
+}
+
+/* Actions */
+.connections-table th:nth-child(10),
+.connections-table td:nth-child(10) {
+  min-width: 120px;
+}
+
+/* Utility Cell */
+.utility-cell {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  position: relative;
+  gap: 0.5rem;
 }
 
-.connection-card-header.electricity {
+.utility-cell.electricity .utility-icon-wrapper {
   background: linear-gradient(135deg, #3B82F6, #1D4ED8);
 }
 
-.connection-card-header.water {
+.utility-cell.water .utility-icon-wrapper {
   background: linear-gradient(135deg, #06B6D4, #0891B2);
 }
 
-.connection-card-header.gas {
+.utility-cell.gas .utility-icon-wrapper {
   background: linear-gradient(135deg, #F59E0B, #D97706);
 }
 
-.connection-card-header.sewage {
+.utility-cell.sewage .utility-icon-wrapper {
   background: linear-gradient(135deg, #8B5CF6, #6D28D9);
 }
 
-.connection-card-header.street-lighting {
+.utility-cell.street-lighting .utility-icon-wrapper {
   background: linear-gradient(135deg, #FBBF24, #F59E0B);
 }
 
 .utility-icon-wrapper {
-  width: 3rem;
-  height: 3rem;
-  background-color: rgba(255, 255, 255, 0.2);
-  border-radius: 0.5rem;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 0.375rem;
   display: flex;
   align-items: center;
   justify-content: center;
   color: white;
-  backdrop-filter: blur(10px);
+  flex-shrink: 0;
 }
 
-.utility-info {
-  flex: 1;
+.utility-icon-wrapper svg {
+  width: 16px;
+  height: 16px;
 }
 
-.utility-type {
-  font-size: 1.125rem;
-  font-weight: 600;
-  color: white;
-  margin-bottom: 0.125rem;
-}
-
-.connection-type {
-  font-size: 0.75rem;
-  color: rgba(255, 255, 255, 0.9);
-}
-
-/* Card Body */
-.connection-card-body {
-  padding: 1.25rem;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 0.875rem;
-}
-
-.connection-detail {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-}
-
-.detail-label {
-  font-size: 0.75rem;
-  color: #9CA3AF;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-.detail-value {
-  font-size: 0.875rem;
-  color: #F9FAFB;
+.utility-cell span {
   font-weight: 500;
 }
 
-.detail-value.location {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.375rem;
+/* Table Specific Cells */
+.connection-number,
+.meter-number {
+  font-family: 'Courier New', monospace;
+  color: #60A5FA;
+  font-weight: 500;
+}
+
+.location-cell {
+  display: block;
   color: #D1D5DB;
+  font-size: 0.75rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-.detail-value.highlight {
-  color: #10B981;
-  font-weight: 600;
-  font-size: 1rem;
+.location-cell svg {
+  display: none;
 }
 
-.connection-detail.consumption {
-  padding-top: 0.5rem;
-  border-top: 1px solid #374151;
-  margin-top: 0.25rem;
-}
-
-/* Card Footer */
-.connection-card-footer {
+/* Action Buttons */
+.action-buttons {
   display: flex;
   gap: 0.5rem;
-  padding: 1rem 1.25rem;
-  background-color: #111827;
-  border-top: 1px solid #374151;
+  justify-content: flex-end;
 }
 
 .action-btn {
-  flex: 1;
-  padding: 0.625rem;
+  padding: 0.5rem;
   background-color: #374151;
   border: none;
   border-radius: 0.375rem;
@@ -297,18 +375,6 @@
 }
 
 /* Responsive Design */
-@media (max-width: 1280px) {
-  .connections-grid {
-    grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
-  }
-}
-
-@media (max-width: 1024px) {
-  .connections-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
 @media (max-width: 768px) {
   .connections-page {
     padding: 1rem;
@@ -333,7 +399,7 @@
     min-width: auto;
   }
 
-  .connections-grid {
-    grid-template-columns: 1fr;
+  .connections-table {
+    min-width: 1000px;
   }
 }
