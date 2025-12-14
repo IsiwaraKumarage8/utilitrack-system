@@ -197,10 +197,6 @@ const Auth = () => {
           <h2 className="slide-element">WELCOME!</h2>
         </div>
       </div>
-
-      <div className="footer">
-        <p>Made with ❤️ by <a href="#" target="_blank" rel="noopener noreferrer">CodeZenithAI</a></p>
-      </div>
     </div>
   );
 };

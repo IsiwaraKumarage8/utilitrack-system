@@ -16,7 +16,12 @@ export const AuthProvider = ({ children }) => {
     
     if (storedUser && storedToken) {
       const userData = JSON.parse(storedUser);
-      setUser(userData);
+      // Normalize user data - ensure 'role' field exists
+      const normalizedUser = {
+        ...userData,
+        role: userData.role || userData.user_role
+      };
+      setUser(normalizedUser);
       setToken(storedToken);
       setIsAuthenticated(true);
     }
@@ -24,10 +29,16 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const login = (userData, authToken) => {
-    setUser(userData);
+    // Normalize user data - ensure 'role' field exists for consistency
+    const normalizedUser = {
+      ...userData,
+      role: userData.role || userData.user_role // Use 'role' if exists, otherwise use 'user_role'
+    };
+    
+    setUser(normalizedUser);
     setToken(authToken);
     setIsAuthenticated(true);
-    localStorage.setItem('user', JSON.stringify(userData));
+    localStorage.setItem('user', JSON.stringify(normalizedUser));
     localStorage.setItem('token', authToken);
   };
 

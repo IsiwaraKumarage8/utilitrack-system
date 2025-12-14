@@ -6,6 +6,23 @@ import Badge from '../common/Badge';
 import './Navbar.css';
 
 /**
+ * Get dashboard title based on user role
+ */
+const getDashboardTitle = (role) => {
+  if (!role) return 'Admin Dashboard';
+  
+  const roleMap = {
+    'Admin': 'Admin Dashboard',
+    'Manager': 'Manager Dashboard',
+    'Field Officer': 'Field Officer Dashboard',
+    'Cashier': 'Cashier Dashboard',
+    'Billing Clerk': 'Billing Dashboard'
+  };
+  
+  return roleMap[role] || `${role} Dashboard`;
+};
+
+/**
  * Enhanced Top Navbar Component with Premium Styling
  * @param {function} onMenuClick - Function to toggle mobile sidebar
  */
@@ -33,7 +50,7 @@ const Navbar = ({ onMenuClick }) => {
           <Menu />
         </button>
         <div>
-          <h1 className="navbar__title">Admin Dashboard</h1>
+          <h1 className="navbar__title">{getDashboardTitle(user?.role)}</h1>
           <p className="navbar__subtitle">Welcome back to your control center</p>
         </div>
       </div>
@@ -57,7 +74,7 @@ const Navbar = ({ onMenuClick }) => {
         <div className="navbar__user-section">
           <div className="navbar__user-info">
             <p className="navbar__user-name">{user?.username || 'Admin User'}</p>
-            <Badge status="info">{user?.role || 'Administrator'}</Badge>
+            <Badge status="info">{user?.role || 'User'}</Badge>
           </div>
           <div className="navbar__user-avatar">
             <User />
