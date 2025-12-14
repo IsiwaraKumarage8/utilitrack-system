@@ -63,6 +63,9 @@ app.get('/health', (req, res) => {
 // API ROUTES
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
+// Authentication routes
+app.use('/api/auth', require('./routes/authRoutes'));
+
 // Customer routes
 app.use('/api/customers', require('./routes/customerRoutes'));
 

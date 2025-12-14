@@ -250,10 +250,7 @@ const userModel = {
   },
 
   // Update password
-  updatePassword: async (userId, newPassword) => {
-    const salt = await bcrypt.genSalt(10);
-    const password_hash = await bcrypt.hash(newPassword, salt);
-
+  updatePassword: async (userId, password_hash) => {
     const queryString = `
       UPDATE [User]
       SET 

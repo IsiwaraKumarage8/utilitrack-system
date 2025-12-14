@@ -1,4 +1,7 @@
 import { Bell, Menu, LogOut, User, Search } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
+import { useAuth } from '../../contexts/AuthContext';
 import Badge from '../common/Badge';
 import './Navbar.css';
 
@@ -7,6 +10,15 @@ import './Navbar.css';
  * @param {function} onMenuClick - Function to toggle mobile sidebar
  */
 const Navbar = ({ onMenuClick }) => {
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    toast.success('Logged out successfully');
+    navigate('/auth');
+  };
+
   return (
     <nav className="navbar">
       {/* Gradient overlay */}
@@ -44,8 +56,8 @@ const Navbar = ({ onMenuClick }) => {
         {/* User Info */}
         <div className="navbar__user-section">
           <div className="navbar__user-info">
-            <p className="navbar__user-name">Admin User</p>
-            <Badge status="info">Administrator</Badge>
+            <p className="navbar__user-name">{user?.username || 'Admin User'}</p>
+            <Badge status="info">{user?.role || 'Administrator'}</Badge>
           </div>
           <div className="navbar__user-avatar">
             <User />
@@ -54,7 +66,7 @@ const Navbar = ({ onMenuClick }) => {
         </div>
         
         {/* Logout */}
-        <button className="navbar__logout">
+        <button className="navbar__logout" onClick={handleLogout} title="Logout">
           <LogOut />
         </button>
       </div>

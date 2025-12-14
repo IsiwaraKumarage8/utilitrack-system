@@ -335,20 +335,22 @@ GO
 -- Sample Data
 
 -- Sample data for [User] table
+-- NOTE: All passwords are hashed with bcrypt (12 rounds)
+-- Default password for all sample users: password123
 INSERT INTO [User] (username, password_hash, full_name, email, phone, user_role, department, hire_date, user_status, last_login)
 VALUES
-('jsmith', '$2a$12$KIXqXbZ3yH8N9fG2pQ1rL.xY5vW8zR4tP6nM7jK9hL3fD2sA1bC0e', 'John Smith', 'john.smith@utilityco.com', '0771234567', 'Admin', 'Operations', '2020-01-15', 'Active', '2024-12-10 09:30:00'),
-('mjohnson', '$2a$12$LJYrYcA4zI9O0gH3qR2sM.yZ6wX9aS5uQ7oN8kL0iM4gE3tB2cD1f', 'Mary Johnson', 'mary.johnson@utilityco.com', '0772345678', 'Manager', 'Finance', '2020-03-22', 'Active', '2024-12-11 08:15:00'),
-('rperera', '$2a$12$MKZsZdB5aJ0P1hI4rS3tN.zA7xY0bT6vR8pO9lM1jN5hF4uC3dE2g', 'Ruwan Perera', 'ruwan.perera@utilityco.com', '0773456789', 'Field Officer', 'Operations', '2021-06-10', 'Active', '2024-12-10 16:45:00'),
-('sfernando', '$2a$12$NLAtAeC6bK1Q2iJ5sT4uO.aAB8yZ1cU7wS9qP0mN2kO6iG5vD4eF3h', 'Shalini Fernando', 'shalini.fernando@utilityco.com', '0774567890', 'Cashier', 'Finance', '2021-09-05', 'Active', '2024-12-11 10:20:00'),
-('asilva', '$2a$12$OMBuBfD7cL2R3jK6tU5vP.bBC9zA2dV8xT0rQ1nO3lP7jH6wE5fG4i', 'Anton Silva', 'anton.silva@utilityco.com', '0775678901', 'Field Officer', 'Operations', '2022-01-12', 'Active', '2024-12-09 14:30:00'),
-('ndias', '$2a$12$PNCvCgE8dM3S4kL7uV6wQ.cCD0aB3eW9yU1sR2oP4mQ8kI7xF6gH5j', 'Nimal Dias', 'nimal.dias@utilityco.com', '0776789012', 'Billing Clerk', 'Finance', '2022-04-18', 'Active', '2024-12-11 11:00:00'),
-('kwijesinghe', '$2a$12$QODwDhF9eN4T5lM8vW7xR.dDE1bC4fX0zV2tS3pQ5nR9lJ8yG7hI6k', 'Kumari Wijesinghe', 'kumari.w@utilityco.com', '0777890123', 'Cashier', 'Finance', '2022-07-25', 'Active', '2024-12-10 15:10:00'),
-('pweerasinghe', '$2a$12$RPExEiG0fO5U6mN9wX8yS.eEF2cD5gY1aW3uT4qR6oS0mK9zH8iJ7l', 'Priya Weerasinghe', 'priya.weerasinghe@utilityco.com', '0778901234', 'Field Officer', 'Operations', '2023-02-14', 'Active', '2024-12-11 07:50:00'),
-('dbandara', '$2a$12$SQFyFjH1gP6V7nO0xY9zT.fFG3dE6hZ2bX4vU5rS7pT1nL0aI9jK8m', 'Dinesh Bandara', 'dinesh.bandara@utilityco.com', '0770123456', 'Manager', 'Customer Service', '2023-05-08', 'Active', '2024-12-11 09:00:00'),
-('tgunasekara', '$2a$12$TRGzGkI2hQ7W8oP1yZ0aU.gGH4eF7iA3cY5wV6sT8qU2oM1bJ0kL9n', 'Thilini Gunasekara', 'thilini.g@utilityco.com', '0771234568', 'Billing Clerk', 'Finance', '2023-08-20', 'Active', '2024-12-10 13:25:00'),
-('lranasinghe', '$2a$12$USHaHlJ3iR8X9pQ2zA1bV.hHI5fG8jB4dZ6xW7tU9rV3pN2cK1lM0o', 'Lakshan Ranasinghe', 'lakshan.r@utilityco.com', '0772345679', 'Field Officer', 'Operations', '2024-01-10', 'Active', '2024-12-09 12:40:00'),
-('mgamage', '$2a$12$VTIbImK4jS9Y0qR3aB2cW.iIJ6gH9kC5eA7yX8uV0sW4qO3dL2mN1p', 'Madhavi Gamage', 'madhavi.gamage@utilityco.com', '0773456780', 'Cashier', 'Finance', '2024-03-15', 'Active', '2024-12-11 08:45:00');
+('jsmith', '$2a$12$J0GyTBjNgg.ZOLopeE//Xec9N4jdTjTp0M9AEoZLPxzBioYh/f5e6', 'John Smith', 'john.smith@utilityco.com', '0771234567', 'Admin', 'Operations', '2020-01-15', 'Active', '2024-12-10 09:30:00'),
+('mjohnson', '$2a$12$J0GyTBjNgg.ZOLopeE//Xec9N4jdTjTp0M9AEoZLPxzBioYh/f5e6', 'Mary Johnson', 'mary.johnson@utilityco.com', '0772345678', 'Manager', 'Finance', '2020-03-22', 'Active', '2024-12-11 08:15:00'),
+('rperera', '$2a$12$J0GyTBjNgg.ZOLopeE//Xec9N4jdTjTp0M9AEoZLPxzBioYh/f5e6', 'Ruwan Perera', 'ruwan.perera@utilityco.com', '0773456789', 'Field Officer', 'Operations', '2021-06-10', 'Active', '2024-12-10 16:45:00'),
+('sfernando', '$2a$12$WZrPFCL3DVh9WkWNgHVkEu24xh0pV/teQ538vkmHawoOzWFy6hQ4a', 'Shalini Fernando', 'shalini.fernando@utilityco.com', '0774567890', 'Cashier', 'Finance', '2021-09-05', 'Active', '2024-12-11 10:20:00'),
+('asilva', '$2a$12$SvGjYREVnjrL5C7qys9wtuViG66b1fsN8/69T16I6CBbb4MZg.wuy', 'Anton Silva', 'anton.silva@utilityco.com', '0775678901', 'Field Officer', 'Operations', '2022-01-12', 'Active', '2024-12-09 14:30:00'),
+('ndias', '$2a$12$UuOfkATWZAoOzh/dzqn0Qe.dqOMOOVU4iG43dJKlVmjzTWXpBYYuC', 'Nimal Dias', 'nimal.dias@utilityco.com', '0776789012', 'Billing Clerk', 'Finance', '2022-04-18', 'Active', '2024-12-11 11:00:00'),
+('kwijesinghe', '$2a$12$wxMS1vEDRE2YqDCxsXCi6OPNtrj3OJ9B/JXRBswH83Op/UzI8UFSm', 'Kumari Wijesinghe', 'kumari.w@utilityco.com', '0777890123', 'Cashier', 'Finance', '2022-07-25', 'Active', '2024-12-10 15:10:00'),
+('pweerasinghe', '$2a$12$KbFpUGquNpK/076Lz0LES.DUEKzMd9SPZmgHyRMoaBFnzm.gh1AAu', 'Priya Weerasinghe', 'priya.weerasinghe@utilityco.com', '0778901234', 'Field Officer', 'Operations', '2023-02-14', 'Active', '2024-12-11 07:50:00'),
+('dbandara', '$2a$12$2a3qN.KAjDiy//LwLAmRgOeAEVKbbci9GTUmznf7mcNwkvou3Vh5G', 'Dinesh Bandara', 'dinesh.bandara@utilityco.com', '0770123456', 'Manager', 'Customer Service', '2023-05-08', 'Active', '2024-12-11 09:00:00'),
+('tgunasekara', '$2a$12$MZRyU1uNvKO8jE3Xii138e2gRiWcpWXMLunBG7ZKEizwaMW.2m.sC', 'Thilini Gunasekara', 'thilini.g@utilityco.com', '0771234568', 'Billing Clerk', 'Finance', '2023-08-20', 'Active', '2024-12-10 13:25:00'),
+('lranasinghe', '$2a$12$n75G2PWkljGwzgtSVLb3jeGEGozqXYnyDcixVpRTYb6bnp1jqrEP2', 'Lakshan Ranasinghe', 'lakshan.r@utilityco.com', '0772345679', 'Field Officer', 'Operations', '2024-01-10', 'Active', '2024-12-09 12:40:00'),
+('mgamage', '$2a$12$bvwAdwFJB2hssDoUCKVOfeA4s6StFUcnAQ4qofHV8OcNl9ScZxkJW', 'Madhavi Gamage', 'madhavi.gamage@utilityco.com', '0773456780', 'Cashier', 'Finance', '2024-03-15', 'Active', '2024-12-11 08:45:00');
 
 GO
 
@@ -778,9 +780,14 @@ GO
 
 -- Stored Procedures
 
+-- Drop existing procedures if they exist (for re-running the script)
+DROP PROCEDURE IF EXISTS sp_GenerateBill;
+DROP PROCEDURE IF EXISTS sp_ProcessPayment;
+DROP PROCEDURE IF EXISTS sp_MonthlyBillingRun;
+GO
+
 CREATE PROCEDURE sp_GenerateBill
     @reading_id INT,
-    @due_date DATE = NULL,
     @bill_number_out VARCHAR(50) OUTPUT
 AS
 BEGIN
@@ -798,10 +805,7 @@ BEGIN
     DECLARE @total_amount DECIMAL(10,2);
     DECLARE @bill_number VARCHAR(50);
     DECLARE @bill_date DATE = GETDATE();
-    
-    -- Set default due_date if not provided (30 days from bill date)
-    IF @due_date IS NULL
-        SET @due_date = DATEADD(day, 30, GETDATE());
+    DECLARE @due_date DATE = DATEADD(day, 30, GETDATE());
     DECLARE @period_start DATE;
     DECLARE @period_end DATE;
     
