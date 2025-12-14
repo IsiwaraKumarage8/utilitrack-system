@@ -62,12 +62,17 @@ app.use('/api/customers', require('./routes/customerRoutes'));
 // Service Connection routes
 app.use('/api/connections', require('./routes/connectionRoutes'));
 
+// Billing routes
+app.use('/api/billing', require('./routes/billingRoutes'));
+
+// Payment routes
+app.use('/api/payments', require('./routes/paymentRoutes'));
+
 // TODO: Uncomment as routes are created
+// app.use('/api/complaints', require('./routes/complaintRoutes'));
 // app.use('/api/auth', require('./routes/authRoutes'));
 // app.use('/api/meters', require('./routes/meterRoutes'));
 // app.use('/api/readings', require('./routes/readingRoutes'));
-// app.use('/api/billing', require('./routes/billingRoutes'));
-// app.use('/api/payments', require('./routes/paymentRoutes'));
 // app.use('/api/reports', require('./routes/reportRoutes'));
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

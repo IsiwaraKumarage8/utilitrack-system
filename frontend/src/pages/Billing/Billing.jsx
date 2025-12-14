@@ -2,260 +2,86 @@ import { useState, useEffect, useMemo } from 'react';
 import { Search, FileText, DollarSign, CheckCircle, AlertCircle, Eye, Download, CreditCard } from 'lucide-react';
 import Button from '../../components/common/Button';
 import Badge from '../../components/common/Badge';
+import billingApi from '../../api/billingApi';
 import '../../styles/table.css';
 import './Billing.css';
 
-// Mock data
-const MOCK_BILLS = [
-  {
-    bill_id: 1,
-    bill_number: 'BILL-2024-0001',
-    customer_name: 'Nuwan Bandara',
-    customer_type: 'Residential',
-    utility_type: 'Electricity',
-    bill_date: '2024-10-01',
-    due_date: '2024-10-31',
-    billing_period_start: '2024-08-31',
-    billing_period_end: '2024-09-30',
-    consumption: 130.50,
-    rate_per_unit: 25.00,
-    fixed_charge: 500.00,
-    consumption_charge: 3262.50,
-    total_amount: 3762.50,
-    amount_paid: 0.00,
-    outstanding_balance: 3762.50,
-    bill_status: 'Unpaid'
-  },
-  {
-    bill_id: 2,
-    bill_number: 'BILL-2024-0002',
-    customer_name: 'Saman Perera',
-    customer_type: 'Commercial',
-    utility_type: 'Water',
-    bill_date: '2024-10-02',
-    due_date: '2024-11-01',
-    billing_period_start: '2024-09-01',
-    billing_period_end: '2024-09-30',
-    consumption: 450.00,
-    rate_per_unit: 15.00,
-    fixed_charge: 1000.00,
-    consumption_charge: 6750.00,
-    total_amount: 7750.00,
-    amount_paid: 7750.00,
-    outstanding_balance: 0.00,
-    bill_status: 'Paid'
-  },
-  {
-    bill_id: 3,
-    bill_number: 'BILL-2024-0003',
-    customer_name: 'Kasun Silva',
-    customer_type: 'Residential',
-    utility_type: 'Electricity',
-    bill_date: '2024-10-03',
-    due_date: '2024-11-02',
-    billing_period_start: '2024-09-01',
-    billing_period_end: '2024-09-30',
-    consumption: 95.25,
-    rate_per_unit: 25.00,
-    fixed_charge: 500.00,
-    consumption_charge: 2381.25,
-    total_amount: 2881.25,
-    amount_paid: 1500.00,
-    outstanding_balance: 1381.25,
-    bill_status: 'Partially Paid'
-  },
-  {
-    bill_id: 4,
-    bill_number: 'BILL-2024-0004',
-    customer_name: 'Chamara Fernando',
-    customer_type: 'Industrial',
-    utility_type: 'Gas',
-    bill_date: '2024-09-15',
-    due_date: '2024-10-15',
-    billing_period_start: '2024-08-15',
-    billing_period_end: '2024-09-15',
-    consumption: 850.00,
-    rate_per_unit: 35.00,
-    fixed_charge: 2000.00,
-    consumption_charge: 29750.00,
-    total_amount: 31750.00,
-    amount_paid: 0.00,
-    outstanding_balance: 31750.00,
-    bill_status: 'Overdue'
-  },
-  {
-    bill_id: 5,
-    bill_number: 'BILL-2024-0005',
-    customer_name: 'Pradeep Kumara',
-    customer_type: 'Government',
-    utility_type: 'Water',
-    bill_date: '2024-10-05',
-    due_date: '2024-11-04',
-    billing_period_start: '2024-09-05',
-    billing_period_end: '2024-10-05',
-    consumption: 1200.00,
-    rate_per_unit: 12.00,
-    fixed_charge: 1500.00,
-    consumption_charge: 14400.00,
-    total_amount: 15900.00,
-    amount_paid: 15900.00,
-    outstanding_balance: 0.00,
-    bill_status: 'Paid'
-  },
-  {
-    bill_id: 6,
-    bill_number: 'BILL-2024-0006',
-    customer_name: 'Malini Wijesinghe',
-    customer_type: 'Residential',
-    utility_type: 'Electricity',
-    bill_date: '2024-10-06',
-    due_date: '2024-11-05',
-    billing_period_start: '2024-09-06',
-    billing_period_end: '2024-10-06',
-    consumption: 75.00,
-    rate_per_unit: 25.00,
-    fixed_charge: 500.00,
-    consumption_charge: 1875.00,
-    total_amount: 2375.00,
-    amount_paid: 0.00,
-    outstanding_balance: 2375.00,
-    bill_status: 'Unpaid'
-  },
-  {
-    bill_id: 7,
-    bill_number: 'BILL-2024-0007',
-    customer_name: 'Rohan De Silva',
-    customer_type: 'Commercial',
-    utility_type: 'Electricity',
-    bill_date: '2024-09-20',
-    due_date: '2024-10-20',
-    billing_period_start: '2024-08-20',
-    billing_period_end: '2024-09-20',
-    consumption: 320.00,
-    rate_per_unit: 25.00,
-    fixed_charge: 1000.00,
-    consumption_charge: 8000.00,
-    total_amount: 9000.00,
-    amount_paid: 0.00,
-    outstanding_balance: 9000.00,
-    bill_status: 'Overdue'
-  },
-  {
-    bill_id: 8,
-    bill_number: 'BILL-2024-0008',
-    customer_name: 'Anushka Jayawardena',
-    customer_type: 'Residential',
-    utility_type: 'Water',
-    bill_date: '2024-10-08',
-    due_date: '2024-11-07',
-    billing_period_start: '2024-09-08',
-    billing_period_end: '2024-10-08',
-    consumption: 180.00,
-    rate_per_unit: 15.00,
-    fixed_charge: 500.00,
-    consumption_charge: 2700.00,
-    total_amount: 3200.00,
-    amount_paid: 3200.00,
-    outstanding_balance: 0.00,
-    bill_status: 'Paid'
-  },
-  {
-    bill_id: 9,
-    bill_number: 'BILL-2024-0009',
-    customer_name: 'Dinesh Rathnayake',
-    customer_type: 'Commercial',
-    utility_type: 'Gas',
-    bill_date: '2024-10-10',
-    due_date: '2024-10-25',
-    billing_period_start: '2024-09-10',
-    billing_period_end: '2024-10-10',
-    consumption: 0.00,
-    rate_per_unit: 35.00,
-    fixed_charge: 1000.00,
-    consumption_charge: 0.00,
-    total_amount: 1000.00,
-    amount_paid: 0.00,
-    outstanding_balance: 0.00,
-    bill_status: 'Cancelled'
-  },
-  {
-    bill_id: 10,
-    bill_number: 'BILL-2024-0010',
-    customer_name: 'Samanthi Mendis',
-    customer_type: 'Residential',
-    utility_type: 'Electricity',
-    bill_date: '2024-10-12',
-    due_date: '2024-11-11',
-    billing_period_start: '2024-09-12',
-    billing_period_end: '2024-10-12',
-    consumption: 110.00,
-    rate_per_unit: 25.00,
-    fixed_charge: 500.00,
-    consumption_charge: 2750.00,
-    total_amount: 3250.00,
-    amount_paid: 1000.00,
-    outstanding_balance: 2250.00,
-    bill_status: 'Partially Paid'
-  }
-];
-
 const Billing = () => {
   const [bills, setBills] = useState([]);
+  const [stats, setStats] = useState({
+    totalBills: 0,
+    totalBilled: 0,
+    totalCollected: 0,
+    totalOutstanding: 0
+  });
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('All');
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
-  // Simulate data loading
+  // Fetch bills from API
   useEffect(() => {
-    const loadData = setTimeout(() => {
-      setBills(MOCK_BILLS);
-      setLoading(false);
-    }, 1000);
+    const fetchBills = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        
+        console.log('Fetching bills with filters:', { searchQuery, statusFilter });
+        
+        let response;
+        if (searchQuery) {
+          response = await billingApi.searchBills(searchQuery);
+        } else if (statusFilter !== 'All') {
+          response = await billingApi.filterByStatus(statusFilter);
+        } else {
+          response = await billingApi.getAllBills();
+        }
 
-    return () => clearTimeout(loadData);
+        console.log('Billing API response:', response);
+
+        if (response && response.success) {
+          setBills(response.data || []);
+        } else {
+          setBills([]);
+        }
+      } catch (err) {
+        console.error('Error fetching bills:', err);
+        setError(err.message || 'Failed to load bills. Please ensure the backend server is running.');
+        setBills([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBills();
+  }, [searchQuery, statusFilter]);
+
+  // Fetch billing stats
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const response = await billingApi.getBillingStats();
+        if (response.success) {
+          setStats({
+            totalBills: response.data.total_bills || 0,
+            totalBilled: response.data.total_billed || 0,
+            totalCollected: response.data.total_collected || 0,
+            totalOutstanding: response.data.total_outstanding || 0
+          });
+        }
+      } catch (err) {
+        console.error('Error fetching billing stats:', err);
+      }
+    };
+
+    fetchStats();
   }, []);
 
-  // Calculate stats
-  const stats = useMemo(() => {
-    const totalBills = bills.length;
-    const totalBilled = bills.reduce((sum, bill) => sum + bill.total_amount, 0);
-    const totalCollected = bills.reduce((sum, bill) => sum + bill.amount_paid, 0);
-    const totalOutstanding = bills.reduce((sum, bill) => sum + bill.outstanding_balance, 0);
-
-    return {
-      totalBills,
-      totalBilled,
-      totalCollected,
-      totalOutstanding
-    };
-  }, [bills]);
-
-  // Filter and search
-  const filteredBills = useMemo(() => {
-    return bills.filter(bill => {
-      // Status filter
-      if (statusFilter !== 'All' && bill.bill_status !== statusFilter) {
-        return false;
-      }
-
-      // Search filter
-      if (searchQuery) {
-        const query = searchQuery.toLowerCase();
-        return (
-          bill.bill_number.toLowerCase().includes(query) ||
-          bill.customer_name.toLowerCase().includes(query)
-        );
-      }
-
-      return true;
-    });
-  }, [bills, statusFilter, searchQuery]);
-
-  // Pagination
-  const totalPages = Math.ceil(filteredBills.length / itemsPerPage);
-  const paginatedBills = filteredBills.slice(
+  // Pagination (bills are already filtered from API)
+  const totalPages = Math.ceil(bills.length / itemsPerPage);
+  const paginatedBills = bills.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
@@ -289,7 +115,8 @@ const Billing = () => {
 
   // Format currency
   const formatCurrency = (amount) => {
-    return `Rs. ${amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    const num = Number(amount) || 0;
+    return `Rs. ${num.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
   };
 
   // Check if overdue
@@ -318,6 +145,25 @@ const Billing = () => {
         <div className="loading-state">
           <div className="spinner"></div>
           <p>Loading billing data...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="billing-page">
+        <div className="error-state">
+          <AlertCircle size={48} color="#ef4444" />
+          <h3>Error Loading Bills</h3>
+          <p>{error}</p>
+          <Button 
+            variant="primary" 
+            size="md"
+            onClick={() => window.location.reload()}
+          >
+            Retry
+          </Button>
         </div>
       </div>
     );
@@ -444,7 +290,7 @@ const Billing = () => {
 
       {/* Data Table */}
       <div className="table-container">
-        {filteredBills.length === 0 ? (
+        {paginatedBills.length === 0 ? (
           <div className="empty-state">
             <p className="empty-state-text">No bills found</p>
             <p className="empty-state-subtext">Try adjusting your search or filters</p>
@@ -515,7 +361,7 @@ const Billing = () => {
       </div>
 
       {/* Pagination */}
-      {filteredBills.length > 0 && totalPages > 1 && (
+      {paginatedBills.length > 0 && totalPages > 1 && (
         <div className="pagination">
           <button
             className="pagination-btn"
