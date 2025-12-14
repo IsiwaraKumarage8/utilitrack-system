@@ -407,6 +407,49 @@ const connectionModel = {
     } catch (error) {
       throw new Error(`Database error in findByCustomerId: ${error.message}`);
     }
+  },
+
+  /**
+   * Get active connections using optimized v_ActiveConnections view
+   * @param {Object} filters - Optional filters (utility_type, customer_type, meter_status)
+   */
+  getActiveConnections: async (filters = {}) => {
+    try {
+      const pool = await sql.connect(dbConfig);
+      const request = pool.request();
+      
+      let whereConditions = [`connection_status = 'Active'`];
+      
+      if (filters.utility_type) {
+        whereConditions.push(`utility_type = @utilityType`);
+        request.input('utilityType', sql.NVarChar, filters.utility_type);
+      }
+      
+      if (filters.customer_type) {
+        whereConditions.push(`customer_type = @customerType`);
+        request.input('customerType', sql.NVarChar, filters.customer_type);
+      }
+      
+      if (filters.meter_status) {
+        whereConditions.push(`meter_status = @meterStatus`);
+        request.input('meterStatus', sql.NVarChar, filters.meter_status);
+      }
+      
+      const whereClause = whereConditions.length > 0 
+        ? `WHERE ${whereConditions.join(' AND ')}` 
+        : '';
+      
+      const result = await request.query(`
+        SELECT *
+        FROM v_ActiveConnections
+        ${whereClause}
+        ORDER BY connection_date DESC
+      `);
+      
+      return result.recordset;
+    } catch (error) {
+      throw new Error(`Database error in getActiveConnections: ${error.message}`);
+    }
   }
 };
 

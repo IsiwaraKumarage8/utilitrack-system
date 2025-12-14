@@ -152,6 +152,47 @@ const billingController = {
     } catch (error) {
       next(error);
     }
+  },
+
+  // GET /api/billing/:id/late-fee - Calculate late fee for a bill
+  getLateFee: async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const { current_date } = req.query;
+
+      const lateFee = await billingModel.calculateLateFee(id, current_date);
+
+      res.status(200).json({
+        success: true,
+        data: {
+          bill_id: parseInt(id),
+          late_fee: lateFee,
+          calculated_date: current_date || new Date().toISOString().split('T')[0]
+        }
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  // GET /api/billing/:id/with-late-fee - Get bill with late fee included
+  getBillWithLateFee: async (req, res, next) => {
+    try {
+      const { id } = req.params;
+
+      const bill = await billingModel.getBillWithLateFee(id);
+
+      if (!bill) {
+        return next(new AppError('Bill not found', 404));
+      }
+
+      res.status(200).json({
+        success: true,
+        data: bill
+      });
+    } catch (error) {
+      next(error);
+    }
   }
 };
 

@@ -190,6 +190,49 @@ const customerController = {
     } catch (error) {
       next(error);
     }
+  },
+
+  /**
+   * GET /api/customers/:id/balance - Get customer's total outstanding balance
+   */
+  getCustomerBalance: async (req, res, next) => {
+    try {
+      const { id } = req.params;
+
+      const balance = await customerModel.getBalance(id);
+
+      res.status(200).json({
+        success: true,
+        data: {
+          customer_id: parseInt(id),
+          total_outstanding_balance: balance
+        }
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  /**
+   * GET /api/customers/:id/with-balance - Get customer with balance details
+   */
+  getCustomerWithBalance: async (req, res, next) => {
+    try {
+      const { id } = req.params;
+
+      const customer = await customerModel.getCustomerWithBalance(id);
+
+      if (!customer) {
+        return next(new AppError('Customer not found', 404));
+      }
+
+      res.status(200).json({
+        success: true,
+        data: customer
+      });
+    } catch (error) {
+      next(error);
+    }
   }
 };
 

@@ -216,6 +216,143 @@ const paymentModel = {
     } catch (error) {
       throw new Error(`Error fetching bill payments: ${error.message}`);
     }
+  },
+
+  // Create new payment using stored procedure
+  create: async (paymentData) => {
+    const { bill_id, payment_amount, payment_method, received_by, transaction_reference, notes } = paymentData;
+
+    const queryString = `
+      DECLARE @payment_number_out VARCHAR(50);
+      
+      EXEC sp_ProcessPayment 
+        @bill_id = @billId,
+        @payment_amount = @paymentAmount,
+        @payment_method = @paymentMethod,
+        @received_by = @receivedBy,
+        @transaction_reference = @transactionReference,
+        @payment_number_out = @payment_number_out OUTPUT;
+      
+      SELECT @payment_number_out AS payment_number;
+    `;
+
+    try {
+      const result = await query(queryString, {
+        billId: bill_id,
+        paymentAmount: payment_amount,
+        paymentMethod: payment_method,
+        receivedBy: received_by,
+        transactionReference: transaction_reference || null
+      });
+
+      const paymentNumber = result.recordset[0]?.payment_number;
+
+      // If notes are provided, update the payment record
+      if (notes && paymentNumber) {
+        const updateQuery = `
+          UPDATE Payment
+          SET notes = @notes
+          WHERE payment_number = @paymentNumber
+        `;
+        await query(updateQuery, { notes, paymentNumber });
+      }
+
+      // Fetch the complete payment details
+      const selectQuery = `
+        SELECT 
+          p.*,
+          c.first_name + ' ' + c.last_name AS customer_name,
+          b.bill_number,
+          u.full_name AS received_by_name
+        FROM Payment p
+        INNER JOIN Customer c ON p.customer_id = c.customer_id
+        INNER JOIN Billing b ON p.bill_id = b.bill_id
+        LEFT JOIN [User] u ON p.received_by = u.user_id
+        WHERE p.payment_number = @paymentNumber
+      `;
+      
+      const paymentResult = await query(selectQuery, { paymentNumber });
+      return paymentResult.recordset[0];
+    } catch (error) {
+      throw new Error(`Error creating payment: ${error.message}`);
+    }
+  },
+
+  // Update payment
+  update: async (paymentId, updateData) => {
+    const { payment_status, notes, transaction_reference } = updateData;
+
+    const queryString = `
+      UPDATE Payment
+      SET 
+        payment_status = COALESCE(@paymentStatus, payment_status),
+        notes = COALESCE(@notes, notes),
+        transaction_reference = COALESCE(@transactionReference, transaction_reference)
+      WHERE payment_id = @paymentId
+    `;
+
+    try {
+      await query(queryString, {
+        paymentId,
+        paymentStatus: payment_status || null,
+        notes: notes || null,
+        transactionReference: transaction_reference || null
+      });
+
+      // Return updated payment
+      return await paymentModel.findById(paymentId);
+    } catch (error) {
+      throw new Error(`Error updating payment: ${error.message}`);
+    }
+  },
+
+  // Delete payment
+  delete: async (paymentId) => {
+    const queryString = `
+      DELETE FROM Payment
+      WHERE payment_id = @paymentId
+    `;
+
+    try {
+      const result = await query(queryString, { paymentId });
+      return result.rowsAffected[0] > 0;
+    } catch (error) {
+      throw new Error(`Error deleting payment: ${error.message}`);
+    }
+  },
+
+  // Get customer payment history using optimized v_CustomerPaymentHistory view
+  getCustomerPaymentHistory: async (customerId = null, filters = {}) => {
+    const { start_date, end_date, payment_method } = filters;
+    
+    let whereConditions = [];
+    if (customerId) whereConditions.push(`customer_id = @customerId`);
+    if (start_date) whereConditions.push(`payment_date >= @startDate`);
+    if (end_date) whereConditions.push(`payment_date <= @endDate`);
+    if (payment_method) whereConditions.push(`payment_method = @paymentMethod`);
+    
+    const whereClause = whereConditions.length > 0 
+      ? `WHERE ${whereConditions.join(' AND ')}` 
+      : '';
+    
+    const queryString = `
+      SELECT *
+      FROM v_CustomerPaymentHistory
+      ${whereClause}
+      ORDER BY payment_date DESC
+    `;
+    
+    try {
+      const result = await query(queryString, {
+        customerId: customerId || null,
+        startDate: start_date || null,
+        endDate: end_date || null,
+        paymentMethod: payment_method || null
+      });
+      return result.recordset;
+    } catch (error) {
+      throw new Error(`Error fetching customer payment history: ${error.message}`);
+    }
   }
 };
 

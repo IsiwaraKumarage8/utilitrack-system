@@ -95,6 +95,81 @@ const paymentController = {
     } catch (error) {
       next(error);
     }
+  },
+
+  // POST /api/payments - Create new payment
+  createPayment: async (req, res, next) => {
+    try {
+      const { bill_id, payment_amount, payment_method, received_by, transaction_reference, notes } = req.body;
+
+      // Validate required fields
+      if (!bill_id || !payment_amount || !payment_method || !received_by) {
+        return next(new AppError('Bill ID, payment amount, payment method, and received by are required', 400));
+      }
+
+      const payment = await paymentModel.create({
+        bill_id,
+        payment_amount,
+        payment_method,
+        received_by,
+        transaction_reference,
+        notes
+      });
+
+      res.status(201).json({
+        success: true,
+        message: 'Payment processed successfully',
+        data: payment
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  // PUT /api/payments/:id - Update payment
+  updatePayment: async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const { payment_status, notes, transaction_reference } = req.body;
+
+      const payment = await paymentModel.update(id, {
+        payment_status,
+        notes,
+        transaction_reference
+      });
+
+      if (!payment) {
+        return next(new AppError('Payment not found', 404));
+      }
+
+      res.status(200).json({
+        success: true,
+        message: 'Payment updated successfully',
+        data: payment
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  // DELETE /api/payments/:id - Delete payment
+  deletePayment: async (req, res, next) => {
+    try {
+      const { id } = req.params;
+
+      const deleted = await paymentModel.delete(id);
+
+      if (!deleted) {
+        return next(new AppError('Payment not found', 404));
+      }
+
+      res.status(200).json({
+        success: true,
+        message: 'Payment deleted successfully'
+      });
+    } catch (error) {
+      next(error);
+    }
   }
 };
 

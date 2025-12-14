@@ -8,20 +8,26 @@
     "dev": "nodemon server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": ["utility", "management", "billing", "api"],
+  "keywords": [
+    "utility",
+    "management",
+    "billing",
+    "api"
+  ],
   "author": "Your Name",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.18.2",
-    "mssql": "^10.0.1",
-    "dotenv": "^16.3.1",
     "bcryptjs": "^2.4.3",
-    "jsonwebtoken": "^9.0.2",
-    "express-rate-limit": "^7.1.5",
-    "helmet": "^7.1.0",
     "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "express-rate-limit": "^7.1.5",
     "express-validator": "^7.0.1",
+    "helmet": "^7.1.0",
+    "jsonwebtoken": "^9.0.2",
     "morgan": "^1.10.0",
+    "mssql": "^10.0.1",
+    "node-cron": "^4.2.1",
     "winston": "^3.11.0"
   },
   "devDependencies": {

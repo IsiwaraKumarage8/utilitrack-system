@@ -41,6 +41,13 @@ app.use(morgan('dev'));
 })();
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// SCHEDULED JOBS INITIALIZATION
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+const { initBillingJobs } = require('./jobs/billingJobs');
+initBillingJobs();
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // HEALTH CHECK ROUTE
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
@@ -74,9 +81,11 @@ app.use('/api/complaints', require('./routes/complaintRoutes'));
 // Meter and Reading routes
 app.use('/api/meters', require('./routes/meterRoutes'));
 
-// TODO: Uncomment as routes are created
-// app.use('/api/auth', require('./routes/authRoutes'));
-// app.use('/api/reports', require('./routes/reportRoutes'));
+// Report routes
+app.use('/api/reports', require('./routes/reportRoutes'));
+
+// User routes
+app.use('/api/users', require('./routes/userRoutes'));
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // ERROR HANDLERS

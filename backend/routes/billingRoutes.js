@@ -14,6 +14,12 @@ router.get('/preview/:readingId', billingController.getBillPreview);
 // GET /api/billing/customer/:customerId - Get bills by customer
 router.get('/customer/:customerId', billingController.getBillsByCustomer);
 
+// GET /api/billing/:id/late-fee - Calculate late fee for a bill
+router.get('/:id/late-fee', billingController.getLateFee);
+
+// GET /api/billing/:id/with-late-fee - Get bill with late fee included
+router.get('/:id/with-late-fee', billingController.getBillWithLateFee);
+
 // GET /api/billing/:id - Get bill by ID
 router.get('/:id', billingController.getBillById);
 

@@ -15,6 +15,12 @@ router.get('/', customerController.getAllCustomers);
 // NOTE: This route must come BEFORE /:id to avoid matching 'stats' as an ID
 router.get('/stats/count', customerController.getCustomerStats);
 
+// GET /api/customers/:id/balance - Get customer's total outstanding balance
+router.get('/:id/balance', customerController.getCustomerBalance);
+
+// GET /api/customers/:id/with-balance - Get customer with balance details
+router.get('/:id/with-balance', customerController.getCustomerWithBalance);
+
 // GET /api/customers/:id - Get customer by ID
 router.get('/:id', customerController.getCustomerById);
 

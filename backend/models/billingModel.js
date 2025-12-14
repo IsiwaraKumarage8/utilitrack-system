@@ -162,7 +162,9 @@ const billingModel = {
         COUNT(CASE WHEN bill_status = 'Unpaid' THEN 1 END) AS unpaid_count,
         COUNT(CASE WHEN bill_status = 'Paid' THEN 1 END) AS paid_count,
         COUNT(CASE WHEN bill_status = 'Partially Paid' THEN 1 END) AS partial_count,
-        COUNT(CASE WHEN bill_status = 'Overdue' THEN 1 END) AS overdue_count
+        COUNT(CASE WHEN bill_status = 'Overdue' THEN 1 END) AS overdue_count,
+        -- Use v_UnpaidBills view for unpaid bills count
+        (SELECT COUNT(*) FROM v_UnpaidBills ${whereClause}) AS unpaid_bills_view_count
       FROM Billing
       ${whereClause}
     `;
@@ -354,6 +356,94 @@ const billingModel = {
       return result.recordset[0];
     } catch (error) {
       throw new Error(`Error fetching bill by number: ${error.message}`);
+    }
+  },
+
+  // Get unpaid bills using optimized v_UnpaidBills view
+  getUnpaidBills: async (filters = {}) => {
+    const { utility_type, customer_id, days_overdue_min } = filters;
+    
+    let whereConditions = [];
+    if (utility_type) whereConditions.push(`utility_type = @utilityType`);
+    if (customer_id) whereConditions.push(`customer_id = @customerId`);
+    if (days_overdue_min) whereConditions.push(`days_overdue >= @daysOverdueMin`);
+    
+    const whereClause = whereConditions.length > 0 
+      ? `WHERE ${whereConditions.join(' AND ')}` 
+      : '';
+    
+    const queryString = `
+      SELECT *
+      FROM v_UnpaidBills
+      ${whereClause}
+      ORDER BY days_overdue DESC, outstanding_balance DESC
+    `;
+    
+    try {
+      const result = await query(queryString, {
+        utilityType: utility_type || null,
+        customerId: customer_id || null,
+        daysOverdueMin: days_overdue_min || null
+      });
+      return result.recordset;
+    } catch (error) {
+      throw new Error(`Error fetching unpaid bills: ${error.message}`);
+    }
+  },
+
+  // Calculate late fee for a bill using fn_CalculateLateFee UDF
+  calculateLateFee: async (billId, currentDate = null) => {
+    const dateParam = currentDate || new Date().toISOString().split('T')[0];
+    
+    const queryString = `
+      SELECT dbo.fn_CalculateLateFee(@billId, @currentDate) AS late_fee
+    `;
+    
+    try {
+      const result = await query(queryString, {
+        billId,
+        currentDate: dateParam
+      });
+      return result.recordset[0]?.late_fee || 0;
+    } catch (error) {
+      throw new Error(`Error calculating late fee: ${error.message}`);
+    }
+  },
+
+  // Get bill with late fee calculated
+  getBillWithLateFee: async (billId) => {
+    const queryString = `
+      SELECT 
+        b.*,
+        c.customer_id,
+        c.first_name,
+        c.last_name,
+        c.customer_type,
+        c.email,
+        c.phone,
+        c.address,
+        ut.utility_name AS utility_type,
+        sc.connection_number,
+        sc.property_address,
+        m.meter_number,
+        m.meter_type,
+        dbo.fn_CalculateLateFee(b.bill_id, GETDATE()) AS late_fee,
+        b.outstanding_balance + dbo.fn_CalculateLateFee(b.bill_id, GETDATE()) AS total_due_with_late_fee,
+        DATEDIFF(day, b.due_date, GETDATE()) AS days_overdue
+      FROM Billing b
+      INNER JOIN Service_Connection sc ON b.connection_id = sc.connection_id
+      INNER JOIN Customer c ON sc.customer_id = c.customer_id
+      INNER JOIN Utility_Type ut ON sc.utility_type_id = ut.utility_type_id
+      INNER JOIN Meter_Reading mr ON b.reading_id = mr.reading_id
+      INNER JOIN Meter m ON mr.meter_id = m.meter_id
+      WHERE b.bill_id = @billId
+    `;
+    
+    try {
+      const result = await query(queryString, { billId });
+      return result.recordset[0];
+    } catch (error) {
+      throw new Error(`Error fetching bill with late fee: ${error.message}`);
     }
   }
 };
