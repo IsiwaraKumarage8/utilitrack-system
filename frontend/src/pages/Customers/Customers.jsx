@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
-import { Search, Plus, Eye, Edit2, Trash2 } from 'lucide-react';
+import { Search, Plus, Eye, Edit2, Trash2, Lock } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { usePermissions } from '../../hooks/usePermissions';
 import Button from '../../components/common/Button';
 import Badge from '../../components/common/Badge';
 import CustomerForm from './CustomerForm';
@@ -144,6 +145,9 @@ const MOCK_CUSTOMERS_BACKUP = [
 ];
 
 const Customers = () => {
+  // Permissions
+  const { can, userRole } = usePermissions();
+  
   // State management
   const [customers, setCustomers] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -313,12 +317,17 @@ const Customers = () => {
       <div className="customers-header">
         <div>
           <h1 className="customers-title">Customer Management</h1>
-          <p className="customers-subtitle">Manage all customer accounts and information</p>
+          <p className="customers-subtitle">
+            {can.addCustomer ? 'Manage all customer accounts and information' : 'View customer accounts and information'}
+            {!can.addCustomer && <span className="view-only-badge"> (View Only)</span>}
+          </p>
         </div>
-        <Button variant="primary" size="md" onClick={handleAddCustomer}>
-          <Plus className="button-icon" />
-          Add Customer
-        </Button>
+        {can.addCustomer && (
+          <Button variant="primary" size="md" onClick={handleAddCustomer}>
+            <Plus className="button-icon" />
+            Add Customer
+          </Button>
+        )}
       </div>
 
       {/* Filters Section */}
@@ -426,20 +435,29 @@ const Customers = () => {
                         >
                           <Eye />
                         </button>
-                        <button
-                          className="action-btn action-btn-edit"
-                          onClick={() => handleEditCustomer(customer)}
-                          title="Edit"
-                        >
-                          <Edit2 />
-                        </button>
-                        <button
-                          className="action-btn action-btn-delete"
-                          onClick={() => handleDeleteCustomer(customer)}
-                          title="Delete"
-                        >
-                          <Trash2 />
-                        </button>
+                        {can.editCustomer && (
+                          <button
+                            className="action-btn action-btn-edit"
+                            onClick={() => handleEditCustomer(customer)}
+                            title="Edit"
+                          >
+                            <Edit2 />
+                          </button>
+                        )}
+                        {can.deleteCustomer && (
+                          <button
+                            className="action-btn action-btn-delete"
+                            onClick={() => handleDeleteCustomer(customer)}
+                            title="Delete"
+                          >
+                            <Trash2 />
+                          </button>
+                        )}
+                        {!can.editCustomer && !can.deleteCustomer && (
+                          <span className="view-only-text" title="View only access">
+                            <Lock size={14} />
+                          </span>
+                        )}
                       </div>
                     </td>
                   </tr>

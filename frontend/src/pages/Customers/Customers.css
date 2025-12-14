@@ -4,6 +4,27 @@
   overflow-x: hidden;
 }
 
+/* View Only Indicators */
+.view-only-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  background: #FEF3C7;
+  color: #92400E;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  margin-left: 8px;
+}
+
+.view-only-text {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: #6B7280;
+  font-size: 12px;
+  opacity: 0.7;
+}
+
 .customers-header {
   display: flex;
   justify-content: space-between;

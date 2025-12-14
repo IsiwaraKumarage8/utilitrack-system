@@ -30,7 +30,8 @@ const Auth = () => {
       
       if (response.success) {
         const userData = response.data.user;
-        login(userData);
+        const authToken = response.data.token;
+        login(userData, authToken);
         toast.success('Login successful!');
         navigate('/dashboard');
       }

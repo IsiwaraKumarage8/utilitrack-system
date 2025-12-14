@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react';
-import { Search, Plus, Zap, Droplet, Flame, Download, Eye, Edit2, FileText, Calendar } from 'lucide-react';
+import { Search, Plus, Zap, Droplet, Flame, Download, Eye, Edit2, FileText, Calendar, Lock } from 'lucide-react';
+import { usePermissions } from '../../hooks/usePermissions';
 import Button from '../../components/common/Button';
 import Badge from '../../components/common/Badge';
 import ReadingDetails from './ReadingDetails';
@@ -193,6 +194,9 @@ const MOCK_READINGS = [
 ];
 
 const Readings = () => {
+  // Permissions
+  const { can, isFieldOfficer } = usePermissions();
+  
   const [searchQuery, setSearchQuery] = useState('');
   const [utilityFilter, setUtilityFilter] = useState('All');
   const [typeFilter, setTypeFilter] = useState('All');
@@ -328,17 +332,22 @@ const Readings = () => {
       <div className="readings-header">
         <div>
           <h1 className="page-title">Meter Readings</h1>
-          <p className="page-subtitle">Track and manage utility meter readings</p>
+          <p className="page-subtitle">
+            {can.recordReading ? 'Track and manage utility meter readings' : 'View utility meter readings'}
+            {!can.recordReading && <span className="view-only-badge"> (View Only)</span>}
+          </p>
         </div>
         <div className="header-actions">
           <Button variant="secondary" size="md" onClick={handleExportCSV}>
-            <Download size={20} />
+            <Download />
             <span>Export CSV</span>
           </Button>
-          <Button variant="primary" size="md" onClick={() => setShowRecordModal(true)}>
-            <Plus size={20} />
-            <span>Record Reading</span>
-          </Button>
+          {can.recordReading && (
+            <Button variant="primary" size="md" onClick={() => setShowRecordModal(true)}>
+              <Plus />
+              <span>Record Reading</span>
+            </Button>
+          )}
         </div>
       </div>
 
@@ -507,20 +516,29 @@ const Readings = () => {
                       >
                         <Eye size={18} />
                       </button>
-                      <button
-                        className="action-btn edit"
-                        onClick={() => handleEditReading(reading)}
-                        title="Edit"
-                      >
-                        <Edit2 size={18} />
-                      </button>
-                      <button
-                        className="action-btn bill"
-                        onClick={() => console.log('Generate bill for reading:', reading.reading_id)}
-                        title="Generate Bill"
-                      >
-                        <FileText size={18} />
-                      </button>
+                      {can.editReading && (
+                        <button
+                          className="action-btn edit"
+                          onClick={() => handleEditReading(reading)}
+                          title="Edit"
+                        >
+                          <Edit2 size={18} />
+                        </button>
+                      )}
+                      {can.generateBill && (
+                        <button
+                          className="action-btn bill"
+                          onClick={() => console.log('Generate bill for reading:', reading.reading_id)}
+                          title="Generate Bill"
+                        >
+                          <FileText size={18} />
+                        </button>
+                      )}
+                      {!can.editReading && !can.generateBill && (
+                        <span className="view-only-text" title="View only access">
+                          <Lock size={14} />
+                        </span>
+                      )}
                     </div>
                   </td>
                 </tr>

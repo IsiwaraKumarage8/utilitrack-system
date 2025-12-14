@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo } from 'react';
-import { Search, FileText, DollarSign, CheckCircle, AlertCircle, Eye, Download, CreditCard } from 'lucide-react';
+import { Search, FileText, DollarSign, CheckCircle, AlertCircle, Eye, Download, CreditCard, Lock } from 'lucide-react';
+import { usePermissions } from '../../hooks/usePermissions';
 import Button from '../../components/common/Button';
 import Badge from '../../components/common/Badge';
 import billingApi from '../../api/billingApi';
@@ -8,6 +9,9 @@ import '../../styles/table.css';
 import './Billing.css';
 
 const Billing = () => {
+  // Permissions
+  const { can, isCashier } = usePermissions();
+  
   const [bills, setBills] = useState([]);
   const [stats, setStats] = useState({
     totalBills: 0,
@@ -178,7 +182,10 @@ const Billing = () => {
       <div className="billing-header">
         <div>
           <h1 className="billing-title">Billing Management</h1>
-          <p className="billing-subtitle">Manage bills and generate invoices</p>
+          <p className="billing-subtitle">
+            {can.generateBill ? 'Manage bills and generate invoices' : 'View bills and invoices'}
+            {!can.generateBill && <span className="view-only-badge"> (View Only)</span>}
+          </p>
         </div>
         <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
           <div className="period-toggle">
@@ -195,10 +202,12 @@ const Billing = () => {
               All Time
             </button>
           </div>
-          <Button variant="primary" size="md" onClick={() => setShowGenerateBillModal(true)}>
-            <FileText size={20} />
-            <span>Generate Bill</span>
-          </Button>
+          {can.generateBill && (
+            <Button variant="primary" size="md" onClick={() => setShowGenerateBillModal(true)}>
+              <FileText size={20} />
+              <span>Generate Bill</span>
+            </Button>
+          )}
         </div>
       </div>
 
