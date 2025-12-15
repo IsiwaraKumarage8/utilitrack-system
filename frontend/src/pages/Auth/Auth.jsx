@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
+import { Pin, User, Lock, Mail, UserCircle } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import * as authApi from '../../api/authApi';
 import './Auth.css';
@@ -75,6 +76,36 @@ const Auth = () => {
 
   return (
     <div className="auth-page">
+      {/* Demo Credentials Sticky Note */}
+      <div className="demo-credentials">
+        <div className="sticky-note-header">
+          <Pin size={16} />
+          <span>Demo Credentials</span>
+        </div>
+        <div className="credentials-list">
+          <div className="credential-item">
+            <strong>Admin</strong>
+            <span>admin / admin123</span>
+          </div>
+          <div className="credential-item">
+            <strong>Field Officer</strong>
+            <span>rperera / password123</span>
+          </div>
+          <div className="credential-item">
+            <strong>Cashier</strong>
+            <span>sfernando / password123</span>
+          </div>
+          <div className="credential-item">
+            <strong>Manager</strong>
+            <span>mjohnson / password123</span>
+          </div>
+          <div className="credential-item">
+            <strong>Billing Clerk</strong>
+            <span>ndias / password123</span>
+          </div>
+        </div>
+      </div>
+
       <div className={`auth-wrapper ${isToggled ? 'toggled' : ''}`}>
         <div className="background-shape"></div>
         <div className="secondary-shape"></div>
@@ -91,7 +122,7 @@ const Auth = () => {
                 required
               />
               <label>Username</label>
-              <i className="fa-solid fa-user"></i>
+              <User size={18} />
             </div>
 
             <div className="field-wrapper slide-element">
@@ -102,7 +133,7 @@ const Auth = () => {
                 required
               />
               <label>Password</label>
-              <i className="fa-solid fa-lock"></i>
+              <Lock size={18} />
             </div>
 
             <div className="field-wrapper slide-element">
@@ -139,7 +170,7 @@ const Auth = () => {
                 required
               />
               <label>Full Name</label>
-              <i className="fa-solid fa-user"></i>
+              <User size={18} />
             </div>
 
             <div className="field-wrapper slide-element">
@@ -150,7 +181,7 @@ const Auth = () => {
                 required
               />
               <label>Username</label>
-              <i className="fa-solid fa-user-tag"></i>
+              <UserCircle size={18} />
             </div>
 
             <div className="field-wrapper slide-element">
@@ -161,7 +192,7 @@ const Auth = () => {
                 required
               />
               <label>Email</label>
-              <i className="fa-solid fa-envelope"></i>
+              <Mail size={18} />
             </div>
 
             <div className="field-wrapper slide-element">
@@ -172,7 +203,7 @@ const Auth = () => {
                 required
               />
               <label>Password</label>
-              <i className="fa-solid fa-lock"></i>
+              <Lock size={18} />
             </div>
 
             <div className="field-wrapper slide-element">
