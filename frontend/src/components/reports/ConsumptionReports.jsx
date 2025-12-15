@@ -7,7 +7,7 @@ import SummaryCards from '../common/SummaryCards';
 import * as reportApi from '../../api/reportApi';
 import { 
   LineChart, Line, BarChart, Bar, XAxis, YAxis, 
-  CartesianGrid, Tooltip, Legend, ResponsiveContainer 
+  CartesianGrid, Tooltip, Legend, ResponsiveContainer, Cell 
 } from 'recharts';
 import './ConsumptionReports.css';
 
@@ -30,38 +30,54 @@ const ConsumptionReports = ({ filters }) => {
     setError(null);
 
     try {
+      console.log('[ConsumptionReports] Fetching data...');
+      
       // Fetch consumption data in parallel
       const [trendsRes, statsRes] = await Promise.all([
         reportApi.getConsumptionByUtility({}),
         reportApi.getMeterReadingStats()
       ]);
 
+      console.log('[ConsumptionReports] Trends response:', trendsRes);
+      console.log('[ConsumptionReports] Stats response:', statsRes);
+
       // Process consumption trends
       if (trendsRes.success && trendsRes.data) {
         setConsumptionTrends(trendsRes.data);
+        console.log('[ConsumptionReports] Set consumption trends:', trendsRes.data.length, 'records');
       }
 
       // Process meter reading stats
       if (statsRes.success && statsRes.data) {
         setMeterReadingStats(statsRes.data);
+        console.log('[ConsumptionReports] Set meter stats:', statsRes.data.length, 'records');
       }
 
     } catch (err) {
-      console.error('Error fetching consumption data:', err);
+      console.error('[ConsumptionReports] Error fetching consumption data:', err);
       setError(err.message || 'Failed to load consumption data');
     } finally {
       setLoading(false);
+      console.log('[ConsumptionReports] Loading complete');
     }
   };
 
-  // Calculate summary metrics from meter stats
-  const totalReadings = meterReadingStats.reduce((sum, stat) => sum + parseInt(stat.total_readings || 0), 0);
-  const actualReadings = meterReadingStats.reduce((sum, stat) => sum + parseInt(stat.actual_readings || 0), 0);
-  const estimatedReadings = meterReadingStats.reduce((sum, stat) => sum + parseInt(stat.estimated_readings || 0), 0);
-  const totalConsumption = meterReadingStats.reduce((sum, stat) => sum + parseFloat(stat.total_consumption || 0), 0);
-  const avgConsumption = meterReadingStats.length > 0
-    ? (meterReadingStats.reduce((sum, stat) => sum + parseFloat(stat.avg_consumption || 0), 0) / meterReadingStats.length).toFixed(2)
+  // Calculate summary metrics from meter stats - with safe fallbacks
+  const totalReadings = Array.isArray(meterReadingStats) 
+    ? meterReadingStats.reduce((sum, stat) => sum + parseInt(stat.total_readings || 0), 0) 
     : 0;
+  const actualReadings = Array.isArray(meterReadingStats)
+    ? meterReadingStats.reduce((sum, stat) => sum + parseInt(stat.actual_readings || 0), 0)
+    : 0;
+  const estimatedReadings = Array.isArray(meterReadingStats)
+    ? meterReadingStats.reduce((sum, stat) => sum + parseInt(stat.estimated_readings || 0), 0)
+    : 0;
+  const totalConsumption = Array.isArray(meterReadingStats)
+    ? meterReadingStats.reduce((sum, stat) => sum + parseFloat(stat.total_consumption || 0), 0)
+    : 0;
+  const avgConsumption = Array.isArray(meterReadingStats) && meterReadingStats.length > 0
+    ? (meterReadingStats.reduce((sum, stat) => sum + parseFloat(stat.avg_consumption || 0), 0) / meterReadingStats.length).toFixed(2)
+    : '0.00';
 
   // Summary cards data
   const summaryCards = [
@@ -143,40 +159,54 @@ const ConsumptionReports = ({ filters }) => {
   // Consumption trends table columns
   const trendsColumns = [
     { 
-      key: 'reading_date', 
-      label: 'Date', 
+      key: 'month_name', 
+      label: 'Month', 
       align: 'left',
-      render: (value) => new Date(value).toLocaleDateString()
+      render: (value, row) => `${value} ${row.year}`
     },
     { key: 'utility_type', label: 'Utility', align: 'left' },
-    { key: 'customer_name', label: 'Customer', align: 'left' },
+    { key: 'customer_type', label: 'Customer Type', align: 'left' },
     { 
-      key: 'consumption_units', 
-      label: 'Consumption', 
-      align: 'right',
-      render: (value) => parseFloat(value || 0).toLocaleString()
+      key: 'total_readings', 
+      label: 'Total Readings', 
+      align: 'center',
+      render: (value) => parseInt(value || 0).toLocaleString()
     },
     { 
-      key: 'previous_reading', 
-      label: 'Previous', 
+      key: 'avg_consumption', 
+      label: 'Avg Consumption', 
       align: 'right',
-      render: (value) => parseFloat(value || 0).toLocaleString()
+      render: (value) => parseFloat(value || 0).toFixed(2)
     },
     { 
-      key: 'current_reading', 
-      label: 'Current', 
+      key: 'min_consumption', 
+      label: 'Min', 
+      align: 'right',
+      render: (value) => parseFloat(value || 0).toFixed(2)
+    },
+    { 
+      key: 'max_consumption', 
+      label: 'Max', 
+      align: 'right',
+      render: (value) => parseFloat(value || 0).toFixed(2)
+    },
+    { 
+      key: 'total_consumption', 
+      label: 'Total', 
       align: 'right',
       render: (value) => parseFloat(value || 0).toLocaleString()
     }
   ];
 
-  // Prepare chart data by utility
-  const consumptionByUtility = meterReadingStats.map(stat => ({
-    utility: stat.utility_type,
-    avgConsumption: parseFloat(stat.avg_consumption || 0),
-    totalConsumption: parseFloat(stat.total_consumption || 0),
-    totalReadings: parseInt(stat.total_readings || 0)
-  }));
+  // Prepare chart data by utility - with safe fallback
+  const consumptionByUtility = Array.isArray(meterReadingStats) 
+    ? meterReadingStats.map(stat => ({
+        utility: stat.utility_type,
+        avgConsumption: parseFloat(stat.avg_consumption || 0),
+        totalConsumption: parseFloat(stat.total_consumption || 0),
+        totalReadings: parseInt(stat.total_readings || 0)
+      }))
+    : [];
 
   const utilityColors = {
     Electricity: '#f59e0b',
@@ -185,6 +215,42 @@ const ConsumptionReports = ({ filters }) => {
     Sewage: '#8b5cf6',
     'Street Lighting': '#10b981'
   };
+
+  // Error boundary fallback
+  if (error && !loading) {
+    return (
+      <div className="consumption-reports">
+        <div className="consumption-reports__error" style={{ 
+          padding: '2rem', 
+          textAlign: 'center', 
+          color: '#dc2626',
+          backgroundColor: '#fee2e2',
+          borderRadius: '0.5rem',
+          margin: '1rem'
+        }}>
+          <h3>Error Loading Consumption Reports</h3>
+          <p>{error}</p>
+          <button 
+            onClick={() => {
+              setError(null);
+              fetchConsumptionData();
+            }}
+            style={{
+              marginTop: '1rem',
+              padding: '0.5rem 1rem',
+              backgroundColor: '#dc2626',
+              color: 'white',
+              border: 'none',
+              borderRadius: '0.25rem',
+              cursor: 'pointer'
+            }}
+          >
+            Retry
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="consumption-reports">
@@ -310,10 +376,10 @@ const ConsumptionReports = ({ filters }) => {
         />
       </ReportCard>
 
-      {/* Recent Consumption Trends Table */}
+      {/* Consumption Trends Table */}
       <ReportCard
-        title="Recent Consumption Trends"
-        subtitle="Latest meter readings and consumption patterns"
+        title="Consumption Trends by Month"
+        subtitle="Monthly consumption statistics by utility and customer type"
         icon={TrendingUp}
         loading={loading}
         error={error}
