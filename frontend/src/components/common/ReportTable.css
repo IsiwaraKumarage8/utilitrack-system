@@ -1,0 +1,145 @@
+.report-table {
+  width: 100%;
+}
+
+.report-table__wrapper {
+  overflow-x: auto;
+  border-radius: 0.5rem;
+  border: 1px solid #e5e7eb;
+}
+
+.report-table__table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+/* Table Head */
+.report-table__thead {
+  background: linear-gradient(to bottom, #f9fafb, #f3f4f6);
+  border-bottom: 2px solid #e5e7eb;
+}
+
+.report-table__th {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  font-weight: 600;
+  color: #374151;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.025em;
+  white-space: nowrap;
+}
+
+.report-table__th--left {
+  text-align: left;
+}
+
+.report-table__th--center {
+  text-align: center;
+}
+
+.report-table__th--right {
+  text-align: right;
+}
+
+/* Table Body */
+.report-table__tbody {
+  background: white;
+}
+
+.report-table__tr {
+  border-bottom: 1px solid #f3f4f6;
+  transition: background-color 0.2s;
+}
+
+.report-table__tr:last-child {
+  border-bottom: none;
+}
+
+.report-table__td {
+  padding: 0.875rem 1rem;
+  color: #111827;
+  vertical-align: middle;
+}
+
+.report-table__td--left {
+  text-align: left;
+}
+
+.report-table__td--center {
+  text-align: center;
+}
+
+.report-table__td--right {
+  text-align: right;
+}
+
+/* Striped Rows */
+.report-table__table--striped .report-table__tr:nth-child(even) {
+  background-color: #f9fafb;
+}
+
+/* Hoverable Rows */
+.report-table__table--hoverable .report-table__tr:hover {
+  background-color: #f3f4f6;
+}
+
+/* Loading State */
+.report-table__loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1rem;
+  color: #6b7280;
+}
+
+.report-table__spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid #e5e7eb;
+  border-top-color: #4f46e5;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.report-table__loading p {
+  margin: 0;
+  font-size: 0.875rem;
+}
+
+/* Empty State */
+.report-table__empty {
+  padding: 3rem 1rem;
+  text-align: center;
+  color: #6b7280;
+  background: #f9fafb;
+  border: 1px dashed #d1d5db;
+  border-radius: 0.5rem;
+}
+
+.report-table__empty p {
+  margin: 0;
+  font-size: 0.875rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .report-table__th,
+  .report-table__td {
+    padding: 0.625rem 0.75rem;
+    font-size: 0.75rem;
+  }
+
+  .report-table__th {
+    font-size: 0.7rem;
+  }
+}

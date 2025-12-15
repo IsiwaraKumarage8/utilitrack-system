@@ -301,6 +301,32 @@ const userModel = {
   // Verify password
   verifyPassword: async (plainPassword, hashedPassword) => {
     return await bcrypt.compare(plainPassword, hashedPassword);
+  },
+
+  // Get active staff (users who logged in recently)
+  getActiveStaff: async () => {
+    const queryString = `
+      SELECT 
+        user_id,
+        username,
+        full_name,
+        user_role,
+        department,
+        last_login,
+        DATEDIFF(MINUTE, last_login, GETDATE()) AS minutes_since_login
+      FROM [User]
+      WHERE user_status = 'Active'
+      AND last_login IS NOT NULL
+      AND DATEDIFF(HOUR, last_login, GETDATE()) <= 24
+      ORDER BY last_login DESC
+    `;
+
+    try {
+      const result = await query(queryString);
+      return result.recordset;
+    } catch (error) {
+      throw new Error(`Error fetching active staff: ${error.message}`);
+    }
   }
 };
 

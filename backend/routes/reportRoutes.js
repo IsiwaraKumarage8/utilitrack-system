@@ -9,6 +9,18 @@ const reportController = require('../controllers/reportController');
 // GET /api/reports/dashboard-summary - Dashboard summary statistics
 router.get('/dashboard-summary', reportController.getDashboardSummary);
 
+// GET /api/reports/today-revenue - Today's revenue with comparison
+router.get('/today-revenue', reportController.getTodayRevenue);
+
+// GET /api/reports/revenue-trends - Revenue trends for charts
+router.get('/revenue-trends', reportController.getRevenueTrends);
+
+// GET /api/reports/utility-distribution - Utility distribution statistics
+router.get('/utility-distribution', reportController.getUtilityDistribution);
+
+// GET /api/reports/recent-activity - Recent system activity
+router.get('/recent-activity', reportController.getRecentActivity);
+
 // GET /api/reports/unpaid-bills - Unpaid bills report
 router.get('/unpaid-bills', reportController.getUnpaidBillsReport);
 
