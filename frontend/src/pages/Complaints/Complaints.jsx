@@ -2,209 +2,43 @@ import { useState, useEffect, useMemo } from 'react';
 import { Search, AlertCircle, AlertTriangle, Clock, CheckCircle, Plus, Eye, UserPlus, Edit, DollarSign, Zap, ZapOff, ThumbsDown, Plug, HelpCircle } from 'lucide-react';
 import Button from '../../components/common/Button';
 import Badge from '../../components/common/Badge';
+import complaintApi from '../../api/complaintApi';
 import './Complaints.css';
-
-// Mock data
-const MOCK_COMPLAINTS = [
-  {
-    complaint_id: 1,
-    complaint_number: 'COMP-2024-0001',
-    customer_id: 1,
-    customer_name: 'Nuwan Bandara',
-    complaint_date: '2024-09-15',
-    complaint_type: 'Billing Issue',
-    priority: 'Medium',
-    description: 'Bill amount seems higher than usual for September. Requesting verification of meter reading and detailed breakdown of charges.',
-    assigned_to: 'Rajesh Kumar',
-    assigned_to_id: 1,
-    complaint_status: 'Resolved',
-    resolution_date: '2024-09-18',
-    resolution_notes: 'Meter reading verified. High usage due to AC during hot weather. Provided detailed bill breakdown to customer.'
-  },
-  {
-    complaint_id: 2,
-    complaint_number: 'COMP-2024-0002',
-    customer_id: 2,
-    customer_name: 'Saman Perera',
-    complaint_date: '2024-10-20',
-    complaint_type: 'Meter Fault',
-    priority: 'High',
-    description: 'Water meter appears to be running even when all taps are closed. Suspect meter malfunction or leak in the system.',
-    assigned_to: 'Nisha Perera',
-    assigned_to_id: 2,
-    complaint_status: 'In Progress',
-    resolution_date: null,
-    resolution_notes: null
-  },
-  {
-    complaint_id: 3,
-    complaint_number: 'COMP-2024-0003',
-    customer_id: 3,
-    customer_name: 'Kasun Silva',
-    complaint_date: '2024-11-05',
-    complaint_type: 'Connection Request',
-    priority: 'Low',
-    description: 'Request for new gas connection installation at residential property. All documentation has been submitted.',
-    assigned_to: null,
-    assigned_to_id: null,
-    complaint_status: 'Open',
-    resolution_date: null,
-    resolution_notes: null
-  },
-  {
-    complaint_id: 4,
-    complaint_number: 'COMP-2024-0004',
-    customer_id: 4,
-    customer_name: 'Malini Fernando',
-    complaint_date: '2024-11-01',
-    complaint_type: 'Service Disruption',
-    priority: 'Urgent',
-    description: 'Frequent power outages in the area for the past 3 days. Each outage lasts 2-3 hours. Affecting business operations severely.',
-    assigned_to: 'Rajesh Kumar',
-    assigned_to_id: 1,
-    complaint_status: 'In Progress',
-    resolution_date: null,
-    resolution_notes: null
-  },
-  {
-    complaint_id: 5,
-    complaint_number: 'COMP-2024-0005',
-    customer_id: 5,
-    customer_name: 'Pradeep Kumara',
-    complaint_date: '2024-10-10',
-    complaint_type: 'Quality Issue',
-    priority: 'Medium',
-    description: 'Water quality has deteriorated recently. Water appears cloudy and has unusual odor. Concerned about health safety.',
-    assigned_to: 'Samanthi Mendis',
-    assigned_to_id: 3,
-    complaint_status: 'Resolved',
-    resolution_date: '2024-10-15',
-    resolution_notes: 'Water testing conducted. Maintenance work completed on main pipeline. Quality restored to normal standards.'
-  },
-  {
-    complaint_id: 6,
-    complaint_number: 'COMP-2024-0006',
-    customer_id: 6,
-    customer_name: 'Rohan De Silva',
-    complaint_date: '2024-11-12',
-    complaint_type: 'Billing Issue',
-    priority: 'High',
-    description: 'Received duplicate bills for the same period. Previous payment not reflected in the account statement.',
-    assigned_to: 'Nisha Perera',
-    assigned_to_id: 2,
-    complaint_status: 'In Progress',
-    resolution_date: null,
-    resolution_notes: null
-  },
-  {
-    complaint_id: 7,
-    complaint_number: 'COMP-2024-0007',
-    customer_id: 7,
-    customer_name: 'Anushka Jayawardena',
-    complaint_date: '2024-09-25',
-    complaint_type: 'Other',
-    priority: 'Low',
-    description: 'Request for temporary disconnection during property renovation period (3 weeks). Will reconnect after completion.',
-    assigned_to: 'Rajesh Kumar',
-    assigned_to_id: 1,
-    complaint_status: 'Closed',
-    resolution_date: '2024-09-26',
-    resolution_notes: 'Temporary disconnection scheduled and completed. Reconnection date set for October 20.'
-  },
-  {
-    complaint_id: 8,
-    complaint_number: 'COMP-2024-0008',
-    customer_id: 8,
-    customer_name: 'Chamara Fernando',
-    complaint_date: '2024-11-08',
-    complaint_type: 'Service Disruption',
-    priority: 'Urgent',
-    description: 'Complete gas supply cutoff for industrial unit. Production halted. Requires immediate attention and resolution.',
-    assigned_to: 'Samanthi Mendis',
-    assigned_to_id: 3,
-    complaint_status: 'In Progress',
-    resolution_date: null,
-    resolution_notes: null
-  },
-  {
-    complaint_id: 9,
-    complaint_number: 'COMP-2024-0009',
-    customer_id: 9,
-    customer_name: 'Dinesh Rathnayake',
-    complaint_date: '2024-10-30',
-    complaint_type: 'Connection Request',
-    priority: 'Medium',
-    description: 'Application for electricity meter upgrade to 3-phase connection for commercial property expansion.',
-    assigned_to: null,
-    assigned_to_id: null,
-    complaint_status: 'Open',
-    resolution_date: null,
-    resolution_notes: null
-  },
-  {
-    complaint_id: 10,
-    complaint_number: 'COMP-2024-0010',
-    customer_id: 10,
-    customer_name: 'Samanthi Mendis',
-    complaint_date: '2024-11-11',
-    complaint_type: 'Meter Fault',
-    priority: 'High',
-    description: 'Electricity meter display not working. Unable to track daily consumption. Meter replacement requested.',
-    assigned_to: 'Nisha Perera',
-    assigned_to_id: 2,
-    complaint_status: 'Open',
-    resolution_date: null,
-    resolution_notes: null
-  },
-  {
-    complaint_id: 11,
-    complaint_number: 'COMP-2024-0011',
-    customer_id: 1,
-    customer_name: 'Nuwan Bandara',
-    complaint_date: '2024-08-20',
-    complaint_type: 'Other',
-    priority: 'Low',
-    description: 'Request for change of billing address. Moved to new location. Need to update records.',
-    assigned_to: 'Rajesh Kumar',
-    assigned_to_id: 1,
-    complaint_status: 'Rejected',
-    resolution_date: '2024-08-21',
-    resolution_notes: 'Billing address change should be done through customer portal. Directed to online process.'
-  },
-  {
-    complaint_id: 12,
-    complaint_number: 'COMP-2024-0012',
-    customer_id: 3,
-    customer_name: 'Kasun Silva',
-    complaint_date: '2024-12-14',
-    complaint_type: 'Quality Issue',
-    priority: 'Urgent',
-    description: 'Low water pressure for past 2 days. Cannot use shower or washing machine. Immediate resolution needed.',
-    assigned_to: 'Samanthi Mendis',
-    assigned_to_id: 3,
-    complaint_status: 'Open',
-    resolution_date: null,
-    resolution_notes: null
-  }
-];
 
 const Complaints = () => {
   const [complaints, setComplaints] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('All');
   const [priorityFilter, setPriorityFilter] = useState('All');
   const [typeFilter, setTypeFilter] = useState('All');
 
-  // Simulate data loading
+  // Fetch complaints from API
   useEffect(() => {
-    const loadData = setTimeout(() => {
-      setComplaints(MOCK_COMPLAINTS);
-      setLoading(false);
-    }, 1000);
-
-    return () => clearTimeout(loadData);
+    fetchComplaints();
   }, []);
+
+  const fetchComplaints = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      const response = await complaintApi.getAllComplaints();
+      
+      if (response && response.success) {
+        setComplaints(response.data || []);
+      } else {
+        setComplaints([]);
+      }
+    } catch (err) {
+      console.error('Error fetching complaints:', err);
+      setError(err.message || 'Failed to load complaints. Please ensure the backend server is running.');
+      setComplaints([]);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // Calculate stats
   const stats = useMemo(() => {
@@ -336,6 +170,21 @@ const Complaints = () => {
         <div className="loading-state">
           <div className="spinner"></div>
           <p>Loading complaints...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="complaints-page">
+        <div className="error-state">
+          <AlertCircle size={48} />
+          <h2>Failed to Load Complaints</h2>
+          <p>{error}</p>
+          <Button variant="primary" onClick={fetchComplaints}>
+            Retry
+          </Button>
         </div>
       </div>
     );

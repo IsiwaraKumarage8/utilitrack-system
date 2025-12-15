@@ -12,6 +12,9 @@ router.post('/login', userController.login);
 // GET /api/users/stats/summary - Get user statistics
 router.get('/stats/summary', userController.getUserStats);
 
+// GET /api/users/stats/active-staff - Get active staff count
+router.get('/stats/active-staff', userController.getActiveStaff);
+
 // GET /api/users/:id - Get user by ID
 router.get('/:id', userController.getUserById);
 

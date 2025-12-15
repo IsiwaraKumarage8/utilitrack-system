@@ -1,98 +1,85 @@
+import { useState, useEffect } from 'react';
 import { X, Mail, Phone, MapPin, Building2, Calendar, Zap, Droplet, Flame, Wind } from 'lucide-react';
 import Button from '../../components/common/Button';
 import Badge from '../../components/common/Badge';
+import axios from 'axios';
+import billingApi from '../../api/billingApi';
+import complaintApi from '../../api/complaintApi';
 import './CustomerDetails.css';
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+
 const CustomerDetails = ({ customer, onClose, onEdit }) => {
-  // Mock service connections data
-  const serviceConnections = [
-    {
-      connection_id: 1,
-      utility_type: 'Electricity',
-      meter_number: 'MTR-ELC-1001',
-      status: 'Active',
-      installation_date: '2023-01-15'
-    },
-    {
-      connection_id: 2,
-      utility_type: 'Water',
-      meter_number: 'MTR-WTR-2001',
-      status: 'Active',
-      installation_date: '2023-01-15'
-    }
-  ];
+  const [serviceConnections, setServiceConnections] = useState([]);
+  const [loadingConnections, setLoadingConnections] = useState(true);
+  const [recentBills, setRecentBills] = useState([]);
+  const [loadingBills, setLoadingBills] = useState(true);
+  const [recentComplaints, setRecentComplaints] = useState([]);
+  const [loadingComplaints, setLoadingComplaints] = useState(true);
 
-  // Mock recent bills data (last 5)
-  const recentBills = [
-    {
-      bill_id: 1,
-      billing_period: 'Jan 2024',
-      utility_type: 'Electricity',
-      amount: 2450.00,
-      status: 'Paid',
-      due_date: '2024-02-15'
-    },
-    {
-      bill_id: 2,
-      billing_period: 'Jan 2024',
-      utility_type: 'Water',
-      amount: 850.00,
-      status: 'Paid',
-      due_date: '2024-02-15'
-    },
-    {
-      bill_id: 3,
-      billing_period: 'Dec 2023',
-      utility_type: 'Electricity',
-      amount: 2380.00,
-      status: 'Paid',
-      due_date: '2024-01-15'
-    },
-    {
-      bill_id: 4,
-      billing_period: 'Dec 2023',
-      utility_type: 'Water',
-      amount: 820.00,
-      status: 'Paid',
-      due_date: '2024-01-15'
-    },
-    {
-      bill_id: 5,
-      billing_period: 'Nov 2023',
-      utility_type: 'Electricity',
-      amount: 2200.00,
-      status: 'Paid',
-      due_date: '2023-12-15'
-    }
-  ];
+  // Fetch service connections from API
+  useEffect(() => {
+    const fetchServiceConnections = async () => {
+      try {
+        setLoadingConnections(true);
+        const response = await axios.get(`${API_URL}/connections/customer/${customer.customer_id}`);
+        setServiceConnections(response.data.data || []);
+      } catch (error) {
+        console.error('Error fetching service connections:', error);
+        setServiceConnections([]);
+      } finally {
+        setLoadingConnections(false);
+      }
+    };
 
-  // Mock recent complaints data (last 3)
-  const recentComplaints = [
-    {
-      complaint_id: 1,
-      subject: 'Meter reading discrepancy',
-      utility_type: 'Electricity',
-      status: 'Resolved',
-      created_date: '2024-01-20',
-      resolved_date: '2024-01-22'
-    },
-    {
-      complaint_id: 2,
-      subject: 'Billing issue - duplicate charge',
-      utility_type: 'Water',
-      status: 'In Progress',
-      created_date: '2024-01-10',
-      resolved_date: null
-    },
-    {
-      complaint_id: 3,
-      subject: 'Service interruption',
-      utility_type: 'Electricity',
-      status: 'Resolved',
-      created_date: '2023-12-05',
-      resolved_date: '2023-12-06'
+    if (customer?.customer_id) {
+      fetchServiceConnections();
     }
-  ];
+  }, [customer?.customer_id]);
+
+  // Fetch recent bills from API
+  useEffect(() => {
+    const fetchRecentBills = async () => {
+      try {
+        setLoadingBills(true);
+        const response = await billingApi.getBillsByCustomer(customer.customer_id);
+        // Get last 5 bills only
+        const bills = (response.data || []).slice(0, 5);
+        setRecentBills(bills);
+      } catch (error) {
+        console.error('Error fetching recent bills:', error);
+        setRecentBills([]);
+      } finally {
+        setLoadingBills(false);
+      }
+    };
+
+    if (customer?.customer_id) {
+      fetchRecentBills();
+    }
+  }, [customer?.customer_id]);
+
+  // Fetch recent complaints from API
+  useEffect(() => {
+    const fetchRecentComplaints = async () => {
+      try {
+        setLoadingComplaints(true);
+        const response = await complaintApi.getComplaintsByCustomer(customer.customer_id);
+        // Get last 3 complaints only
+        const complaints = (response.data || []).slice(0, 3);
+        setRecentComplaints(complaints);
+      } catch (error) {
+        console.error('Error fetching recent complaints:', error);
+        setRecentComplaints([]);
+      } finally {
+        setLoadingComplaints(false);
+      }
+    };
+
+    if (customer?.customer_id) {
+      fetchRecentComplaints();
+    }
+  }, [customer?.customer_id]);
 
   const getUtilityIcon = (utilityType) => {
     const icons = {
@@ -107,8 +94,8 @@ const CustomerDetails = ({ customer, onClose, onEdit }) => {
   const getStatusVariant = (status) => {
     const variants = {
       'Active': 'success',
-      'Inactive': 'secondary',
-      'Suspended': 'warning',
+      'Inactive': 'warning',
+      'Suspended': 'danger',
       'Paid': 'success',
       'Unpaid': 'danger',
       'Partially Paid': 'warning',
@@ -141,21 +128,21 @@ const CustomerDetails = ({ customer, onClose, onEdit }) => {
                 <h3 className="section-title">Basic Information</h3>
                 <div className="info-grid">
                   <div className="info-item">
-                    <span className="info-label">Customer Type</span>
-                    <span className="info-value">{customer.customer_type}</span>
+                    <span className="info-label" style={{ color: '#FFFFFF' }}>Customer Type</span>
+                    <span className="info-value" style={{ color: '#FFFFFF' }}>{customer.customer_type}</span>
                   </div>
                   <div className="info-item">
-                    <span className="info-label">Status</span>
-                    <Badge variant={getStatusVariant(customer.status)} text={customer.status} />
+                    <span className="info-label" style={{ color: '#FFFFFF' }}>Status</span>
+                    <Badge status={getStatusVariant(customer.status)}>{customer.status}</Badge>
                   </div>
                   <div className="info-item">
-                    <span className="info-label">Full Name</span>
-                    <span className="info-value">{customer.first_name} {customer.last_name}</span>
+                    <span className="info-label" style={{ color: '#FFFFFF' }}>Full Name</span>
+                    <span className="info-value" style={{ color: '#FFFFFF' }}>{customer.first_name} {customer.last_name}</span>
                   </div>
                   {customer.company_name && (
                     <div className="info-item">
-                      <span className="info-label">Company</span>
-                      <span className="info-value">{customer.company_name}</span>
+                      <span className="info-label" style={{ color: '#FFFFFF' }}>Company</span>
+                      <span className="info-value" style={{ color: '#FFFFFF' }}>{customer.company_name}</span>
                     </div>
                   )}
                 </div>
@@ -192,26 +179,32 @@ const CustomerDetails = ({ customer, onClose, onEdit }) => {
               {/* Service Connections Section */}
               <div className="details-section">
                 <h3 className="section-title">Service Connections ({serviceConnections.length})</h3>
-                <div className="connections-list">
-                  {serviceConnections.map(connection => (
-                    <div key={connection.connection_id} className="connection-card">
-                      <div className="connection-header">
-                        <div className="connection-utility">
-                          <div className="utility-icon">{getUtilityIcon(connection.utility_type)}</div>
-                          <div>
-                            <div className="connection-type">{connection.utility_type}</div>
-                            <div className="connection-meter">Meter: {connection.meter_number}</div>
+                {loadingConnections ? (
+                  <div className="loading-message">Loading connections...</div>
+                ) : serviceConnections.length === 0 ? (
+                  <div className="empty-message">No service connections found</div>
+                ) : (
+                  <div className="connections-list">
+                    {serviceConnections.map(connection => (
+                      <div key={connection.connection_id} className="connection-card">
+                        <div className="connection-header">
+                          <div className="connection-utility">
+                            <div className="utility-icon">{getUtilityIcon(connection.utility_name)}</div>
+                            <div>
+                              <div className="connection-type">{connection.utility_name}</div>
+                              <div className="connection-meter">Meter: {connection.meter_number || 'N/A'}</div>
+                            </div>
                           </div>
+                          <Badge status={getStatusVariant(connection.connection_status)}>{connection.connection_status || 'Unknown'}</Badge>
                         </div>
-                        <Badge variant={getStatusVariant(connection.status)} text={connection.status} />
+                        <div className="connection-footer">
+                          <Calendar size={14} />
+                          <span>Installed: {new Date(connection.connection_date).toLocaleDateString()}</span>
+                        </div>
                       </div>
-                      <div className="connection-footer">
-                        <Calendar size={14} />
-                        <span>Installed: {new Date(connection.installation_date).toLocaleDateString()}</span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
 
@@ -220,45 +213,57 @@ const CustomerDetails = ({ customer, onClose, onEdit }) => {
               {/* Recent Bills */}
               <div className="details-section">
                 <h3 className="section-title">Recent Bills</h3>
-                <div className="activity-list">
-                  {recentBills.map(bill => (
-                    <div key={bill.bill_id} className="activity-item">
-                      <div className="activity-header">
-                        <span className="activity-title">{bill.billing_period}</span>
-                        <Badge variant={getStatusVariant(bill.status)} text={bill.status} size="sm" />
+                {loadingBills ? (
+                  <div className="loading-message">Loading bills...</div>
+                ) : recentBills.length === 0 ? (
+                  <div className="empty-message">No bills found</div>
+                ) : (
+                  <div className="activity-list">
+                    {recentBills.map(bill => (
+                      <div key={bill.bill_id} className="activity-item">
+                        <div className="activity-header">
+                          <span className="activity-title">{bill.bill_number}</span>
+                          <Badge status={getStatusVariant(bill.bill_status)}>{bill.bill_status}</Badge>
+                        </div>
+                        <div className="activity-utility">{bill.utility_type}</div>
+                        <div className="activity-footer">
+                          <span className="activity-amount">PKR {bill.total_amount?.toFixed(2) || '0.00'}</span>
+                          <span className="activity-date">Due: {new Date(bill.due_date).toLocaleDateString()}</span>
+                        </div>
                       </div>
-                      <div className="activity-utility">{bill.utility_type}</div>
-                      <div className="activity-footer">
-                        <span className="activity-amount">PKR {bill.amount.toFixed(2)}</span>
-                        <span className="activity-date">Due: {new Date(bill.due_date).toLocaleDateString()}</span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
+                    ))}
+                  </div>
+                )}
               </div>
 
               {/* Recent Complaints */}
               <div className="details-section">
                 <h3 className="section-title">Recent Complaints</h3>
-                <div className="activity-list">
-                  {recentComplaints.map(complaint => (
-                    <div key={complaint.complaint_id} className="activity-item">
-                      <div className="activity-header">
-                        <span className="activity-title">{complaint.subject}</span>
-                        <Badge variant={getStatusVariant(complaint.status)} text={complaint.status} size="sm" />
+                {loadingComplaints ? (
+                  <div className="loading-message">Loading complaints...</div>
+                ) : recentComplaints.length === 0 ? (
+                  <div className="empty-message">No complaints found</div>
+                ) : (
+                  <div className="activity-list">
+                    {recentComplaints.map(complaint => (
+                      <div key={complaint.complaint_id} className="activity-item">
+                        <div className="activity-header">
+                          <span className="activity-title">{complaint.complaint_type || complaint.description?.substring(0, 50)}</span>
+                          <Badge status={getStatusVariant(complaint.complaint_status)}>{complaint.complaint_status}</Badge>
+                        </div>
+                        <div className="activity-utility">{complaint.utility_name || 'N/A'}</div>
+                        <div className="activity-footer">
+                          <span className="activity-date">
+                            {complaint.resolution_date 
+                              ? `Resolved: ${new Date(complaint.resolution_date).toLocaleDateString()}`
+                              : `Created: ${new Date(complaint.complaint_date).toLocaleDateString()}`
+                            }
+                          </span>
+                        </div>
                       </div>
-                      <div className="activity-utility">{complaint.utility_type}</div>
-                      <div className="activity-footer">
-                        <span className="activity-date">
-                          {complaint.resolved_date 
-                            ? `Resolved: ${new Date(complaint.resolved_date).toLocaleDateString()}`
-                            : `Created: ${new Date(complaint.created_date).toLocaleDateString()}`
-                          }
-                        </span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
           </div>

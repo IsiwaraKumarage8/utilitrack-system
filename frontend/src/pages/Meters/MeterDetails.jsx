@@ -1,78 +1,45 @@
+import { useState, useEffect } from 'react';
 import { X, Zap, Droplet, Flame, MapPin, Calendar, Wrench, Activity, TrendingUp } from 'lucide-react';
 import Button from '../../components/common/Button';
 import Badge from '../../components/common/Badge';
+import meterApi from '../../api/meterApi';
 import './MeterDetails.css';
 
-// Mock reading history - TODO: Replace with API call from Meter_Reading table
-const MOCK_READING_HISTORY = [
-  {
-    reading_id: 1,
-    reading_date: '2024-11-15',
-    previous_reading: 1450.00,
-    current_reading: 1580.00,
-    consumption: 130.00,
-    reading_type: 'Actual',
-    reader_name: 'John Doe'
-  },
-  {
-    reading_id: 2,
-    reading_date: '2024-10-15',
-    previous_reading: 1320.00,
-    current_reading: 1450.00,
-    consumption: 130.00,
-    reading_type: 'Actual',
-    reader_name: 'John Doe'
-  },
-  {
-    reading_id: 3,
-    reading_date: '2024-09-15',
-    previous_reading: 1185.00,
-    current_reading: 1320.00,
-    consumption: 135.00,
-    reading_type: 'Actual',
-    reader_name: 'John Doe'
-  },
-  {
-    reading_id: 4,
-    reading_date: '2024-08-15',
-    previous_reading: 1045.00,
-    current_reading: 1185.00,
-    consumption: 140.00,
-    reading_type: 'Actual',
-    reader_name: 'Jane Smith'
-  },
-  {
-    reading_id: 5,
-    reading_date: '2024-07-15',
-    previous_reading: 910.00,
-    current_reading: 1045.00,
-    consumption: 135.00,
-    reading_type: 'Actual',
-    reader_name: 'Jane Smith'
-  }
-];
-
-// Mock maintenance history - TODO: Replace with API call from Maintenance table
-const MOCK_MAINTENANCE_HISTORY = [
-  {
-    maintenance_id: 1,
-    maintenance_date: '2024-06-15',
-    maintenance_type: 'Routine Inspection',
-    performed_by: 'Tech-01',
-    notes: 'All systems normal',
-    status: 'Completed'
-  },
-  {
-    maintenance_id: 2,
-    maintenance_date: '2024-03-10',
-    maintenance_type: 'Calibration',
-    performed_by: 'Tech-03',
-    notes: 'Meter recalibrated successfully',
-    status: 'Completed'
-  }
-];
-
 const MeterDetails = ({ meter, onClose, onEdit, onRecordReading }) => {
+  const [readingHistory, setReadingHistory] = useState([]);
+  const [maintenanceHistory, setMaintenanceHistory] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (meter && meter.meter_id) {
+      fetchMeterData();
+    }
+  }, [meter]);
+
+  const fetchMeterData = async () => {
+    try {
+      setLoading(true);
+      const [readingsResponse, maintenanceResponse] = await Promise.all([
+        meterApi.getMeterReadings(meter.meter_id),
+        meterApi.getMeterMaintenance(meter.meter_id)
+      ]);
+
+      if (readingsResponse && readingsResponse.success) {
+        setReadingHistory(readingsResponse.data || []);
+      }
+
+      if (maintenanceResponse && maintenanceResponse.success) {
+        setMaintenanceHistory(maintenanceResponse.data || []);
+      }
+    } catch (err) {
+      console.error('Error fetching meter data:', err);
+      setReadingHistory([]);
+      setMaintenanceHistory([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   if (!meter) return null;
 
   const getUtilityIcon = (utilityType) => {

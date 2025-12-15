@@ -1,0 +1,117 @@
+.welcome-card {
+  position: relative;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 16px;
+  padding: 32px;
+  margin-bottom: 24px;
+  overflow: hidden;
+  box-shadow: 0 10px 40px rgba(102, 126, 234, 0.2);
+}
+
+.welcome-card__gradient-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(
+    circle at top right,
+    rgba(255, 255, 255, 0.1) 0%,
+    transparent 60%
+  );
+  pointer-events: none;
+}
+
+.welcome-card__content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+}
+
+.welcome-card__main {
+  flex: 1;
+}
+
+.welcome-card__greeting {
+  font-size: 28px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 16px 0;
+  line-height: 1.2;
+}
+
+.welcome-card__info {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.welcome-card__info-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 14px;
+}
+
+.welcome-card__info-item svg {
+  opacity: 0.8;
+}
+
+.welcome-card__role-badge {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-weight: 600;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.welcome-card__message {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(255, 255, 255, 0.15);
+  padding: 16px 20px;
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  max-width: 300px;
+}
+
+.welcome-card__message-icon {
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+.welcome-card__message p {
+  margin: 0;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .welcome-card {
+    padding: 24px;
+  }
+
+  .welcome-card__content {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .welcome-card__greeting {
+    font-size: 24px;
+  }
+
+  .welcome-card__message {
+    max-width: 100%;
+    width: 100%;
+  }
+}

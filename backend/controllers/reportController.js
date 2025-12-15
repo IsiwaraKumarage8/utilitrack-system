@@ -299,6 +299,95 @@ const reportController = {
     } catch (error) {
       next(error);
     }
+  },
+
+  /**
+   * GET /api/reports/today-revenue - Get today's revenue with comparison to yesterday
+   */
+  getTodayRevenue: async (req, res, next) => {
+    try {
+      const revenueData = await reportModel.getTodayRevenue();
+
+      res.status(200).json({
+        success: true,
+        data: revenueData
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  /**
+   * GET /api/reports/revenue-trends - Get revenue trends for charts
+   * Query params: months (default: 6)
+   */
+  getRevenueTrends: async (req, res, next) => {
+    try {
+      const { months } = req.query;
+      const monthsToFetch = months ? parseInt(months) : 6;
+
+      // Validate months parameter
+      if (monthsToFetch < 1 || monthsToFetch > 24) {
+        return res.status(400).json({
+          success: false,
+          message: 'Months parameter must be between 1 and 24'
+        });
+      }
+
+      const trendsData = await reportModel.getRevenueTrends(monthsToFetch);
+
+      res.status(200).json({
+        success: true,
+        data: trendsData
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  /**
+   * GET /api/reports/utility-distribution - Get utility distribution statistics
+   */
+  getUtilityDistribution: async (req, res, next) => {
+    try {
+      const distributionData = await reportModel.getUtilityDistribution();
+
+      res.status(200).json({
+        success: true,
+        data: distributionData
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  /**
+   * GET /api/reports/recent-activity - Get recent system activity
+   * Query params: limit (default: 10)
+   */
+  getRecentActivity: async (req, res, next) => {
+    try {
+      const { limit } = req.query;
+      const recordLimit = limit ? parseInt(limit) : 10;
+
+      // Validate limit parameter
+      if (recordLimit < 1 || recordLimit > 50) {
+        return res.status(400).json({
+          success: false,
+          message: 'Limit parameter must be between 1 and 50'
+        });
+      }
+
+      const activities = await reportModel.getRecentActivity(recordLimit);
+
+      res.status(200).json({
+        success: true,
+        count: activities.length,
+        data: activities
+      });
+    } catch (error) {
+      next(error);
+    }
   }
 };
 

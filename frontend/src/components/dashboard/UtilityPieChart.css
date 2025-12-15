@@ -25,6 +25,28 @@
   border: 1px solid rgba(243, 232, 255, 0.5);
 }
 
+.utility-pie-chart__loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 320px;
+}
+
+.spinner-small {
+  width: 32px;
+  height: 32px;
+  border: 3px solid rgba(147, 51, 234, 0.1);
+  border-top-color: #9333ea;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 @media (min-width: 1024px) {
   .utility-pie-chart__container {
     padding: 1.75rem;

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { X, Calendar, Activity, AlertCircle } from 'lucide-react';
 import Button from '../../components/common/Button';
+import meterApi from '../../api/meterApi';
 import './RecordReadingForm.css';
 
 const RecordReadingForm = ({ meter, onClose, onSave }) => {
@@ -10,24 +11,46 @@ const RecordReadingForm = ({ meter, onClose, onSave }) => {
     previous_reading: '',
     consumption: '',
     reading_type: 'Actual',
-    reader_name: '', // TODO: Get from logged-in user
+    reader_name: '',
     notes: ''
   });
 
   const [errors, setErrors] = useState({});
+  const [loadingPrevious, setLoadingPrevious] = useState(true);
 
-  // Fetch previous reading on mount
-  // TODO: Replace with API call to get last reading from Meter_Reading table
+  // Fetch previous reading from API
   useEffect(() => {
-    if (meter) {
-      // Mock previous reading - in production, fetch from API
-      const mockPreviousReading = 1580.00;
-      setFormData(prev => ({
-        ...prev,
-        previous_reading: mockPreviousReading.toFixed(2),
-        reader_name: 'Current User' // TODO: Get from auth context
-      }));
-    }
+    const fetchLastReading = async () => {
+      if (meter && meter.meter_id) {
+        try {
+          setLoadingPrevious(true);
+          const response = await meterApi.getLastReading(meter.meter_id);
+          if (response && response.success && response.data) {
+            setFormData(prev => ({
+              ...prev,
+              previous_reading: response.data.current_reading?.toFixed(2) || '0.00',
+              reader_name: 'Current User'
+            }));
+          } else {
+            setFormData(prev => ({
+              ...prev,
+              previous_reading: meter.initial_reading?.toFixed(2) || '0.00',
+              reader_name: 'Current User'
+            }));
+          }
+        } catch (err) {
+          console.error('Error fetching last reading:', err);
+          setFormData(prev => ({
+            ...prev,
+            previous_reading: meter.initial_reading?.toFixed(2) || '0.00',
+            reader_name: 'Current User'
+          }));
+        } finally {
+          setLoadingPrevious(false);
+        }
+      }
+    };
+    fetchLastReading();
   }, [meter]);
 
   // Calculate consumption when current reading changes

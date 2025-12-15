@@ -4,6 +4,23 @@ import { menuItems } from './menuConfig';
 import './Sidebar.css';
 
 /**
+ * Get panel name based on user role
+ */
+const getPanelName = (role) => {
+  if (!role) return 'Admin Panel';
+  
+  const roleMap = {
+    'Admin': 'Admin Panel',
+    'Manager': 'Manager Panel',
+    'Field Officer': 'Field Officer Panel',
+    'Cashier': 'Cashier Panel',
+    'Billing Clerk': 'Billing Panel'
+  };
+  
+  return roleMap[role] || `${role} Panel`;
+};
+
+/**
  * Enhanced Sidebar Navigation Component with Modern Design
  * @param {boolean} isOpen - Mobile sidebar open state
  * @param {function} onClose - Function to close mobile sidebar
@@ -34,7 +51,7 @@ const Sidebar = ({ isOpen, onClose, userRole = 'Admin' }) => {
               <span className="sidebar__logo-text">
                 UtiliTrack
               </span>
-              <p className="sidebar__logo-subtitle">Admin Panel</p>
+              <p className="sidebar__logo-subtitle">{getPanelName(userRole)}</p>
             </div>
           </div>
           <button 

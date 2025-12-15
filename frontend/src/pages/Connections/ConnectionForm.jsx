@@ -1,10 +1,13 @@
 import { useState, useEffect } from 'react';
 import { X, ChevronLeft, ChevronRight } from 'lucide-react';
 import Button from '../../components/common/Button';
+import customerApi from '../../api/customerApi';
 import './ConnectionForm.css';
 
 const ConnectionForm = ({ mode, connection, onClose, onSave }) => {
   const [currentStep, setCurrentStep] = useState(1);
+  const [customers, setCustomers] = useState([]);
+  const [loadingCustomers, setLoadingCustomers] = useState(true);
   const [formData, setFormData] = useState({
     // Step 1: Customer Selection
     customer_id: '',
@@ -31,14 +34,23 @@ const ConnectionForm = ({ mode, connection, onClose, onSave }) => {
 
   const [errors, setErrors] = useState({});
 
-  // Mock customers for dropdown
-  const MOCK_CUSTOMERS = [
-    { customer_id: 1, customer_name: 'Nuwan Bandara' },
-    { customer_id: 2, customer_name: 'Samantha Silva' },
-    { customer_id: 3, customer_name: 'Lakshmi Perera' },
-    { customer_id: 4, customer_name: 'Rajesh Kumar' },
-    { customer_id: 5, customer_name: 'Chaminda Fernando' }
-  ];
+  // Fetch customers from API
+  useEffect(() => {
+    const fetchCustomers = async () => {
+      try {
+        setLoadingCustomers(true);
+        const response = await customerApi.getAll();
+        setCustomers(response.data || []);
+      } catch (error) {
+        console.error('Error fetching customers:', error);
+        setCustomers([]);
+      } finally {
+        setLoadingCustomers(false);
+      }
+    };
+
+    fetchCustomers();
+  }, []);
 
   // Utility Type ID mapping (from database)
   const utilityTypeIds = {
@@ -124,11 +136,11 @@ const ConnectionForm = ({ mode, connection, onClose, onSave }) => {
 
   const handleCustomerSelect = (e) => {
     const customerId = parseInt(e.target.value);
-    const customer = MOCK_CUSTOMERS.find(c => c.customer_id === customerId);
+    const customer = customers.find(c => c.customer_id === customerId);
     setFormData(prev => ({
       ...prev,
       customer_id: customerId,
-      customer_name: customer ? customer.customer_name : ''
+      customer_name: customer ? `${customer.first_name} ${customer.last_name}` : ''
     }));
     if (errors.customer_id) {
       setErrors(prev => ({ ...prev, customer_id: '' }));
@@ -250,11 +262,14 @@ const ConnectionForm = ({ mode, connection, onClose, onSave }) => {
                     className={`form-input ${errors.customer_id ? 'error' : ''}`}
                     value={formData.customer_id}
                     onChange={handleCustomerSelect}
+                    disabled={loadingCustomers}
                   >
-                    <option value="">-- Select Customer --</option>
-                    {MOCK_CUSTOMERS.map(customer => (
+                    <option value="">
+                      {loadingCustomers ? 'Loading customers...' : 'Select a customer'}
+                    </option>
+                    {customers.map(customer => (
                       <option key={customer.customer_id} value={customer.customer_id}>
-                        {customer.customer_name}
+                        {customer.first_name} {customer.last_name} - {customer.customer_type}
                       </option>
                     ))}
                   </select>

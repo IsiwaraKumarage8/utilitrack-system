@@ -218,6 +218,23 @@ const userController = {
     } catch (error) {
       next(error);
     }
+  },
+
+  // GET /api/users/stats/active-staff - Get active staff statistics
+  getActiveStaff: async (req, res, next) => {
+    try {
+      const activeStaff = await userModel.getActiveStaff();
+
+      res.status(200).json({
+        success: true,
+        data: {
+          active_count: activeStaff.length,
+          staff_list: activeStaff
+        }
+      });
+    } catch (error) {
+      next(error);
+    }
   }
 };
 
