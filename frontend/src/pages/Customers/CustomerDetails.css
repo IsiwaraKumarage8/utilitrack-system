@@ -1,6 +1,38 @@
 /* Customer Details Modal */
 .customer-details-modal {
   max-width: 72rem;
+  background-color: #1F2937;
+}
+
+.customer-details-modal .info-value,
+.customer-details-modal .contact-value,
+.customer-details-modal .connection-type {
+  color: #FFFFFF !important;
+}
+
+.customer-details-modal .badge,
+.customer-details-modal .badge * {
+  color: inherit;
+}
+
+.customer-details-modal .badge.badge--success {
+  color: #047857 !important;
+}
+
+.customer-details-modal .badge.badge--warning {
+  color: #c2410c !important;
+}
+
+.customer-details-modal .badge.badge--danger {
+  color: #b91c1c !important;
+}
+
+.customer-details-modal .badge.badge--info {
+  color: #1d4ed8 !important;
+}
+
+.customer-details-modal .badge.badge--secondary {
+  color: #6B7280 !important;
 }
 
 /* Details Layout */
@@ -51,15 +83,21 @@
 
 .info-label {
   font-size: 0.75rem;
-  color: #9CA3AF;
+  color: #FFFFFF !important;
   text-transform: uppercase;
   letter-spacing: 0.05em;
+  font-weight: 600;
 }
 
 .info-value {
   font-size: 0.875rem;
-  color: #F9FAFB;
-  font-weight: 500;
+  color: #FFFFFF !important;
+  font-weight: 600;
+}
+
+.customer-details-modal .details-section .info-grid .info-item .info-value {
+  color: #FFFFFF !important;
+  font-weight: 600;
 }
 
 /* Contact List */

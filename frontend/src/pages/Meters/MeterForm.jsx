@@ -1,21 +1,13 @@
 import { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
 import Button from '../../components/common/Button';
+import axios from 'axios';
 import './MeterForm.css';
 
-// Mock connections data - TODO: Replace with API call
-const MOCK_CONNECTIONS = [
-  { connection_id: 1, connection_number: 'ELEC-2020-001', customer_name: 'Nuwan Bandara', utility_type: 'Electricity' },
-  { connection_id: 2, connection_number: 'WATER-2020-001', customer_name: 'Nuwan Bandara', utility_type: 'Water' },
-  { connection_id: 3, connection_number: 'ELEC-2020-003', customer_name: 'Samantha Silva', utility_type: 'Electricity' },
-  { connection_id: 4, connection_number: 'GAS-2023-001', customer_name: 'Samantha Silva', utility_type: 'Gas' },
-  { connection_id: 5, connection_number: 'ELEC-2020-005', customer_name: 'Rajesh Kumar', utility_type: 'Electricity' },
-  { connection_id: 6, connection_number: 'WATER-2020-003', customer_name: 'Samantha Silva', utility_type: 'Water' },
-  { connection_id: 7, connection_number: 'ELEC-2020-007', customer_name: 'Priya Perera', utility_type: 'Electricity' },
-  { connection_id: 8, connection_number: 'WATER-2020-005', customer_name: 'Rajesh Kumar', utility_type: 'Water' }
-];
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
 const MeterForm = ({ mode, meter, onClose, onSave }) => {
+  const [connections, setConnections] = useState([]);
   const [formData, setFormData] = useState({
     connection_id: '',
     meter_number: '',
@@ -29,6 +21,26 @@ const MeterForm = ({ mode, meter, onClose, onSave }) => {
 
   const [errors, setErrors] = useState({});
   const [selectedConnection, setSelectedConnection] = useState(null);
+  const [loadingConnections, setLoadingConnections] = useState(true);
+
+  // Fetch connections from API
+  useEffect(() => {
+    const fetchConnections = async () => {
+      try {
+        setLoadingConnections(true);
+        const response = await axios.get(`${API_URL}/connections`);
+        if (response.data && response.data.success) {
+          setConnections(response.data.data || []);
+        }
+      } catch (err) {
+        console.error('Error fetching connections:', err);
+        setConnections([]);
+      } finally {
+        setLoadingConnections(false);
+      }
+    };
+    fetchConnections();
+  }, []);
 
   useEffect(() => {
     if (mode === 'edit' && meter) {
@@ -43,7 +55,7 @@ const MeterForm = ({ mode, meter, onClose, onSave }) => {
         notes: meter.notes || ''
       });
 
-      const connection = MOCK_CONNECTIONS.find(c => c.connection_id === meter.connection_id);
+      const connection = connections.find(c => c.connection_id === meter.connection_id);
       setSelectedConnection(connection);
     }
   }, [mode, meter]);
@@ -57,7 +69,7 @@ const MeterForm = ({ mode, meter, onClose, onSave }) => {
 
     // Update selected connection when connection_id changes
     if (name === 'connection_id') {
-      const connection = MOCK_CONNECTIONS.find(c => c.connection_id === parseInt(value));
+      const connection = connections.find(c => c.connection_id === parseInt(value));
       setSelectedConnection(connection);
     }
 

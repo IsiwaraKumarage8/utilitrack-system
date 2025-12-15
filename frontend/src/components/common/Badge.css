@@ -10,7 +10,7 @@
 
 .badge--success {
   background: linear-gradient(to right, #d1fae5, #a7f3d0);
-  color: #047857;
+  color: #047857 !important;
   border-color: #86efac;
 }
 
@@ -20,7 +20,7 @@
 
 .badge--warning {
   background: linear-gradient(to right, #fed7aa, #fde68a);
-  color: #c2410c;
+  color: #c2410c !important;
   border-color: #fcd34d;
 }
 
@@ -30,7 +30,7 @@
 
 .badge--danger {
   background: linear-gradient(to right, #fecaca, #fda4af);
-  color: #b91c1c;
+  color: #b91c1c !important;
   border-color: #fca5a5;
 }
 
@@ -40,10 +40,16 @@
 
 .badge--info {
   background: linear-gradient(to right, #dbeafe, #cffafe);
-  color: #1d4ed8;
+  color: #1d4ed8 !important;
   border-color: #93c5fd;
 }
 
 .badge--info {
   box-shadow: 0 1px 2px 0 rgba(147, 197, 253, 0.5);
+}
+
+.badge--secondary {
+  background: linear-gradient(to right, #E5E7EB, #D1D5DB);
+  color: #4B5563 !important;
+  border-color: #9CA3AF;
 }

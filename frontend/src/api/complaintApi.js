@@ -95,6 +95,21 @@ const complaintApi = {
   },
 
   /**
+   * Get complaints by customer ID
+   * @param {number} customerId - Customer ID
+   * @returns {Promise} API response with customer complaints
+   */
+  getComplaintsByCustomer: async (customerId) => {
+    try {
+      const response = await axios.get(`${API_URL}/complaints/customer/${customerId}`);
+      return response.data;
+    } catch (error) {
+      console.error(`Error fetching complaints for customer ${customerId}:`, error);
+      throw error;
+    }
+  },
+
+  /**
    * Create new complaint
    * @param {Object} complaintData - Complaint data
    * @returns {Promise} API response with created complaint

@@ -1,163 +1,17 @@
-import { useState, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Search, Plus, Zap, Droplet, Flame, Eye, Edit2, Activity, Wrench } from 'lucide-react';
 import Button from '../../components/common/Button';
 import Badge from '../../components/common/Badge';
 import MeterForm from './MeterForm';
 import MeterDetails from './MeterDetails';
 import RecordReadingForm from './RecordReadingForm';
+import meterApi from '../../api/meterApi';
 import './Meters.css';
 
-// Mock data - TODO: Replace with API call
-// Note: In production, fetch via JOIN with Service_Connection, Customer, and Utility_Type tables
-const MOCK_METERS = [
-  {
-    meter_id: 1,
-    connection_id: 1,
-    meter_number: 'MTR-ELEC-2020-00001',
-    meter_type: 'Digital',
-    manufacturer: 'Siemens',
-    installation_date: '2020-01-25',
-    last_maintenance_date: '2024-06-15',
-    initial_reading: 0.00,
-    meter_status: 'Active',
-    notes: 'Single phase digital meter',
-    // FROM JOINs:
-    customer_name: 'Nuwan Bandara',
-    customer_id: 1,
-    utility_type: 'Electricity',
-    utility_type_id: 1,
-    connection_number: 'ELEC-2020-001',
-    property_address: '45/2 Galle Road, Colombo 03'
-  },
-  {
-    meter_id: 2,
-    connection_id: 2,
-    meter_number: 'MTR-WATER-2020-00001',
-    meter_type: 'Digital',
-    manufacturer: 'Sensus',
-    installation_date: '2020-01-25',
-    last_maintenance_date: '2024-06-15',
-    initial_reading: 0.00,
-    meter_status: 'Active',
-    notes: 'Residential water meter',
-    customer_name: 'Nuwan Bandara',
-    customer_id: 1,
-    utility_type: 'Water',
-    utility_type_id: 2,
-    connection_number: 'WATER-2020-001',
-    property_address: '45/2 Galle Road, Colombo 03'
-  },
-  {
-    meter_id: 3,
-    connection_id: 3,
-    meter_number: 'MTR-ELEC-2020-00003',
-    meter_type: 'Smart Meter',
-    manufacturer: 'Landis+Gyr',
-    installation_date: '2020-05-15',
-    last_maintenance_date: '2024-05-20',
-    initial_reading: 0.00,
-    meter_status: 'Active',
-    notes: 'Three-phase commercial meter',
-    customer_name: 'Samantha Silva',
-    customer_id: 3,
-    utility_type: 'Electricity',
-    utility_type_id: 1,
-    connection_number: 'ELEC-2020-003',
-    property_address: '78 Main Street, Negombo'
-  },
-  {
-    meter_id: 4,
-    connection_id: 6,
-    meter_number: 'MTR-WATER-2020-00003',
-    meter_type: 'Digital',
-    manufacturer: 'Itron',
-    installation_date: '2020-05-15',
-    last_maintenance_date: '2024-05-20',
-    initial_reading: 0.00,
-    meter_status: 'Active',
-    notes: 'Commercial grade water meter',
-    customer_name: 'Samantha Silva',
-    customer_id: 3,
-    utility_type: 'Water',
-    utility_type_id: 2,
-    connection_number: 'WATER-2020-003',
-    property_address: '78 Main Street, Negombo'
-  },
-  {
-    meter_id: 5,
-    connection_id: 5,
-    meter_number: 'MTR-ELEC-2020-00005',
-    meter_type: 'Smart Meter',
-    manufacturer: 'ABB',
-    installation_date: '2020-10-10',
-    last_maintenance_date: '2024-10-15',
-    initial_reading: 0.00,
-    meter_status: 'Active',
-    notes: 'Industrial smart meter with CT connection',
-    customer_name: 'Rajesh Kumar',
-    customer_id: 5,
-    utility_type: 'Electricity',
-    utility_type_id: 1,
-    connection_number: 'ELEC-2020-005',
-    property_address: 'Industrial Zone, Plot 15, Ratmalana'
-  },
-  {
-    meter_id: 6,
-    connection_id: 4,
-    meter_number: 'MTR-GAS-2023-00001',
-    meter_type: 'Digital',
-    manufacturer: 'Honeywell',
-    installation_date: '2023-03-10',
-    last_maintenance_date: null,
-    initial_reading: 0.00,
-    meter_status: 'Active',
-    notes: 'LPG pipeline meter',
-    customer_name: 'Samantha Silva',
-    customer_id: 3,
-    utility_type: 'Gas',
-    utility_type_id: 3,
-    connection_number: 'GAS-2023-001',
-    property_address: '789 Green Avenue, Galle'
-  },
-  {
-    meter_id: 7,
-    connection_id: 1,
-    meter_number: 'MTR-ELEC-2019-00456',
-    meter_type: 'Analog',
-    manufacturer: 'Siemens',
-    installation_date: '2019-05-10',
-    last_maintenance_date: '2023-08-20',
-    initial_reading: 0.00,
-    meter_status: 'Replaced',
-    notes: 'Old meter replaced with digital',
-    customer_name: 'Nuwan Bandara',
-    customer_id: 1,
-    utility_type: 'Electricity',
-    utility_type_id: 1,
-    connection_number: 'ELEC-2020-001',
-    property_address: '45/2 Galle Road, Colombo 03'
-  },
-  {
-    meter_id: 8,
-    connection_id: 3,
-    meter_number: 'MTR-ELEC-2024-00012',
-    meter_type: 'Digital',
-    manufacturer: 'Schneider Electric',
-    installation_date: '2024-02-15',
-    last_maintenance_date: null,
-    initial_reading: 2450.50,
-    meter_status: 'Faulty',
-    notes: 'Reported reading error, needs inspection',
-    customer_name: 'Samantha Silva',
-    customer_id: 3,
-    utility_type: 'Electricity',
-    utility_type_id: 1,
-    connection_number: 'ELEC-2020-003',
-    property_address: '78 Main Street, Negombo'
-  }
-];
-
 const Meters = () => {
+  const [meters, setMeters] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('All');
   const [typeFilter, setTypeFilter] = useState('All');
@@ -173,9 +27,35 @@ const Meters = () => {
 
   const itemsPerPage = 10;
 
+  // Fetch meters from API
+  useEffect(() => {
+    fetchMeters();
+  }, []);
+
+  const fetchMeters = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      const response = await meterApi.getAllMeters();
+      
+      if (response && response.success) {
+        setMeters(response.data || []);
+      } else {
+        setMeters([]);
+      }
+    } catch (err) {
+      console.error('Error fetching meters:', err);
+      setError(err.message || 'Failed to load meters. Please ensure the backend server is running.');
+      setMeters([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   // Filter and sort meters
   const filteredMeters = useMemo(() => {
-    let filtered = MOCK_METERS.filter(meter => {
+    let filtered = meters.filter(meter => {
       const matchesSearch = 
         meter.meter_number.toLowerCase().includes(searchQuery.toLowerCase()) ||
         meter.customer_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -204,7 +84,7 @@ const Meters = () => {
     });
 
     return filtered;
-  }, [searchQuery, statusFilter, typeFilter, utilityFilter, sortField, sortOrder]);
+  }, [meters, searchQuery, statusFilter, typeFilter, utilityFilter, sortField, sortOrder]);
 
   // Pagination
   const totalPages = Math.ceil(filteredMeters.length / itemsPerPage);
@@ -281,6 +161,32 @@ const Meters = () => {
     };
     return classes[status] || '';
   };
+
+  if (loading) {
+    return (
+      <div className="meters-page">
+        <div className="loading-state">
+          <div className="spinner"></div>
+          <p>Loading meters...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="meters-page">
+        <div className="error-state">
+          <Activity size={48} />
+          <h2>Failed to Load Meters</h2>
+          <p>{error}</p>
+          <Button variant="primary" onClick={fetchMeters}>
+            Retry
+          </Button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="meters-page">
