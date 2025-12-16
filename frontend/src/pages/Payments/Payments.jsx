@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo } from 'react';
 import { Search, TrendingUp, Calendar, Clock, XCircle, Eye, Printer, RotateCcw, Banknote, CreditCard, Building, Smartphone, FileText } from 'lucide-react';
 import Button from '../../components/common/Button';
 import Badge from '../../components/common/Badge';
+import PaymentDetails from './PaymentDetails';
 import '../../styles/table.css';
 import './Payments.css';
 
@@ -156,6 +157,8 @@ const Payments = () => {
   const [statusFilter, setStatusFilter] = useState('All');
   const [methodFilter, setMethodFilter] = useState('All');
   const [currentPage, setCurrentPage] = useState(1);
+  const [showRecordPaymentModal, setShowRecordPaymentModal] = useState(false);
+  const [selectedPayment, setSelectedPayment] = useState(null);
   const itemsPerPage = 10;
 
   // Simulate data loading
@@ -276,18 +279,25 @@ const Payments = () => {
 
   // Action handlers
   const handleViewReceipt = (payment) => {
-    // TODO: Implement view receipt modal
-    console.log('View receipt:', payment);
+    setSelectedPayment(payment);
   };
 
   const handlePrintReceipt = (payment) => {
     // TODO: Implement print receipt functionality
+    alert(`Printing receipt for ${payment.payment_number}`);
     console.log('Print receipt:', payment);
   };
 
   const handleRefund = (payment) => {
     // TODO: Implement refund modal
+    alert(`Processing refund for ${payment.payment_number}`);
     console.log('Refund payment:', payment);
+  };
+
+  const handleRecordPayment = () => {
+    alert('Opening Record Payment form...');
+    setShowRecordPaymentModal(true);
+    // TODO: Create RecordPaymentModal component
   };
 
   if (loading) {
@@ -309,7 +319,7 @@ const Payments = () => {
           <h1 className="payments-title">Payment Management</h1>
           <p className="payments-subtitle">View and manage customer payments</p>
         </div>
-        <Button variant="primary" size="md">
+        <Button variant="primary" size="md" onClick={handleRecordPayment}>
           <CreditCard size={20} />
           <span>Record Payment</span>
         </Button>
@@ -523,6 +533,14 @@ const Payments = () => {
             Next
           </button>
         </div>
+      )}
+
+      {/* Payment Details Modal */}
+      {selectedPayment && (
+        <PaymentDetails
+          payment={selectedPayment}
+          onClose={() => setSelectedPayment(null)}
+        />
       )}
     </div>
   );
