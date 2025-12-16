@@ -5,9 +5,9 @@ import Badge from '../../components/common/Badge';
 import './ReadingDetails.css';
 
 const ReadingDetails = ({ reading, onClose, onEdit }) => {
-  const [historicalReadings, setHistoricalReadings] = useState([]);
-  const [associatedBills, setAssociatedBills] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [historicalReadings] = useState([]);
+  const [associatedBills] = useState([]);
+  const [loading] = useState(false);
 
   if (!reading) return null;
 
