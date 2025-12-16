@@ -1,6 +1,9 @@
 import { useState, useEffect } from 'react';
-import { X, CreditCard, User, FileText, DollarSign, Calendar, Building } from 'lucide-react';
+import { X, CreditCard, User, FileText, DollarSign, Calendar, Building, XCircle } from 'lucide-react';
 import Button from '../../components/common/Button';
+import customerApi from '../../api/customerApi';
+import billingApi from '../../api/billingApi';
+import paymentApi from '../../api/paymentApi';
 import './RecordPaymentModal.css';
 
 const RecordPaymentModal = ({ isOpen, onClose, onSuccess }) => {
@@ -14,48 +17,73 @@ const RecordPaymentModal = ({ isOpen, onClose, onSuccess }) => {
     received_by: ''
   });
 
-  const [customers] = useState([
-    { id: 1, name: 'Nuwan Bandara' },
-    { id: 2, name: 'Saman Perera' },
-    { id: 3, name: 'Kasun Silva' },
-    { id: 5, name: 'Pradeep Kumara' },
-    { id: 7, name: 'Rohan De Silva' },
-    { id: 8, name: 'Anushka Jayawardena' },
-    { id: 10, name: 'Samanthi Mendis' }
-  ]);
-
-  const [bills] = useState([
-    { id: 1, bill_number: 'BILL-2024-0001', customer_id: 1, amount: 3762.50, status: 'Pending' },
-    { id: 2, bill_number: 'BILL-2024-0002', customer_id: 2, amount: 7750.00, status: 'Pending' },
-    { id: 3, bill_number: 'BILL-2024-0003', customer_id: 3, amount: 1500.00, status: 'Pending' },
-    { id: 5, bill_number: 'BILL-2024-0005', customer_id: 5, amount: 15900.00, status: 'Pending' },
-    { id: 7, bill_number: 'BILL-2024-0007', customer_id: 7, amount: 5200.00, status: 'Pending' },
-    { id: 8, bill_number: 'BILL-2024-0008', customer_id: 8, amount: 3200.00, status: 'Pending' },
-    { id: 10, bill_number: 'BILL-2024-0010', customer_id: 10, amount: 1000.00, status: 'Pending' }
-  ]);
-
+  const [customers, setCustomers] = useState([]);
+  const [bills, setBills] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [loadingCustomers, setLoadingCustomers] = useState(false);
+  const [loadingBills, setLoadingBills] = useState(false);
   const [selectedBill, setSelectedBill] = useState(null);
-  const [filteredBills, setFilteredBills] = useState([]);
+  const [error, setError] = useState(null);
 
+  // Fetch customers on mount
+  useEffect(() => {
+    if (isOpen) {
+      fetchCustomers();
+    }
+  }, [isOpen]);
+
+  // Fetch bills when customer is selected
   useEffect(() => {
     if (formData.customer_id) {
-      const customerBills = bills.filter(b => b.customer_id === parseInt(formData.customer_id));
-      setFilteredBills(customerBills);
+      fetchPendingBills(formData.customer_id);
+    } else {
+      setBills([]);
       setFormData(prev => ({ ...prev, bill_id: '' }));
       setSelectedBill(null);
-    } else {
-      setFilteredBills([]);
     }
   }, [formData.customer_id]);
 
+  // Update payment amount when bill is selected
   useEffect(() => {
     if (formData.bill_id) {
-      const bill = bills.find(b => b.id === parseInt(formData.bill_id));
+      const bill = bills.find(b => b.bill_id === parseInt(formData.bill_id));
       setSelectedBill(bill);
-      setFormData(prev => ({ ...prev, payment_amount: bill?.amount || '' }));
+      if (bill) {
+        setFormData(prev => ({ ...prev, payment_amount: bill.outstanding_amount || bill.total_amount }));
+      }
+    } else {
+      setSelectedBill(null);
     }
-  }, [formData.bill_id]);
+  }, [formData.bill_id, bills]);
+
+  const fetchCustomers = async () => {
+    try {
+      setLoadingCustomers(true);
+      setError(null);
+      const response = await customerApi.getAll();
+      setCustomers(response.data || []);
+    } catch (error) {
+      console.error('Error fetching customers:', error);
+      setError('Failed to load customers. Please try again.');
+    } finally {
+      setLoadingCustomers(false);
+    }
+  };
+
+  const fetchPendingBills = async (customerId) => {
+    try {
+      setLoadingBills(true);
+      setError(null);
+      const response = await billingApi.getPendingBillsByCustomer(customerId);
+      setBills(response.data || []);
+    } catch (error) {
+      console.error('Error fetching bills:', error);
+      setError('Failed to load bills for this customer.');
+      setBills([]);
+    } finally {
+      setLoadingBills(false);
+    }
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -70,22 +98,34 @@ const RecordPaymentModal = ({ isOpen, onClose, onSuccess }) => {
     
     // Validate required fields
     if (!formData.customer_id || !formData.bill_id || !formData.payment_amount || !formData.received_by) {
-      alert('Please fill in all required fields');
+      setError('Please fill in all required fields');
+      return;
+    }
+
+    // Validate transaction reference for non-cash payments
+    if (formData.payment_method !== 'Cash' && !formData.transaction_reference) {
+      setError(`Transaction reference is required for ${formData.payment_method} payments`);
       return;
     }
 
     try {
       setLoading(true);
+      setError(null);
       
-      // TODO: Replace with actual API call
-      // await paymentApi.recordPayment(formData);
+      // Prepare payment data for API
+      const paymentData = {
+        bill_id: parseInt(formData.bill_id),
+        payment_amount: parseFloat(formData.payment_amount),
+        payment_method: formData.payment_method,
+        transaction_reference: formData.transaction_reference || null,
+        payment_date: formData.payment_date,
+        received_by: formData.received_by
+      };
       
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // Create payment via API
+      const response = await paymentApi.createPayment(paymentData);
       
-      alert('Payment recorded successfully!');
-      
-      // Reset form
+      // Reset form on success
       setFormData({
         customer_id: '',
         bill_id: '',
@@ -96,12 +136,18 @@ const RecordPaymentModal = ({ isOpen, onClose, onSuccess }) => {
         received_by: ''
       });
       setSelectedBill(null);
+      setBills([]);
       
+      // Notify parent component
       if (onSuccess) onSuccess();
+      
+      // Show success message
+      alert(`Payment recorded successfully!\nPayment Number: ${response.data?.payment_number || 'Generated'}`);
+      
       onClose();
     } catch (error) {
       console.error('Error recording payment:', error);
-      alert('Failed to record payment. Please try again.');
+      setError(error.message || 'Failed to record payment. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -133,6 +179,14 @@ const RecordPaymentModal = ({ isOpen, onClose, onSuccess }) => {
           </button>
         </div>
 
+        {/* Error Message */}
+        {error && (
+          <div className="error-banner">
+            <XCircle size={16} />
+            <span>{error}</span>
+          </div>
+        )}
+
         {/* Modal Body */}
         <form onSubmit={handleSubmit} className="modal-body">
           <div className="form-grid">
@@ -149,11 +203,12 @@ const RecordPaymentModal = ({ isOpen, onClose, onSuccess }) => {
                 onChange={handleChange}
                 className="form-input"
                 required
+                disabled={loadingCustomers}
               >
-                <option value="">Select Customer</option>
+                <option value="">{loadingCustomers ? 'Loading customers...' : 'Select Customer'}</option>
                 {customers.map(customer => (
-                  <option key={customer.id} value={customer.id}>
-                    {customer.name} (ID: {customer.id})
+                  <option key={customer.customer_id} value={customer.customer_id}>
+                    {customer.first_name} {customer.last_name} (ID: {customer.customer_id})
                   </option>
                 ))}
               </select>
@@ -172,16 +227,18 @@ const RecordPaymentModal = ({ isOpen, onClose, onSuccess }) => {
                 onChange={handleChange}
                 className="form-input"
                 required
-                disabled={!formData.customer_id}
+                disabled={!formData.customer_id || loadingBills}
               >
-                <option value="">Select Bill</option>
-                {filteredBills.map(bill => (
-                  <option key={bill.id} value={bill.id}>
-                    {bill.bill_number} - {formatCurrency(bill.amount)}
+                <option value="">
+                  {loadingBills ? 'Loading bills...' : 'Select Bill'}
+                </option>
+                {bills.map(bill => (
+                  <option key={bill.bill_id} value={bill.bill_id}>
+                    {bill.bill_number} - {formatCurrency(bill.outstanding_amount || bill.total_amount)}
                   </option>
                 ))}
               </select>
-              {formData.customer_id && filteredBills.length === 0 && (
+              {formData.customer_id && !loadingBills && bills.length === 0 && (
                 <p className="form-hint">No pending bills for this customer</p>
               )}
             </div>
@@ -206,7 +263,7 @@ const RecordPaymentModal = ({ isOpen, onClose, onSuccess }) => {
               />
               {selectedBill && (
                 <p className="form-hint">
-                  Bill Amount: {formatCurrency(selectedBill.amount)}
+                  Bill Amount: {formatCurrency(selectedBill.outstanding_amount || selectedBill.total_amount)}
                 </p>
               )}
             </div>
@@ -297,19 +354,19 @@ const RecordPaymentModal = ({ isOpen, onClose, onSuccess }) => {
               <div className="summary-grid">
                 <div className="summary-item">
                   <span>Bill Amount:</span>
-                  <span>{formatCurrency(selectedBill.amount)}</span>
+                  <span>{formatCurrency(selectedBill.total_amount)}</span>
                 </div>
                 <div className="summary-item">
                   <span>Payment Amount:</span>
                   <span className="highlight">{formatCurrency(formData.payment_amount)}</span>
                 </div>
-                {parseFloat(formData.payment_amount) !== selectedBill.amount && (
+                {parseFloat(formData.payment_amount) !== (selectedBill.outstanding_amount || selectedBill.total_amount) && (
                   <div className="summary-item">
                     <span>
-                      {parseFloat(formData.payment_amount) > selectedBill.amount ? 'Overpayment:' : 'Outstanding:'}
+                      {parseFloat(formData.payment_amount) > (selectedBill.outstanding_amount || selectedBill.total_amount) ? 'Overpayment:' : 'Outstanding:'}
                     </span>
-                    <span className={parseFloat(formData.payment_amount) > selectedBill.amount ? 'overpayment' : 'outstanding'}>
-                      {formatCurrency(Math.abs(selectedBill.amount - parseFloat(formData.payment_amount)))}
+                    <span className={parseFloat(formData.payment_amount) > (selectedBill.outstanding_amount || selectedBill.total_amount) ? 'overpayment' : 'outstanding'}>
+                      {formatCurrency(Math.abs((selectedBill.outstanding_amount || selectedBill.total_amount) - parseFloat(formData.payment_amount)))}
                     </span>
                   </div>
                 )}

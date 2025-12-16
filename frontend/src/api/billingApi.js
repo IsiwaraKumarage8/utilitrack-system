@@ -126,6 +126,23 @@ const billingApi = {
   },
 
   /**
+   * Get pending bills for a specific customer
+   * @param {number} customerId - Customer ID
+   * @returns {Promise} - Promise resolving to pending bills array
+   */
+  getPendingBillsByCustomer: async (customerId) => {
+    try {
+      const response = await api.get(`/billing/customer/${customerId}`, {
+        params: { status: 'Unpaid,Partially Paid,Overdue' }
+      });
+      return response.data;
+    } catch (error) {
+      console.error(`Error fetching pending bills for customer ${customerId}:`, error);
+      throw error;
+    }
+  },
+
+  /**
    * Search bills by term
    * @param {string} searchTerm - Search term
    * @returns {Promise} - Promise resolving to bills array
