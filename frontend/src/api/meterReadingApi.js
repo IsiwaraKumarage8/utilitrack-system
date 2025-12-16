@@ -174,6 +174,20 @@ const meterReadingApi = {
       console.error(`Error fetching last reading for meter ${meterId}:`, error);
       throw error;
     }
+  },
+
+  /**
+   * Get reading statistics
+   * @returns {Promise} API response with reading stats
+   */
+  getReadingStats: async () => {
+    try {
+      const response = await axios.get(`${API_URL}/meter-readings/stats`);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching reading stats:', error);
+      throw error;
+    }
   }
 };
 

@@ -168,6 +168,20 @@ const meterApi = {
       console.error(`Error fetching last reading for meter ${meterId}:`, error);
       throw error;
     }
+  },
+
+  /**
+   * Get meter statistics
+   * @returns {Promise} API response with meter stats
+   */
+  getMeterStats: async () => {
+    try {
+      const response = await axios.get(`${API_URL}/meters/stats`);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching meter stats:', error);
+      throw error;
+    }
   }
 };
 

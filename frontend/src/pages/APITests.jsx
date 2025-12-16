@@ -57,15 +57,15 @@ const APITests = () => {
       { name: 'Get Payment Stats', fn: () => paymentApi.getPaymentStats() }
     ],
     meters: [
-      { name: 'Get All Meters', fn: () => meterApi.getAll() },
-      { name: 'Get Meter By ID', fn: () => meterApi.getById(1) },
-      { name: 'Search Meters', fn: () => meterApi.search('meter') },
-      { name: 'Get Meter Stats', fn: () => meterApi.getStats() }
+      { name: 'Get All Meters', fn: () => meterApi.getAllMeters() },
+      { name: 'Get Meter By ID', fn: () => meterApi.getMeterById(1) },
+      { name: 'Search Meters', fn: () => meterApi.searchMeters('meter') },
+      { name: 'Get Meter Stats', fn: () => meterApi.getMeterStats() }
     ],
     readings: [
-      { name: 'Get All Readings', fn: () => meterReadingApi.getAll() },
-      { name: 'Get Reading By ID', fn: () => meterReadingApi.getById(1) },
-      { name: 'Search Readings', fn: () => meterReadingApi.search('reading') }
+      { name: 'Get All Readings', fn: () => meterReadingApi.getAllReadings() },
+      { name: 'Get Reading By ID', fn: () => meterReadingApi.getReadingById(1) },
+      { name: 'Search Readings', fn: () => meterReadingApi.searchReadings('reading') }
     ]
   };
 
