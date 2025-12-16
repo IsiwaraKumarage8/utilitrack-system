@@ -69,8 +69,8 @@ const paymentApi = {
    */
   searchPayments: async (searchTerm) => {
     try {
-      const response = await axios.get(`${API_URL}/payments/search`, {
-        params: { q: searchTerm }
+      const response = await axios.get(`${API_URL}/payments`, {
+        params: { search: searchTerm }
       });
       return response.data;
     } catch (error) {
@@ -101,7 +101,9 @@ const paymentApi = {
    */
   filterByMethod: async (method) => {
     try {
-      const response = await axios.get(`${API_URL}/payments/filter/method/${method}`);
+      const response = await axios.get(`${API_URL}/payments`, {
+        params: { method }
+      });
       return response.data;
     } catch (error) {
       console.error('Error filtering payments by method:', error);
@@ -213,7 +215,7 @@ const paymentApi = {
    */
   getPaymentStats: async (period = 'this_month') => {
     try {
-      const response = await axios.get(`${API_URL}/payments/stats`, {
+      const response = await axios.get(`${API_URL}/payments/stats/summary`, {
         params: { period }
       });
       return response.data;

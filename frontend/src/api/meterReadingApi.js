@@ -9,7 +9,7 @@ const meterReadingApi = {
    */
   getAllReadings: async () => {
     try {
-      const response = await axios.get(`${API_URL}/meter-readings`);
+      const response = await axios.get(`${API_URL}/meters/readings`);
       return response.data;
     } catch (error) {
       console.error('Error fetching meter readings:', error);
@@ -24,7 +24,7 @@ const meterReadingApi = {
    */
   getReadingById: async (readingId) => {
     try {
-      const response = await axios.get(`${API_URL}/meter-readings/${readingId}`);
+      const response = await axios.get(`${API_URL}/meters/readings/${readingId}`);
       return response.data;
     } catch (error) {
       console.error(`Error fetching reading ${readingId}:`, error);
@@ -72,8 +72,8 @@ const meterReadingApi = {
    */
   searchReadings: async (searchTerm) => {
     try {
-      const response = await axios.get(`${API_URL}/meter-readings/search`, {
-        params: { q: searchTerm }
+      const response = await axios.get(`${API_URL}/meters/readings`, {
+        params: { search: searchTerm }
       });
       return response.data;
     } catch (error) {
