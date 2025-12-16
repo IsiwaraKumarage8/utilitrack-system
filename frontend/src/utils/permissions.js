@@ -224,7 +224,7 @@ export const getAccessiblePages = (userRole) => {
     [ROLES.ADMIN]: [
       '/dashboard', '/customers', '/connections', '/meters', 
       '/readings', '/billing', '/payments', '/complaints', 
-      '/reports', '/settings'
+      '/reports', '/settings', '/api-tests'
     ],
     [ROLES.FIELD_OFFICER]: [
       '/dashboard', '/customers', '/connections', '/meters', 

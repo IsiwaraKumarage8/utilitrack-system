@@ -1,0 +1,274 @@
+/* API Tests Page */
+.api-tests-page {
+  padding: 24px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* Page Header */
+.api-tests-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 32px;
+}
+
+.api-tests-title {
+  font-size: 28px;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0 0 8px 0;
+}
+
+.api-tests-subtitle {
+  font-size: 14px;
+  color: #6b7280;
+  margin: 0;
+}
+
+.api-tests-run-btn {
+  padding: 12px 24px;
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.api-tests-run-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+}
+
+.api-tests-run-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.api-tests-run-btn .spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Category Filters */
+.api-tests-filters {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.filter-btn {
+  padding: 10px 16px;
+  background: white;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #6b7280;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.filter-btn:hover {
+  border-color: #3b82f6;
+  color: #3b82f6;
+  background: #eff6ff;
+}
+
+.filter-btn.active {
+  background: #3b82f6;
+  border-color: #3b82f6;
+  color: white;
+}
+
+/* Test Summary */
+.api-tests-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.summary-card {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+}
+
+.summary-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+}
+
+.summary-value {
+  font-size: 32px;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.summary-card-success {
+  border-left: 4px solid #10b981;
+}
+
+.summary-card-success .summary-value {
+  color: #10b981;
+}
+
+.summary-card-error {
+  border-left: 4px solid #ef4444;
+}
+
+.summary-card-error .summary-value {
+  color: #ef4444;
+}
+
+/* Test Results */
+.api-tests-results {
+  display: grid;
+  gap: 12px;
+}
+
+.test-item {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 16px 20px;
+  transition: all 0.2s ease;
+}
+
+.test-item:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.test-item.success {
+  border-left: 4px solid #10b981;
+}
+
+.test-item.error {
+  border-left: 4px solid #ef4444;
+}
+
+.test-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.test-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.test-icon {
+  flex-shrink: 0;
+}
+
+.test-icon.loading {
+  color: #6b7280;
+}
+
+.test-icon.success {
+  color: #10b981;
+}
+
+.test-icon.error {
+  color: #ef4444;
+}
+
+.test-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 2px;
+}
+
+.test-category {
+  font-size: 12px;
+  font-weight: 500;
+  color: #6b7280;
+  text-transform: capitalize;
+}
+
+.test-duration {
+  font-size: 13px;
+  font-weight: 500;
+  color: #6b7280;
+  background: #f3f4f6;
+  padding: 4px 10px;
+  border-radius: 6px;
+}
+
+.test-error {
+  margin-top: 12px;
+  padding: 12px;
+  background: #fee2e2;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  font-size: 13px;
+  color: #991b1b;
+}
+
+.test-error strong {
+  font-weight: 600;
+}
+
+.test-success {
+  margin-top: 12px;
+  padding: 12px;
+  background: #d1fae5;
+  border: 1px solid #a7f3d0;
+  border-radius: 8px;
+  font-size: 13px;
+  color: #065f46;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .api-tests-page {
+    padding: 16px;
+  }
+
+  .api-tests-header {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .api-tests-run-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .api-tests-filters {
+    flex-direction: column;
+  }
+
+  .filter-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .api-tests-summary {
+    grid-template-columns: 1fr;
+  }
+}
