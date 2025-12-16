@@ -71,9 +71,9 @@ const MeterDetails = ({ meter, onClose, onEdit, onRecordReading }) => {
   };
 
   const calculateAverageConsumption = () => {
-    if (MOCK_READING_HISTORY.length === 0) return 0;
-    const total = MOCK_READING_HISTORY.reduce((sum, reading) => sum + reading.consumption, 0);
-    return (total / MOCK_READING_HISTORY.length).toFixed(2);
+    if (readingHistory.length === 0) return 0;
+    const total = readingHistory.reduce((sum, reading) => sum + reading.consumption, 0);
+    return (total / readingHistory.length).toFixed(2);
   };
 
   return (
@@ -139,7 +139,9 @@ const MeterDetails = ({ meter, onClose, onEdit, onRecordReading }) => {
                 </div>
                 <div className="detail-item">
                   <span className="detail-label">Status</span>
-                  <Badge variant={getStatusVariant(meter.meter_status)} text={meter.meter_status} />
+                  <Badge status={getStatusVariant(meter.meter_status)}>
+                    {meter.meter_status}
+                  </Badge>
                 </div>
               </div>
               {meter.notes && (
@@ -191,7 +193,7 @@ const MeterDetails = ({ meter, onClose, onEdit, onRecordReading }) => {
                   </div>
                   <div className="stat-content">
                     <span className="stat-label">Total Readings</span>
-                    <span className="stat-value">{MOCK_READING_HISTORY.length}</span>
+                    <span className="stat-value">{readingHistory.length}</span>
                   </div>
                 </div>
               </div>
@@ -208,36 +210,44 @@ const MeterDetails = ({ meter, onClose, onEdit, onRecordReading }) => {
             <div className="detail-section">
               <h3 className="section-title">Recent Readings</h3>
               <div className="history-list">
-                {MOCK_READING_HISTORY.map(reading => (
-                  <div key={reading.reading_id} className="history-item">
-                    <div className="history-header">
-                      <span className="history-date">
-                        {new Date(reading.reading_date).toLocaleDateString()}
-                      </span>
-                      <span className={`reading-type ${reading.reading_type.toLowerCase()}`}>
-                        {reading.reading_type}
-                      </span>
+                {loading ? (
+                  <p className="loading-message">Loading readings...</p>
+                ) : readingHistory.length === 0 ? (
+                  <p className="no-history">No reading records</p>
+                ) : (
+                  readingHistory.slice(0, 5).map(reading => (
+                    <div key={reading.reading_id} className="history-item">
+                      <div className="history-header">
+                        <span className="history-date">
+                          {new Date(reading.reading_date).toLocaleDateString()}
+                        </span>
+                        <span className={`reading-type ${reading.reading_type?.toLowerCase() || 'regular'}`}>
+                          {reading.reading_type || 'Regular'}
+                        </span>
+                      </div>
+                      <div className="history-details">
+                        <div className="history-row">
+                          <span className="history-label">Previous:</span>
+                          <span className="history-value">{reading.previous_reading?.toFixed(2) || '0.00'} kWh</span>
+                        </div>
+                        <div className="history-row">
+                          <span className="history-label">Current:</span>
+                          <span className="history-value">{reading.current_reading?.toFixed(2) || '0.00'} kWh</span>
+                        </div>
+                        <div className="history-row">
+                          <span className="history-label">Consumption:</span>
+                          <span className="history-value consumption">{reading.consumption?.toFixed(2) || '0.00'} kWh</span>
+                        </div>
+                        {reading.reader_name && (
+                          <div className="history-row">
+                            <span className="history-label">Reader:</span>
+                            <span className="history-value">{reading.reader_name}</span>
+                          </div>
+                        )}
+                      </div>
                     </div>
-                    <div className="history-details">
-                      <div className="history-row">
-                        <span className="history-label">Previous:</span>
-                        <span className="history-value">{reading.previous_reading.toFixed(2)} kWh</span>
-                      </div>
-                      <div className="history-row">
-                        <span className="history-label">Current:</span>
-                        <span className="history-value">{reading.current_reading.toFixed(2)} kWh</span>
-                      </div>
-                      <div className="history-row">
-                        <span className="history-label">Consumption:</span>
-                        <span className="history-value consumption">{reading.consumption.toFixed(2)} kWh</span>
-                      </div>
-                      <div className="history-row">
-                        <span className="history-label">Reader:</span>
-                        <span className="history-value">{reading.reader_name}</span>
-                      </div>
-                    </div>
-                  </div>
-                ))}
+                  ))
+                )}
               </div>
             </div>
 
@@ -245,24 +255,28 @@ const MeterDetails = ({ meter, onClose, onEdit, onRecordReading }) => {
             <div className="detail-section">
               <h3 className="section-title">Maintenance History</h3>
               <div className="history-list">
-                {MOCK_MAINTENANCE_HISTORY.length > 0 ? (
-                  MOCK_MAINTENANCE_HISTORY.map(maintenance => (
+                {loading ? (
+                  <p className="loading-message">Loading maintenance history...</p>
+                ) : maintenanceHistory.length > 0 ? (
+                  maintenanceHistory.map(maintenance => (
                     <div key={maintenance.maintenance_id} className="history-item">
                       <div className="history-header">
                         <span className="history-date">
                           {new Date(maintenance.maintenance_date).toLocaleDateString()}
                         </span>
-                        <Badge variant="success" text={maintenance.status} />
+                        <Badge status="success">{maintenance.status || 'Completed'}</Badge>
                       </div>
                       <div className="history-details">
                         <div className="history-row">
                           <span className="history-label">Type:</span>
                           <span className="history-value">{maintenance.maintenance_type}</span>
                         </div>
-                        <div className="history-row">
-                          <span className="history-label">Technician:</span>
-                          <span className="history-value">{maintenance.performed_by}</span>
-                        </div>
+                        {maintenance.performed_by && (
+                          <div className="history-row">
+                            <span className="history-label">Technician:</span>
+                            <span className="history-value">{maintenance.performed_by}</span>
+                          </div>
+                        )}
                         {maintenance.notes && (
                           <div className="history-row">
                             <span className="history-label">Notes:</span>

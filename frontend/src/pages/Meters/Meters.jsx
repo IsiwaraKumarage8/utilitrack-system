@@ -293,7 +293,9 @@ const Meters = () => {
                   <td>{new Date(meter.installation_date).toLocaleDateString()}</td>
                   <td>{meter.last_maintenance_date ? new Date(meter.last_maintenance_date).toLocaleDateString() : 'Never'}</td>
                   <td>
-                    <Badge variant={getStatusVariant(meter.meter_status)} text={meter.meter_status} />
+                    <Badge status={getStatusVariant(meter.meter_status)}>
+                      {meter.meter_status}
+                    </Badge>
                   </td>
                   <td>
                     <div className="action-buttons">
@@ -360,7 +362,7 @@ const Meters = () => {
           onClose={() => setShowForm(false)}
           onSave={() => {
             setShowForm(false);
-            // TODO: Refresh meters list
+            fetchMeters();
           }}
         />
       )}
@@ -386,7 +388,7 @@ const Meters = () => {
           onClose={() => setShowRecordReading(false)}
           onSave={() => {
             setShowRecordReading(false);
-            // TODO: Refresh meters list
+            fetchMeters();
           }}
         />
       )}

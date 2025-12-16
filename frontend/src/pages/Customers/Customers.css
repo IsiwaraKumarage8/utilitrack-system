@@ -145,11 +145,310 @@
 .customer-name {
   font-weight: 500;
   color: #1f2937;
+  white-space: nowrap;
 }
 
 .customer-company {
   font-size: 12px;
   color: #6b7280;
+}
+
+.company-name {
+  color: #6b7280;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+/* Table Container with Horizontal Scrolling */
+.customers-page .table-container {
+  background-color: #ffffff;
+  border-radius: 12px 12px 0 0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  width: 100%;
+  max-width: 100%;
+  position: relative;
+  display: block;
+  margin-bottom: 0;
+}
+
+/* Scrollbar styling */
+.customers-page .table-container::-webkit-scrollbar {
+  height: 12px;
+}
+
+.customers-page .table-container::-webkit-scrollbar-track {
+  background: #f3f4f6;
+  border-radius: 0 0 12px 12px;
+}
+
+.customers-page .table-container::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 4px;
+}
+
+.customers-page .table-container::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
+/* Data Table */
+.customers-page .data-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: auto;
+}
+
+/* Customers table needs more width for 8 columns */
+.customers-page .customers-table {
+  min-width: 1200px;
+  width: max-content;
+}
+
+.customers-page .data-table thead tr {
+  background-color: #f9fafb;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+.customers-page .data-table th {
+  padding: 16px 20px;
+  text-align: left;
+  font-size: 12px;
+  font-weight: 600;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+
+.customers-page .data-table tbody tr {
+  border-bottom: 1px solid #f3f4f6;
+  transition: background-color 0.2s ease;
+}
+
+.customers-page .data-table tbody tr:hover {
+  background-color: #f9fafb;
+}
+
+.customers-page .data-table tbody tr:last-child {
+  border-bottom: none;
+}
+
+.customers-page .data-table td {
+  padding: 16px 20px;
+  font-size: 14px;
+  color: #1f2937;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+/* Sticky Actions Column */
+.customers-page .data-table th:last-child,
+.customers-page .data-table td:last-child {
+  position: sticky;
+  right: 0;
+  background-color: #f9fafb;
+  box-shadow: -2px 0 4px rgba(0, 0, 0, 0.05);
+  z-index: 1;
+}
+
+.customers-page .data-table tbody tr:hover td:last-child {
+  background-color: #f9fafb;
+}
+
+.customers-page .data-table td:last-child {
+  background-color: #ffffff;
+}
+
+.customers-page .data-table tbody tr:hover td:last-child {
+  background-color: #f9fafb;
+}
+
+/* Action Buttons */
+.customers-page .action-buttons {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-start;
+}
+
+.customers-page .action-btn {
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background-color: transparent;
+}
+
+.customers-page .action-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+.customers-page .action-btn-view {
+  color: #3b82f6;
+}
+
+.customers-page .action-btn-view:hover {
+  background-color: #eff6ff;
+}
+
+.customers-page .action-btn-edit {
+  color: #10b981;
+}
+
+.customers-page .action-btn-edit:hover {
+  background-color: #f0fdf4;
+}
+
+.customers-page .action-btn-delete {
+  color: #ef4444;
+}
+
+.customers-page .action-btn-delete:hover {
+  background-color: #fef2f2;
+}
+
+/* Pagination - Sticky and Non-Scrollable */
+.customers-page .pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-top: 1px solid #e5e7eb;
+  background-color: #ffffff;
+  border-radius: 0 0 12px 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  margin-top: 0;
+  position: relative;
+  z-index: 2;
+}
+
+.customers-page .pagination-btn {
+  padding: 8px 16px;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  background-color: #ffffff;
+  color: #374151;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.customers-page .pagination-btn:hover:not(:disabled) {
+  background-color: #f9fafb;
+  border-color: #3b82f6;
+  color: #3b82f6;
+}
+
+.customers-page .pagination-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.customers-page .pagination-pages {
+  display: flex;
+  gap: 4px;
+}
+
+.customers-page .pagination-page {
+  width: 32px;
+  height: 32px;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  background-color: #ffffff;
+  color: #374151;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.customers-page .pagination-page:hover {
+  background-color: #f9fafb;
+  border-color: #3b82f6;
+  color: #3b82f6;
+}
+
+.customers-page .pagination-page.active {
+  background-color: #3b82f6;
+  border-color: #3b82f6;
+  color: #ffffff;
+}
+
+/* Empty State */
+.customers-page .empty-state {
+  padding: 80px 20px;
+  text-align: center;
+}
+
+.customers-page .empty-state-text {
+  font-size: 18px;
+  font-weight: 500;
+  color: #1f2937;
+  margin: 0 0 8px 0;
+}
+
+.customers-page .empty-state-subtext {
+  font-size: 14px;
+  color: #6b7280;
+  margin: 0;
+}
+
+/* Loading and Error States */
+.customers-page .loading-container,
+.customers-page .error-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  gap: 16px;
+}
+
+.customers-page .spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #e5e7eb;
+  border-top-color: #3b82f6;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.customers-page .error-message {
+  color: #ef4444;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.customers-page .retry-button {
+  padding: 10px 20px;
+  background-color: #3b82f6;
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.customers-page .retry-button:hover {
+  background-color: #2563eb;
 }
 
 /* Responsive */

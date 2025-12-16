@@ -318,12 +318,17 @@
   font-size: 14px;
 }
 
-.no-history {
+.no-history,
+.loading-message {
   text-align: center;
   color: #9ca3af;
   font-size: 14px;
   padding: 20px;
   margin: 0;
+}
+
+.loading-message {
+  font-style: italic;
 }
 
 /* Modal Footer */

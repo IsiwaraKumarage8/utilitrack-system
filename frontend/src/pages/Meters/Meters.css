@@ -1,7 +1,9 @@
 /* Meters Page */
 .meters-page {
   padding: 24px;
-  max-width: 1400px;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
 /* Page Header */
@@ -87,15 +89,44 @@
 /* Table */
 .table-container {
   background: white;
-  border-radius: 12px;
+  border-radius: 12px 12px 0 0;
   border: 1px solid #e5e7eb;
-  overflow: hidden;
+  overflow-x: auto;
+  overflow-y: visible;
+  -webkit-overflow-scrolling: touch;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  margin-bottom: 0;
+  width: 100%;
+  max-width: 100%;
+  position: relative;
+  display: block;
+}
+
+/* Scrollbar styling */
+.table-container::-webkit-scrollbar {
+  height: 12px;
+}
+
+.table-container::-webkit-scrollbar-track {
+  background: #f3f4f6;
+  border-radius: 0 0 12px 12px;
+}
+
+.table-container::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 4px;
+}
+
+.table-container::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
 }
 
 .meters-table {
   width: 100%;
+  min-width: 1400px;
+  width: max-content;
   border-collapse: collapse;
+  table-layout: auto;
 }
 
 .meters-table thead {
@@ -111,6 +142,7 @@
   color: #374151;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  white-space: nowrap;
 }
 
 .meters-table th.sortable {
@@ -174,12 +206,36 @@
   padding: 14px 16px;
   font-size: 14px;
   color: #374151;
+  white-space: nowrap;
+}
+
+/* Sticky Actions Column */
+.meters-table th:last-child,
+.meters-table td:last-child {
+  position: sticky;
+  right: 0;
+  background-color: #f9fafb;
+  box-shadow: -2px 0 4px rgba(0, 0, 0, 0.05);
+  z-index: 1;
+}
+
+.meters-table tbody tr:hover td:last-child {
+  background-color: #f9fafb;
+}
+
+.meters-table td:last-child {
+  background-color: #ffffff;
+}
+
+.meters-table tbody tr:hover td:last-child {
+  background-color: #f9fafb;
 }
 
 .meter-number {
   font-family: 'Courier New', monospace;
   font-weight: 600;
   color: #1f2937;
+  white-space: nowrap;
 }
 
 /* Utility Badge */
@@ -267,13 +323,19 @@
   margin: 0;
 }
 
-/* Pagination */
+/* Pagination - Sticky and Non-Scrollable */
 .pagination {
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 16px;
-  margin-top: 24px;
+  margin-top: 0;
+  padding: 16px 20px;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-top: none;
+  border-radius: 0 0 12px 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
 .pagination-btn {

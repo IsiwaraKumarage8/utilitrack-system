@@ -384,6 +384,7 @@ const Customers = () => {
               <thead>
                 <tr>
                   <th>Customer</th>
+                  <th>Company</th>
                   <th>Email</th>
                   <th>Phone</th>
                   <th>Type</th>
@@ -407,11 +408,13 @@ const Customers = () => {
                           <div className="customer-name">
                             {customer.first_name} {customer.last_name}
                           </div>
-                          {customer.company_name && (
-                            <div className="customer-company">{customer.company_name}</div>
-                          )}
                         </div>
                       </div>
+                    </td>
+                    <td>
+                      <span className="company-name">
+                        {customer.company_name || 'No company'}
+                      </span>
                     </td>
                     <td>{customer.email}</td>
                     <td>{customer.phone}</td>

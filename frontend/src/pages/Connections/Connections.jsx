@@ -232,7 +232,7 @@ async (connection) => {
                 <tr key={connection.connection_id}>
                   <td>
                     <div className="utility-cell">
-                      <div className={`utility-icon ${getUtilityColor(connection.utility_name)}`}>
+                      <div className={`utility-icon utility-icon--${getUtilityColor(connection.utility_name)}`}>
                         {getUtilityIcon(connection.utility_name)}
                       </div>
                       <span className="utility-name">{connection.utility_name}</span>
@@ -251,7 +251,9 @@ async (connection) => {
                   </td>
                   <td>{new Date(connection.connection_date).toLocaleDateString()}</td>
                   <td>
-                    <Badge variant={getStatusVariant(connection.connection_status)} text={connection.connection_status} />
+                    <Badge status={getStatusVariant(connection.connection_status)}>
+                      {connection.connection_status}
+                    </Badge>
                   </td>
                   <td>
                     {connection.connection_status === 'Active' ? (

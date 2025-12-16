@@ -3,6 +3,22 @@
   max-width: 64rem;
 }
 
+/* Modal Body - Add spacing between sections */
+.modal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* Details Section - Add margin between sections */
+.details-section {
+  margin-bottom: 1.5rem;
+}
+
+.details-section:last-child {
+  margin-bottom: 0;
+}
+
 /* Header Content */
 .header-content {
   display: flex;
@@ -217,6 +233,22 @@
 .bill-date {
   font-size: 0.75rem;
   color: #9CA3AF;
+}
+
+/* Loading and Empty States */
+.loading-message,
+.empty-message {
+  padding: 2rem;
+  text-align: center;
+  color: #9CA3AF;
+  font-size: 0.875rem;
+  background-color: #1F2937;
+  border: 1px solid #374151;
+  border-radius: 0.5rem;
+}
+
+.empty-message {
+  color: #6B7280;
 }
 
 /* Scrollbar Styling */

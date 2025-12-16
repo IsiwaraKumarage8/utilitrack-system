@@ -164,12 +164,12 @@ const MeterForm = ({ mode, meter, onClose, onSave }) => {
                 value={formData.connection_id}
                 onChange={handleChange}
                 className={`form-input ${errors.connection_id ? 'error' : ''}`}
-                disabled={mode === 'edit'}
+                disabled={mode === 'edit' || loadingConnections}
               >
-                <option value="">Select a service connection</option>
-                {MOCK_CONNECTIONS.map(connection => (
+                <option value="">{loadingConnections ? 'Loading connections...' : 'Select a service connection'}</option>
+                {connections.map(connection => (
                   <option key={connection.connection_id} value={connection.connection_id}>
-                    {connection.connection_number} - {connection.customer_name} ({connection.utility_type})
+                    {connection.connection_number} - {connection.customer_name} ({connection.utility_name || connection.utility_type})
                   </option>
                 ))}
               </select>
@@ -179,7 +179,7 @@ const MeterForm = ({ mode, meter, onClose, onSave }) => {
               {selectedConnection && (
                 <div className="connection-info">
                   <span className="info-badge">
-                    {selectedConnection.utility_type} connection for {selectedConnection.customer_name}
+                    {selectedConnection.utility_name || selectedConnection.utility_type} connection for {selectedConnection.customer_name}
                   </span>
                 </div>
               )}
