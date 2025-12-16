@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { Settings as SettingsIcon, Wrench, Database, Bell, Lock, Users, Palette } from 'lucide-react';
+import { Settings as SettingsIcon, Database } from 'lucide-react';
 import Button from '../components/common/Button';
 import './Settings.css';
 
@@ -17,46 +17,6 @@ const Settings = () => {
       action: () => navigate('/api-tests'),
       buttonText: 'Open API Tests',
       variant: 'primary'
-    },
-    {
-      icon: Users,
-      title: 'User Management',
-      description: 'Manage user accounts, roles, and permissions',
-      action: null,
-      buttonText: 'Coming Soon',
-      variant: 'secondary'
-    },
-    {
-      icon: Bell,
-      title: 'Notifications',
-      description: 'Configure email and SMS notification settings',
-      action: null,
-      buttonText: 'Coming Soon',
-      variant: 'secondary'
-    },
-    {
-      icon: Lock,
-      title: 'Security',
-      description: 'Password policies and authentication settings',
-      action: null,
-      buttonText: 'Coming Soon',
-      variant: 'secondary'
-    },
-    {
-      icon: Wrench,
-      title: 'System Configuration',
-      description: 'General system settings and preferences',
-      action: null,
-      buttonText: 'Coming Soon',
-      variant: 'secondary'
-    },
-    {
-      icon: Palette,
-      title: 'Appearance',
-      description: 'Theme and display customization options',
-      action: null,
-      buttonText: 'Coming Soon',
-      variant: 'secondary'
     }
   ];
 
