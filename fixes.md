@@ -48,4 +48,4 @@
     - The actual action icons of the actions column of the table, except for the eye icon, the other two icons do nothing and is not functional.
     - The method column, it shows an icon of the payment methodd and another blue hollow shape next to it. 
     - The Status colum also does not show the proper status, just a blue shape.
-    - "Record Payment" button does not work. Create a 
+    - "Record Payment" button does not work. 
