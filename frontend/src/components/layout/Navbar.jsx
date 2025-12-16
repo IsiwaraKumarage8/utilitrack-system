@@ -58,18 +58,6 @@ const Navbar = ({ onMenuClick }) => {
       
       {/* Right side - User info and actions */}
       <div className="navbar__right">
-        {/* Search */}
-        <button className="navbar__search">
-          <Search />
-          <span>Search...</span>
-        </button>
-        
-        {/* Notifications */}
-        <button className="navbar__notifications">
-          <Bell />
-          <span className="navbar__notification-badge">3</span>
-        </button>
-        
         {/* User Info */}
         <div className="navbar__user-section">
           <div className="navbar__user-info">
