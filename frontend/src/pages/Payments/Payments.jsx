@@ -3,6 +3,7 @@ import { Search, TrendingUp, Calendar, Clock, XCircle, Eye, Printer, RotateCcw, 
 import Button from '../../components/common/Button';
 import Badge from '../../components/common/Badge';
 import PaymentDetails from './PaymentDetails';
+import RecordPaymentModal from './RecordPaymentModal';
 import '../../styles/table.css';
 import './Payments.css';
 
@@ -295,9 +296,13 @@ const Payments = () => {
   };
 
   const handleRecordPayment = () => {
-    alert('Opening Record Payment form...');
     setShowRecordPaymentModal(true);
-    // TODO: Create RecordPaymentModal component
+  };
+
+  const handlePaymentRecorded = () => {
+    // TODO: Refresh payments list from API
+    // For now, just close the modal
+    setShowRecordPaymentModal(false);
   };
 
   if (loading) {
@@ -540,6 +545,15 @@ const Payments = () => {
         <PaymentDetails
           payment={selectedPayment}
           onClose={() => setSelectedPayment(null)}
+        />
+      )}
+
+      {/* Record Payment Modal */}
+      {showRecordPaymentModal && (
+        <RecordPaymentModal
+          isOpen={showRecordPaymentModal}
+          onClose={() => setShowRecordPaymentModal(false)}
+          onSuccess={handlePaymentRecorded}
         />
       )}
     </div>
