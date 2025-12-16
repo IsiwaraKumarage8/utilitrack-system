@@ -15,6 +15,7 @@ import Payments from './pages/Payments/Payments';
 import Complaints from './pages/Complaints/Complaints';
 import Reports from './pages/Reports';
 import Settings from './pages/Settings';
+import APITests from './pages/APITests';
 
 // Protected Route wrapper
 const ProtectedRoute = ({ children }) => {
@@ -114,6 +115,11 @@ function AppRoutes() {
                 <Route path="/settings" element={
                   <RoleProtectedRoute path="/settings">
                     <Settings />
+                  </RoleProtectedRoute>
+                } />
+                <Route path="/api-tests" element={
+                  <RoleProtectedRoute path="/api-tests">
+                    <APITests />
                   </RoleProtectedRoute>
                 } />
               </Routes>

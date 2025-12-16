@@ -2,6 +2,8 @@ import { useState, useEffect, useMemo } from 'react';
 import { Search, TrendingUp, Calendar, Clock, XCircle, Eye, Printer, RotateCcw, Banknote, CreditCard, Building, Smartphone, FileText } from 'lucide-react';
 import Button from '../../components/common/Button';
 import Badge from '../../components/common/Badge';
+import PaymentDetails from './PaymentDetails';
+import RecordPaymentModal from './RecordPaymentModal';
 import '../../styles/table.css';
 import './Payments.css';
 
@@ -156,6 +158,8 @@ const Payments = () => {
   const [statusFilter, setStatusFilter] = useState('All');
   const [methodFilter, setMethodFilter] = useState('All');
   const [currentPage, setCurrentPage] = useState(1);
+  const [showRecordPaymentModal, setShowRecordPaymentModal] = useState(false);
+  const [selectedPayment, setSelectedPayment] = useState(null);
   const itemsPerPage = 10;
 
   // Simulate data loading
@@ -274,6 +278,33 @@ const Payments = () => {
   // Calculate table total
   const tableTotal = paginatedPayments.reduce((sum, p) => sum + p.payment_amount, 0);
 
+  // Action handlers
+  const handleViewReceipt = (payment) => {
+    setSelectedPayment(payment);
+  };
+
+  const handlePrintReceipt = (payment) => {
+    // TODO: Implement print receipt functionality
+    alert(`Printing receipt for ${payment.payment_number}`);
+    console.log('Print receipt:', payment);
+  };
+
+  const handleRefund = (payment) => {
+    // TODO: Implement refund modal
+    alert(`Processing refund for ${payment.payment_number}`);
+    console.log('Refund payment:', payment);
+  };
+
+  const handleRecordPayment = () => {
+    setShowRecordPaymentModal(true);
+  };
+
+  const handlePaymentRecorded = () => {
+    // TODO: Refresh payments list from API
+    // For now, just close the modal
+    setShowRecordPaymentModal(false);
+  };
+
   if (loading) {
     return (
       <div className="payments-page">
@@ -293,7 +324,7 @@ const Payments = () => {
           <h1 className="payments-title">Payment Management</h1>
           <p className="payments-subtitle">View and manage customer payments</p>
         </div>
-        <Button variant="primary" size="md">
+        <Button variant="primary" size="md" onClick={handleRecordPayment}>
           <CreditCard size={20} />
           <span>Record Payment</span>
         </Button>
@@ -421,7 +452,7 @@ const Payments = () => {
                   <td>
                     <div className="payment-method">
                       {getPaymentMethodIcon(payment.payment_method)}
-                      <Badge variant={getMethodBadge(payment.payment_method)} text={payment.payment_method} />
+                      <Badge status={getMethodBadge(payment.payment_method)}>{payment.payment_method}</Badge>
                     </div>
                   </td>
                   <td className="transaction-ref">
@@ -429,19 +460,21 @@ const Payments = () => {
                   </td>
                   <td>{payment.received_by}</td>
                   <td>
-                    <Badge variant={getStatusBadge(payment.payment_status)} text={payment.payment_status} />
+                    <Badge status={getStatusBadge(payment.payment_status)}>{payment.payment_status}</Badge>
                   </td>
                   <td>
                     <div className="action-buttons">
                       <button
                         className="action-btn action-btn-view"
                         title="View Receipt"
+                        onClick={() => handleViewReceipt(payment)}
                       >
                         <Eye size={16} />
                       </button>
                       <button
                         className="action-btn action-btn-print"
                         title="Print"
+                        onClick={() => handlePrintReceipt(payment)}
                       >
                         <Printer size={16} />
                       </button>
@@ -449,6 +482,7 @@ const Payments = () => {
                         <button
                           className="action-btn action-btn-refund"
                           title="Refund"
+                          onClick={() => handleRefund(payment)}
                         >
                           <RotateCcw size={16} />
                         </button>
@@ -504,6 +538,23 @@ const Payments = () => {
             Next
           </button>
         </div>
+      )}
+
+      {/* Payment Details Modal */}
+      {selectedPayment && (
+        <PaymentDetails
+          payment={selectedPayment}
+          onClose={() => setSelectedPayment(null)}
+        />
+      )}
+
+      {/* Record Payment Modal */}
+      {showRecordPaymentModal && (
+        <RecordPaymentModal
+          isOpen={showRecordPaymentModal}
+          onClose={() => setShowRecordPaymentModal(false)}
+          onSuccess={handlePaymentRecorded}
+        />
       )}
     </div>
   );

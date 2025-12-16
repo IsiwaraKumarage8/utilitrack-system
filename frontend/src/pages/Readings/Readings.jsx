@@ -5,6 +5,7 @@ import Button from '../../components/common/Button';
 import Badge from '../../components/common/Badge';
 import ReadingDetails from './ReadingDetails';
 import RecordReadingModal from './RecordReadingModal';
+import GenerateBillModal from '../Billing/GenerateBillModal';
 import './Readings.css';
 
 // Mock data - TODO: Replace with API call
@@ -205,6 +206,7 @@ const Readings = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [showDetails, setShowDetails] = useState(false);
   const [showRecordModal, setShowRecordModal] = useState(false);
+  const [showGenerateBillModal, setShowGenerateBillModal] = useState(false);
   const [selectedReading, setSelectedReading] = useState(null);
   const [selectedMeterForReading, setSelectedMeterForReading] = useState(null);
 
@@ -285,6 +287,15 @@ const Readings = () => {
   const handleViewDetails = (reading) => {
     setSelectedReading(reading);
     setShowDetails(true);
+  };
+
+  const handleEditReading = (reading) => {
+    setSelectedReading(reading);
+    setShowRecordModal(true);
+  };
+
+  const handleGenerateBill = () => {
+    setShowGenerateBillModal(true);
   };
 
   const handleExportCSV = () => {
@@ -501,10 +512,9 @@ const Readings = () => {
                     </span>
                   </td>
                   <td>
-                    <Badge 
-                      variant={getReadingTypeVariant(reading.reading_type)} 
-                      text={reading.reading_type} 
-                    />
+                    <Badge status={getReadingTypeVariant(reading.reading_type)}>
+                      {reading.reading_type}
+                    </Badge>
                   </td>
                   <td>{reading.reader_name}</td>
                   <td>
@@ -528,7 +538,7 @@ const Readings = () => {
                       {can.generateBill && (
                         <button
                           className="action-btn bill"
-                          onClick={() => console.log('Generate bill for reading:', reading.reading_id)}
+                          onClick={handleGenerateBill}
                           title="Generate Bill"
                         >
                           <FileText size={18} />
@@ -576,16 +586,34 @@ const Readings = () => {
         <ReadingDetails
           reading={selectedReading}
           onClose={() => setShowDetails(false)}
+          onEdit={handleEditReading}
+          onGenerateBill={handleGenerateBill}
         />
       )}
 
       {showRecordModal && (
         <RecordReadingModal
-          onClose={() => setShowRecordModal(false)}
+          meter={selectedReading}
+          onClose={() => {
+            setShowRecordModal(false);
+            setSelectedReading(null);
+          }}
           onSave={(data) => {
             console.log('Reading recorded:', data);
-            // TODO: Refresh readings list
-            setShowRecordModal(false);
+            // Refresh the page to show updated data
+            window.location.reload();
+          }}
+        />
+      )}
+
+      {showGenerateBillModal && (
+        <GenerateBillModal
+          isOpen={showGenerateBillModal}
+          onClose={() => setShowGenerateBillModal(false)}
+          onSuccess={() => {
+            setShowGenerateBillModal(false);
+            // Refresh the page to show updated data
+            window.location.reload();
           }}
         />
       )}

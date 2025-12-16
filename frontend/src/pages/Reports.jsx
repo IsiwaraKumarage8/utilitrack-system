@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { FileText, TrendingUp, DollarSign, Activity, BarChart3 } from 'lucide-react';
 import ReportFilterBar from '../components/common/ReportFilterBar';
-import APITestPanel from '../components/common/APITestPanel';
 import RevenueReports from '../components/reports/RevenueReports';
 import CollectionReports from '../components/reports/CollectionReports';
 import ConsumptionReports from '../components/reports/ConsumptionReports';
@@ -84,9 +83,6 @@ const Reports = () => {
         onReset={handleResetFilters}
         onExport={handleExport}
       />
-
-      {/* API Integration Test Panel */}
-      <APITestPanel />
 
       {/* Report Content Area */}
       <div className="reports-page__content">

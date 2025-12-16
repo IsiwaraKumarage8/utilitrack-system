@@ -1,7 +1,67 @@
 /* Readings Page */
 .readings-page {
   padding: 24px;
-  max-width: 1600px;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+/* Table Container with Horizontal Scroll */
+.readings-page .table-container {
+  background-color: #ffffff;
+  border-radius: 12px 12px 0 0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  width: 100%;
+  max-width: 100%;
+  position: relative;
+  display: block;
+  margin-bottom: 0;
+}
+
+/* Scrollbar styling */
+.readings-page .table-container::-webkit-scrollbar {
+  height: 12px;
+}
+
+.readings-page .table-container::-webkit-scrollbar-track {
+  background: #f3f4f6;
+  border-radius: 0 0 12px 12px;
+}
+
+.readings-page .table-container::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 4px;
+}
+
+.readings-page .table-container::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
+/* Readings Table */
+.readings-page .readings-table {
+  min-width: 1600px;
+  width: max-content;
+  border-collapse: collapse;
+  table-layout: auto;
+}
+
+/* Sticky Actions Column */
+.readings-page .readings-table th:last-child,
+.readings-page .readings-table td:last-child {
+  position: sticky;
+  right: 0;
+  background-color: #f9fafb;
+  z-index: 1;
+}
+
+.readings-page .readings-table tbody tr:hover td:last-child {
+  background-color: #f3f4f6;
+}
+
+.readings-page .readings-table td:last-child {
+  background-color: white;
 }
 
 /* Page Header */
@@ -210,26 +270,58 @@
   border-color: #3b82f6;
 }
 
-/* Table */
-.table-container {
-  background: white;
-  border-radius: 12px;
-  border: 1px solid #e5e7eb;
-  overflow: hidden;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+/* Table Container */
+.readings-page .table-container {
+  background-color: #ffffff;
+  border-radius: 12px 12px 0 0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  width: 100%;
+  max-width: 100%;
+  position: relative;
+  display: block;
+  margin-bottom: 0;
 }
 
-.readings-table {
+/* Scrollbar styling */
+.readings-page .table-container::-webkit-scrollbar {
+  height: 12px;
+}
+
+.readings-page .table-container::-webkit-scrollbar-track {
+  background: #f3f4f6;
+  border-radius: 0 0 12px 12px;
+}
+
+.readings-page .table-container::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 4px;
+}
+
+.readings-page .table-container::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
+/* Data Table */
+.readings-page .readings-table {
   width: 100%;
   border-collapse: collapse;
+  table-layout: auto;
 }
 
-.readings-table thead {
+/* Readings table needs more width for 10 columns */
+.readings-page .readings-table {
+  min-width: 1600px;
+  width: max-content;
+}
+
+.readings-page .readings-table thead {
   background: #f9fafb;
   border-bottom: 1px solid #e5e7eb;
 }
 
-.readings-table th {
+.readings-page .readings-table th {
   padding: 14px 16px;
   text-align: left;
   font-size: 13px;
@@ -237,21 +329,45 @@
   color: #374151;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  white-space: nowrap;
 }
 
-.readings-table tbody tr {
+.readings-page .readings-table tbody tr {
   border-bottom: 1px solid #f3f4f6;
   transition: background-color 0.15s;
 }
 
-.readings-table tbody tr:hover {
+.readings-page .readings-table tbody tr:hover {
   background: #f9fafb;
 }
 
-.readings-table td {
+.readings-page .readings-table td {
   padding: 14px 16px;
   font-size: 14px;
   color: #374151;
+  white-space: nowrap;
+}
+
+/* Sticky Actions Column */
+.readings-page .readings-table th:last-child,
+.readings-page .readings-table td:last-child {
+  position: sticky;
+  right: 0;
+  background-color: #f9fafb;
+  box-shadow: -2px 0 4px rgba(0, 0, 0, 0.05);
+  z-index: 1;
+}
+
+.readings-page .readings-table tbody tr:hover td:last-child {
+  background-color: #f9fafb;
+}
+
+.readings-page .readings-table td:last-child {
+  background-color: #ffffff;
+}
+
+.readings-page .readings-table tbody tr:hover td:last-child {
+  background-color: #f9fafb;
 }
 
 .meter-number {

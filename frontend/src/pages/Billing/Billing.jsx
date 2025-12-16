@@ -22,11 +22,21 @@ const Billing = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('All');
   const [statsPeriod, setStatsPeriod] = useState('all'); // 'all' or 'current'
   const [showGenerateBillModal, setShowGenerateBillModal] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
+
+  // Debounce search query
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearchQuery(searchQuery);
+    }, 500); // Wait 500ms after user stops typing
+
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
 
   // Fetch bills from API
   useEffect(() => {
@@ -35,11 +45,11 @@ const Billing = () => {
         setLoading(true);
         setError(null);
         
-        console.log('Fetching bills with filters:', { searchQuery, statusFilter });
+        console.log('Fetching bills with filters:', { searchQuery: debouncedSearchQuery, statusFilter });
         
         let response;
-        if (searchQuery) {
-          response = await billingApi.searchBills(searchQuery);
+        if (debouncedSearchQuery) {
+          response = await billingApi.searchBills(debouncedSearchQuery);
         } else if (statusFilter !== 'All') {
           response = await billingApi.filterByStatus(statusFilter);
         } else {
@@ -63,7 +73,7 @@ const Billing = () => {
     };
 
     fetchBills();
-  }, [searchQuery, statusFilter]);
+  }, [debouncedSearchQuery, statusFilter]);
 
   // Fetch billing stats
   useEffect(() => {
@@ -96,7 +106,7 @@ const Billing = () => {
   // Reset page when filters change
   useEffect(() => {
     setCurrentPage(1);
-  }, [statusFilter, searchQuery]);
+  }, [statusFilter, debouncedSearchQuery]);
 
   // Get status badge variant
   const getStatusBadge = (status) => {
@@ -124,6 +134,22 @@ const Billing = () => {
   const formatCurrency = (amount) => {
     const num = Number(amount) || 0;
     return `Rs. ${num.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  };
+
+  // Action handlers
+  const handleViewBill = (bill) => {
+    console.log('View bill:', bill);
+    // TODO: Open bill details modal
+  };
+
+  const handleDownloadBill = (bill) => {
+    console.log('Download bill PDF:', bill);
+    // TODO: Implement PDF download
+  };
+
+  const handleRecordPayment = (bill) => {
+    console.log('Record payment for bill:', bill);
+    // TODO: Open record payment modal
   };
 
   // Check if overdue
@@ -367,18 +393,21 @@ const Billing = () => {
                     <div className="action-buttons">
                       <button
                         className="action-btn action-btn-view"
+                        onClick={() => handleViewBill(bill)}
                         title="View Details"
                       >
                         <Eye size={16} />
                       </button>
                       <button
                         className="action-btn action-btn-download"
+                        onClick={() => handleDownloadBill(bill)}
                         title="Download PDF"
                       >
                         <Download size={16} />
                       </button>
                       <button
                         className="action-btn action-btn-payment"
+                        onClick={() => handleRecordPayment(bill)}
                         title="Record Payment"
                       >
                         <CreditCard size={16} />

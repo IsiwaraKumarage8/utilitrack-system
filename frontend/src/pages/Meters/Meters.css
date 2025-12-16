@@ -1,7 +1,9 @@
 /* Meters Page */
 .meters-page {
   padding: 24px;
-  max-width: 1400px;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
 /* Page Header */
@@ -84,26 +86,58 @@
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
-/* Table */
-.table-container {
-  background: white;
-  border-radius: 12px;
-  border: 1px solid #e5e7eb;
-  overflow: hidden;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+/* Table Container */
+.meters-page .table-container {
+  background-color: #ffffff;
+  border-radius: 12px 12px 0 0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  width: 100%;
+  max-width: 100%;
+  position: relative;
+  display: block;
+  margin-bottom: 0;
 }
 
-.meters-table {
+/* Scrollbar styling */
+.meters-page .table-container::-webkit-scrollbar {
+  height: 12px;
+}
+
+.meters-page .table-container::-webkit-scrollbar-track {
+  background: #f3f4f6;
+  border-radius: 0 0 12px 12px;
+}
+
+.meters-page .table-container::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 4px;
+}
+
+.meters-page .table-container::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
+/* Data Table */
+.meters-page .meters-table {
   width: 100%;
   border-collapse: collapse;
+  table-layout: auto;
 }
 
-.meters-table thead {
+/* Meters table needs more width for 9 columns */
+.meters-page .meters-table {
+  min-width: 1400px;
+  width: max-content;
+}
+
+.meters-page .meters-table thead {
   background: #f9fafb;
   border-bottom: 1px solid #e5e7eb;
 }
 
-.meters-table th {
+.meters-page .meters-table th {
   padding: 14px 16px;
   text-align: left;
   font-size: 13px;
@@ -111,75 +145,100 @@
   color: #374151;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  white-space: nowrap;
 }
 
-.meters-table th.sortable {
+.meters-page .meters-table th.sortable {
   cursor: pointer;
   user-select: none;
 }
 
-.meters-table th.sortable:hover {
+.meters-page .meters-table th.sortable:hover {
   background: #f3f4f6;
 }
 
-.meters-table tbody tr {
+.meters-page .meters-table tbody tr {
   border-bottom: 1px solid #f3f4f6;
   transition: background-color 0.15s;
 }
 
 /* Zebra striping */
-.meters-table tbody tr:nth-child(even) {
+.meters-page .meters-table tbody tr:nth-child(even) {
   background: #f9fafb;
 }
 
-.meters-table tbody tr:hover {
+.meters-page .meters-table tbody tr:hover {
   background: #f0f9ff !important;
 }
 
 /* Status-based row colors */
-.meters-table tbody tr.row-active {
+.meters-page .meters-table tbody tr.row-active {
   background: rgba(16, 185, 129, 0.03);
 }
 
-.meters-table tbody tr.row-active:nth-child(even) {
+.meters-page .meters-table tbody tr.row-active:nth-child(even) {
   background: rgba(16, 185, 129, 0.06);
 }
 
-.meters-table tbody tr.row-faulty {
+.meters-page .meters-table tbody tr.row-faulty {
   background: rgba(239, 68, 68, 0.03);
 }
 
-.meters-table tbody tr.row-faulty:nth-child(even) {
+.meters-page .meters-table tbody tr.row-faulty:nth-child(even) {
   background: rgba(239, 68, 68, 0.06);
 }
 
-.meters-table tbody tr.row-replaced {
+.meters-page .meters-table tbody tr.row-replaced {
   background: rgba(107, 114, 128, 0.03);
 }
 
-.meters-table tbody tr.row-replaced:nth-child(even) {
+.meters-page .meters-table tbody tr.row-replaced:nth-child(even) {
   background: rgba(107, 114, 128, 0.06);
 }
 
-.meters-table tbody tr.row-removed {
+.meters-page .meters-table tbody tr.row-removed {
   background: rgba(107, 114, 128, 0.03);
   opacity: 0.7;
 }
 
-.meters-table tbody tr.row-removed:nth-child(even) {
+.meters-page .meters-table tbody tr.row-removed:nth-child(even) {
   background: rgba(107, 114, 128, 0.06);
 }
 
-.meters-table td {
+.meters-page .meters-table td {
   padding: 14px 16px;
   font-size: 14px;
   color: #374151;
+  white-space: nowrap;
+}
+
+/* Sticky Actions Column */
+.meters-page .meters-table th:last-child,
+.meters-page .meters-table td:last-child {
+  position: sticky;
+  right: 0;
+  background-color: #f9fafb;
+  box-shadow: -2px 0 4px rgba(0, 0, 0, 0.05);
+  z-index: 1;
+}
+
+.meters-page .meters-table tbody tr:hover td:last-child {
+  background-color: #f9fafb;
+}
+
+.meters-page .meters-table td:last-child {
+  background-color: #ffffff;
+}
+
+.meters-page .meters-table tbody tr:hover td:last-child {
+  background-color: #f9fafb;
 }
 
 .meter-number {
   font-family: 'Courier New', monospace;
   font-weight: 600;
   color: #1f2937;
+  white-space: nowrap;
 }
 
 /* Utility Badge */
@@ -267,13 +326,19 @@
   margin: 0;
 }
 
-/* Pagination */
+/* Pagination - Sticky and Non-Scrollable */
 .pagination {
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 16px;
-  margin-top: 24px;
+  margin-top: 0;
+  padding: 16px 20px;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-top: none;
+  border-radius: 0 0 12px 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
 .pagination-btn {

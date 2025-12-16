@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Card from '../common/Card';
 import Badge from '../common/Badge';
 import Button from '../common/Button';
@@ -9,6 +10,7 @@ import './RecentActivity.css';
  * Recent Activity Table Component - Shows latest payment transactions
  */
 const RecentActivity = () => {
+  const navigate = useNavigate();
   const [activities, setActivities] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -122,7 +124,7 @@ const RecentActivity = () => {
       </div>
       
       <div className="recent-activity__footer">
-        <Button variant="secondary" size="md">View All Transactions</Button>
+        <Button variant="secondary" size="md" onClick={() => navigate('/payments')}>View All Transactions</Button>
       </div>
     </Card>
   );

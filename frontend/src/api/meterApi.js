@@ -39,8 +39,8 @@ const meterApi = {
    */
   searchMeters: async (searchTerm) => {
     try {
-      const response = await axios.get(`${API_URL}/meters/search`, {
-        params: { q: searchTerm }
+      const response = await axios.get(`${API_URL}/meters`, {
+        params: { search: searchTerm }
       });
       return response.data;
     } catch (error) {
@@ -166,6 +166,20 @@ const meterApi = {
       return response.data;
     } catch (error) {
       console.error(`Error fetching last reading for meter ${meterId}:`, error);
+      throw error;
+    }
+  },
+
+  /**
+   * Get meter statistics
+   * @returns {Promise} API response with meter stats
+   */
+  getMeterStats: async () => {
+    try {
+      const response = await axios.get(`${API_URL}/meters/stats/summary`);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching meter stats:', error);
       throw error;
     }
   }

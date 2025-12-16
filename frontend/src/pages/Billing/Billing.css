@@ -224,6 +224,23 @@
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
+/* Sticky Actions Column */
+.billing-page table th:last-child,
+.billing-page table td:last-child {
+  position: sticky;
+  right: 0;
+  background-color: #f9fafb;
+  z-index: 1;
+}
+
+.billing-page table tbody tr:hover td:last-child {
+  background-color: #f3f4f6;
+}
+
+.billing-page table td:last-child {
+  background-color: white;
+}
+
 /* Table Specific Styles */
 .bill-number {
   font-weight: 600;

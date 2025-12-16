@@ -1,13 +1,58 @@
-import './PlaceholderPage.css';
+import { useNavigate } from 'react-router-dom';
+import { Settings as SettingsIcon, Database } from 'lucide-react';
+import Button from '../components/common/Button';
+import './Settings.css';
 
 /**
- * Settings Page - Placeholder
+ * Settings Page
  */
 const Settings = () => {
+  const navigate = useNavigate();
+
+  const settingsCategories = [
+    {
+      icon: Database,
+      title: 'API Tests',
+      description: 'Test all system APIs and verify connectivity',
+      action: () => navigate('/api-tests'),
+      buttonText: 'Open API Tests',
+      variant: 'primary'
+    }
+  ];
+
   return (
-    <div className="placeholder-page">
-      <h2 className="placeholder-page__title">System Settings</h2>
-      <p className="placeholder-page__text">This page is coming soon...</p>
+    <div className="settings-page">
+      {/* Page Header */}
+      <div className="settings-header">
+        <SettingsIcon size={32} className="settings-header-icon" />
+        <div>
+          <h1 className="settings-title">System Settings</h1>
+          <p className="settings-subtitle">Configure and manage system preferences</p>
+        </div>
+      </div>
+
+      {/* Settings Categories */}
+      <div className="settings-grid">
+        {settingsCategories.map((category, index) => (
+          <div key={index} className="settings-card">
+            <div className="settings-card-icon">
+              <category.icon size={28} />
+            </div>
+            <div className="settings-card-content">
+              <h3 className="settings-card-title">{category.title}</h3>
+              <p className="settings-card-description">{category.description}</p>
+            </div>
+            <Button
+              variant={category.variant}
+              size="md"
+              onClick={category.action}
+              disabled={!category.action}
+            >
+              {category.buttonText}
+            </Button>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

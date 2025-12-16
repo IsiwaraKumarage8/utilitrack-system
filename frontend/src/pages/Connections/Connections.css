@@ -377,23 +377,24 @@
   height: 16px;
 }
 
-.utility-cell.electricity .utility-icon {
+/* Different colors for each utility type */
+.utility-icon--electricity {
   background: linear-gradient(135deg, #3b82f6, #1d4ed8);
 }
 
-.utility-cell.water .utility-icon {
+.utility-icon--water {
   background: linear-gradient(135deg, #06b6d4, #0891b2);
 }
 
-.utility-cell.gas .utility-icon {
+.utility-icon--gas {
   background: linear-gradient(135deg, #f59e0b, #d97706);
 }
 
-.utility-cell.sewage .utility-icon {
+.utility-icon--sewage {
   background: linear-gradient(135deg, #8b5cf6, #6d28d9);
 }
 
-.utility-cell.street-lighting .utility-icon {
+.utility-icon--street-lighting {
   background: linear-gradient(135deg, #fbbf24, #f59e0b);
 }
 
@@ -415,8 +416,9 @@
 }
 
 .consumption-value {
-  color: #10b981;
+  color: #1f2937;
   font-weight: 500;
+  font-size: 14px;
 }
 
 .text-muted {

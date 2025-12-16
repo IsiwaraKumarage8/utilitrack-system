@@ -1,4 +1,5 @@
 import { UserPlus, FileText, CreditCard, BarChart } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import Card from '../common/Card';
 import './QuickActions.css';
 
@@ -6,30 +7,36 @@ import './QuickActions.css';
  * Quick Actions Grid Component
  */
 const QuickActions = () => {
+  const navigate = useNavigate();
+  
   const actions = [
     {
       icon: UserPlus,
       label: 'Add New Customer',
       description: 'Register a new customer',
       colorClass: 'blue',
+      onClick: () => navigate('/customers'),
     },
     {
       icon: FileText,
       label: 'Generate Bill',
       description: 'Create a new bill',
       colorClass: 'green',
+      onClick: () => navigate('/billing'),
     },
     {
       icon: CreditCard,
       label: 'Record Payment',
       description: 'Process a payment',
       colorClass: 'orange',
+      onClick: () => navigate('/payments'),
     },
     {
       icon: BarChart,
       label: 'View Reports',
       description: 'Generate reports',
       colorClass: 'purple',
+      onClick: () => navigate('/reports'),
     },
   ];
   
@@ -45,6 +52,7 @@ const QuickActions = () => {
           return (
             <button
               key={index}
+              onClick={action.onClick}
               style={{ animationDelay: `${index * 100}ms` }}
               className={`quick-actions__button quick-actions__button--${action.colorClass}`}
             >
