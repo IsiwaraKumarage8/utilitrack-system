@@ -26,6 +26,59 @@
   animation: modalSlideIn 0.3s ease-out;
 }
 
+/* Modal Header - Dark Gradient Theme */
+.reading-details-modal .modal-header {
+  background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
+  padding: 24px 32px;
+  border-radius: 16px 16px 0 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: white;
+}
+
+.reading-details-modal .modal-header .modal-title {
+  color: white;
+  font-size: 24px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.reading-details-modal .modal-header .modal-subtitle {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 14px;
+  margin-top: 4px;
+}
+
+.reading-details-modal .modal-header .modal-close {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: white;
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.reading-details-modal .modal-header .modal-close:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Modal Footer */
+.reading-details-modal .modal-footer {
+  background: #F9FAFB;
+  padding: 20px 32px;
+  border-radius: 0 0 16px 16px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  border-top: 1px solid #E5E7EB;
+}
+
 @keyframes modalSlideIn {
   from {
     opacity: 0;
