@@ -15,4 +15,4 @@
 - [x] 10. Modal - Generate Bill button - Opens GenerateBillModal
 
 ## Step 03 - Action Icons
-- [ ] 11. Table action icons - Edit and delete icons (except eye icon) are not functional
+- [x] 11. Table action icons - All icons functional (Eye: view, Edit: opens edit modal, Bill: opens generate bill modal)

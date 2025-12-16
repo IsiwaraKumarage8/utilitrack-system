@@ -512,10 +512,9 @@ const Readings = () => {
                     </span>
                   </td>
                   <td>
-                    <Badge 
-                      variant={getReadingTypeVariant(reading.reading_type)} 
-                      text={reading.reading_type} 
-                    />
+                    <Badge status={getReadingTypeVariant(reading.reading_type)}>
+                      {reading.reading_type}
+                    </Badge>
                   </td>
                   <td>{reading.reader_name}</td>
                   <td>
