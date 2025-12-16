@@ -16,6 +16,7 @@ const APITests = () => {
   const [tests, setTests] = useState([]);
   const [testing, setTesting] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState('all');
+  const [showFailedOnly, setShowFailedOnly] = useState(false);
 
   // Comprehensive API test definitions organized by category
   const apiTests = {
@@ -77,10 +78,20 @@ const APITests = () => {
   };
 
   const getFilteredTests = () => {
+    let filtered;
     if (selectedCategory === 'all') {
-      return getAllTests();
+      filtered = getAllTests();
+    } else {
+      filtered = (apiTests[selectedCategory] || []).map(test => ({ ...test, category: selectedCategory }));
     }
-    return (apiTests[selectedCategory] || []).map(test => ({ ...test, category: selectedCategory }));
+    
+    // Apply failed-only filter if enabled
+    if (showFailedOnly && tests.length > 0) {
+      const failedTestNames = tests.filter(t => t.status === 'error').map(t => t.name);
+      filtered = filtered.filter(test => failedTestNames.includes(test.name));
+    }
+    
+    return filtered;
   };
 
   const runTests = async () => {
@@ -152,44 +163,53 @@ const APITests = () => {
       <div className="api-tests-filters">
         <button
           className={`filter-btn ${selectedCategory === 'all' ? 'active' : ''}`}
-          onClick={() => setSelectedCategory('all')}
+          onClick={() => { setSelectedCategory('all'); setShowFailedOnly(false); }}
         >
           <CheckCheck size={16} />
           All APIs ({getAllTests().length})
         </button>
+        {errorCount > 0 && (
+          <button
+            className={`filter-btn filter-btn-error ${showFailedOnly ? 'active' : ''}`}
+            onClick={() => { setShowFailedOnly(!showFailedOnly); setSelectedCategory('all'); }}
+          >
+            <XCircle size={16} />
+            Failed Only ({errorCount})
+          </button>
+        )}
         <button
           className={`filter-btn ${selectedCategory === 'reports' ? 'active' : ''}`}
-          onClick={() => setSelectedCategory('reports')}
+          onClick={() => { setSelectedCategory('reports'); setShowFailedOnly(false); }}
         >
           Reports ({apiTests.reports.length})
         </button>
         <button
           className={`filter-btn ${selectedCategory === 'customers' ? 'active' : ''}`}
-          onClick={() => setSelectedCategory('customers')}
+          onClick={() => { setSelectedCategory('customers'); setShowFailedOnly(false); }}
         >
           Customers ({apiTests.customers.length})
         </button>
         <button
           className={`filter-btn ${selectedCategory === 'billing' ? 'active' : ''}`}
-          onClick={() => setSelectedCategory('billing')}
+          onClick={() => { setSelectedCategory('billing'); setShowFailedOnly(false); }}
         >
           Billing ({apiTests.billing.length})
         </button>
         <button
           className={`filter-btn ${selectedCategory === 'payments' ? 'active' : ''}`}
-          onClick={() => setSelectedCategory('payments')}
+          onClick={() => { setSelectedCategory('payments'); setShowFailedOnly(false); }}
         >
           Payments ({apiTests.payments.length})
         </button>
         <button
           className={`filter-btn ${selectedCategory === 'meters' ? 'active' : ''}`}
-          onClick={() => setSelectedCategory('meters')}
+          onClick={() => { setSelectedCategory('meters'); setShowFailedOnly(false); }}
         >
           Meters ({apiTests.meters.length})
         </button>
         <button
           className={`filter-btn ${selectedCategory === 'readings' ? 'active' : ''}`}
-          onClick={() => setSelectedCategory('readings')}
+          onClick={() => { setSelectedCategory('readings'); setShowFailedOnly(false); }}
         >
           Readings ({apiTests.readings.length})
         </button>

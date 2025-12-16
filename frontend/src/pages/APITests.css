@@ -95,6 +95,23 @@
   color: white;
 }
 
+.filter-btn-error {
+  border-color: #fca5a5;
+  color: #dc2626;
+}
+
+.filter-btn-error:hover {
+  border-color: #dc2626;
+  color: #dc2626;
+  background: #fee2e2;
+}
+
+.filter-btn-error.active {
+  background: #dc2626;
+  border-color: #dc2626;
+  color: white;
+}
+
 /* Test Summary */
 .api-tests-summary {
   display: grid;
