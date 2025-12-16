@@ -5,6 +5,59 @@
   overflow-x: hidden;
 }
 
+/* Horizontal Scrolling for Table */
+.payments-page .table-container {
+  overflow-x: auto;
+  margin-bottom: 0;
+  border-radius: 12px 12px 0 0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  background: white;
+}
+
+/* Custom Scrollbar */
+.payments-page .table-container::-webkit-scrollbar {
+  height: 8px;
+}
+
+.payments-page .table-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.payments-page .table-container::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+.payments-page .table-container::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Table Width */
+.payments-page .payments-table {
+  min-width: 1600px;
+  width: max-content;
+  border-collapse: collapse;
+  table-layout: auto;
+}
+
+/* Sticky Actions Column */
+.payments-page .payments-table th:last-child,
+.payments-page .payments-table td:last-child {
+  position: sticky;
+  right: 0;
+  background-color: #f9fafb;
+  z-index: 1;
+}
+
+.payments-page .payments-table tbody tr:hover td:last-child {
+  background-color: #f3f4f6;
+}
+
+.payments-page .payments-table td:last-child {
+  background-color: white;
+}
+
 /* Page Header */
 .payments-header {
   display: flex;

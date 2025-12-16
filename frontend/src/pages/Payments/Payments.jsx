@@ -274,6 +274,22 @@ const Payments = () => {
   // Calculate table total
   const tableTotal = paginatedPayments.reduce((sum, p) => sum + p.payment_amount, 0);
 
+  // Action handlers
+  const handleViewReceipt = (payment) => {
+    // TODO: Implement view receipt modal
+    console.log('View receipt:', payment);
+  };
+
+  const handlePrintReceipt = (payment) => {
+    // TODO: Implement print receipt functionality
+    console.log('Print receipt:', payment);
+  };
+
+  const handleRefund = (payment) => {
+    // TODO: Implement refund modal
+    console.log('Refund payment:', payment);
+  };
+
   if (loading) {
     return (
       <div className="payments-page">
@@ -421,7 +437,7 @@ const Payments = () => {
                   <td>
                     <div className="payment-method">
                       {getPaymentMethodIcon(payment.payment_method)}
-                      <Badge variant={getMethodBadge(payment.payment_method)} text={payment.payment_method} />
+                      <Badge status={getMethodBadge(payment.payment_method)}>{payment.payment_method}</Badge>
                     </div>
                   </td>
                   <td className="transaction-ref">
@@ -429,19 +445,21 @@ const Payments = () => {
                   </td>
                   <td>{payment.received_by}</td>
                   <td>
-                    <Badge variant={getStatusBadge(payment.payment_status)} text={payment.payment_status} />
+                    <Badge status={getStatusBadge(payment.payment_status)}>{payment.payment_status}</Badge>
                   </td>
                   <td>
                     <div className="action-buttons">
                       <button
                         className="action-btn action-btn-view"
                         title="View Receipt"
+                        onClick={() => handleViewReceipt(payment)}
                       >
                         <Eye size={16} />
                       </button>
                       <button
                         className="action-btn action-btn-print"
                         title="Print"
+                        onClick={() => handlePrintReceipt(payment)}
                       >
                         <Printer size={16} />
                       </button>
@@ -449,6 +467,7 @@ const Payments = () => {
                         <button
                           className="action-btn action-btn-refund"
                           title="Refund"
+                          onClick={() => handleRefund(payment)}
                         >
                           <RotateCcw size={16} />
                         </button>
