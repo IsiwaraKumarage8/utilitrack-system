@@ -1,23 +1,15 @@
+import { useState } from 'react';
 import { X, Zap, Droplet, Flame, Calendar, User, TrendingUp, FileText, Edit2 } from 'lucide-react';
 import Button from '../../components/common/Button';
 import Badge from '../../components/common/Badge';
 import './ReadingDetails.css';
 
-// Mock historical readings - TODO: Replace with API call
-const getHistoricalReadings = (meterId) => {
-  return [
-    { date: '2024-11-15', reading: 1450.00, consumption: 130.00 },
-    { date: '2024-10-15', reading: 1320.00, consumption: 128.00 },
-    { date: '2024-09-15', reading: 1192.00, consumption: 135.00 },
-    { date: '2024-08-15', reading: 1057.00, consumption: 142.00 },
-    { date: '2024-07-15', reading: 915.00, consumption: 138.00 }
-  ];
-};
-
 const ReadingDetails = ({ reading, onClose, onEdit }) => {
-  if (!reading) return null;
+  const [historicalReadings, setHistoricalReadings] = useState([]);
+  const [associatedBills, setAssociatedBills] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-  const historicalReadings = getHistoricalReadings(reading.meter_id);
+  if (!reading) return null;
 
   const getUtilityIcon = (utilityType) => {
     const icons = {
@@ -46,10 +38,24 @@ const ReadingDetails = ({ reading, onClose, onEdit }) => {
     return variants[type] || 'secondary';
   };
 
-  const consumptionChange = reading.consumption - (historicalReadings[0]?.consumption || reading.consumption);
-  const consumptionChangePercent = historicalReadings[0]?.consumption 
+  const consumptionChange = historicalReadings.length > 0 
+    ? reading.consumption - (historicalReadings[0]?.consumption || reading.consumption)
+    : 0;
+  const consumptionChangePercent = historicalReadings.length > 0 && historicalReadings[0]?.consumption 
     ? ((consumptionChange / historicalReadings[0].consumption) * 100).toFixed(1)
     : 0;
+
+  const handleGenerateBill = () => {
+    console.log('Generate bill for reading:', reading.reading_id);
+    // TODO: Implement bill generation logic
+  };
+
+  const handleEditReading = () => {
+    if (onEdit) {
+      onEdit(reading);
+    }
+    onClose();
+  };
 
   return (
     <div className="modal-overlay">
@@ -82,7 +88,9 @@ const ReadingDetails = ({ reading, onClose, onEdit }) => {
                 </div>
                 <div className="detail-item">
                   <span className="detail-label">Reading Type</span>
-                  <Badge variant={getReadingTypeVariant(reading.reading_type)} text={reading.reading_type} />
+                  <Badge status={getReadingTypeVariant(reading.reading_type)}>
+                    {reading.reading_type}
+                  </Badge>
                 </div>
                 <div className="detail-item">
                   <span className="detail-label">Meter Number</span>
@@ -166,12 +174,38 @@ const ReadingDetails = ({ reading, onClose, onEdit }) => {
             <div className="detail-section">
               <h3 className="section-title">Associated Bills</h3>
               <div className="bills-list">
-                {/* TODO: Fetch actual bills from API */}
-                <p className="no-data">No bills generated for this reading yet</p>
-                <Button variant="primary" size="sm">
-                  <FileText size={16} />
-                  <span>Generate Bill</span>
-                </Button>
+                {loading ? (
+                  <p className="no-data">Loading bills...</p>
+                ) : associatedBills.length === 0 ? (
+                  <>
+                    <p className="no-data">No bills generated for this reading yet</p>
+                    <Button variant="primary" size="sm" onClick={handleGenerateBill}>
+                      <FileText size={16} />
+                      <span>Generate Bill</span>
+                    </Button>
+                  </>
+                ) : (
+                  <div className="bills-grid">
+                    {associatedBills.map((bill, index) => (
+                      <div key={index} className="bill-item">
+                        <div className="bill-info">
+                          <span className="bill-label">Bill #{bill.bill_number}</span>
+                          <span className="bill-date">{new Date(bill.billing_date).toLocaleDateString()}</span>
+                        </div>
+                        <div className="bill-amount">
+                          <span className="bill-value">Rs. {bill.total_amount.toFixed(2)}</span>
+                          <Badge status={bill.payment_status === 'Paid' ? 'success' : 'warning'}>
+                            {bill.payment_status}
+                          </Badge>
+                        </div>
+                      </div>
+                    ))}
+                    <Button variant="primary" size="sm" onClick={handleGenerateBill}>
+                      <FileText size={16} />
+                      <span>Generate New Bill</span>
+                    </Button>
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -180,50 +214,58 @@ const ReadingDetails = ({ reading, onClose, onEdit }) => {
           <div className="details-right">
             <div className="detail-section">
               <h3 className="section-title">Reading History</h3>
-              <div className="timeline">
-                {/* Current Reading */}
-                <div className="timeline-item current">
-                  <div className="timeline-marker"></div>
-                  <div className="timeline-content">
-                    <div className="timeline-header">
-                      <span className="timeline-date">{new Date(reading.reading_date).toLocaleDateString()}</span>
-                      <Badge variant="primary" text="Current" />
-                    </div>
-                    <div className="timeline-details">
-                      <div className="timeline-row">
-                        <span className="timeline-label">Reading:</span>
-                        <span className="timeline-value">{reading.current_reading.toFixed(2)} kWh</span>
-                      </div>
-                      <div className="timeline-row">
-                        <span className="timeline-label">Consumption:</span>
-                        <span className="timeline-value consumption">{reading.consumption.toFixed(2)} kWh</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Historical Readings */}
-                {historicalReadings.map((hist, index) => (
-                  <div key={index} className="timeline-item">
+              {loading ? (
+                <p className="no-data">Loading history...</p>
+              ) : (
+                <div className="timeline">
+                  {/* Current Reading */}
+                  <div className="timeline-item current">
                     <div className="timeline-marker"></div>
                     <div className="timeline-content">
                       <div className="timeline-header">
-                        <span className="timeline-date">{new Date(hist.date).toLocaleDateString()}</span>
+                        <span className="timeline-date">{new Date(reading.reading_date).toLocaleDateString()}</span>
+                        <Badge status="primary">Current</Badge>
                       </div>
                       <div className="timeline-details">
                         <div className="timeline-row">
                           <span className="timeline-label">Reading:</span>
-                          <span className="timeline-value">{hist.reading.toFixed(2)} kWh</span>
+                          <span className="timeline-value">{reading.current_reading.toFixed(2)} kWh</span>
                         </div>
                         <div className="timeline-row">
                           <span className="timeline-label">Consumption:</span>
-                          <span className="timeline-value">{hist.consumption.toFixed(2)} kWh</span>
+                          <span className="timeline-value consumption">{reading.consumption.toFixed(2)} kWh</span>
                         </div>
                       </div>
                     </div>
                   </div>
-                ))}
-              </div>
+
+                  {/* Historical Readings */}
+                  {historicalReadings.length === 0 ? (
+                    <p className="no-data">No historical readings available</p>
+                  ) : (
+                    historicalReadings.map((hist, index) => (
+                      <div key={index} className="timeline-item">
+                        <div className="timeline-marker"></div>
+                        <div className="timeline-content">
+                          <div className="timeline-header">
+                            <span className="timeline-date">{new Date(hist.reading_date).toLocaleDateString()}</span>
+                          </div>
+                          <div className="timeline-details">
+                            <div className="timeline-row">
+                              <span className="timeline-label">Reading:</span>
+                              <span className="timeline-value">{hist.current_reading.toFixed(2)} kWh</span>
+                            </div>
+                            <div className="timeline-row">
+                              <span className="timeline-label">Consumption:</span>
+                              <span className="timeline-value">{hist.consumption.toFixed(2)} kWh</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -234,11 +276,11 @@ const ReadingDetails = ({ reading, onClose, onEdit }) => {
             Close
           </Button>
           <div className="footer-actions">
-            <Button variant="primary" size="md" onClick={onEdit}>
+            <Button variant="primary" size="md" onClick={handleEditReading}>
               <Edit2 size={18} />
               <span>Edit Reading</span>
             </Button>
-            <Button variant="success" size="md" onClick={() => console.log('Generate bill')}>
+            <Button variant="success" size="md" onClick={handleGenerateBill}>
               <FileText size={18} />
               <span>Generate Bill</span>
             </Button>
