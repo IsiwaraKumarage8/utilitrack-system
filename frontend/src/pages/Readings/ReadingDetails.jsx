@@ -4,7 +4,7 @@ import Button from '../../components/common/Button';
 import Badge from '../../components/common/Badge';
 import './ReadingDetails.css';
 
-const ReadingDetails = ({ reading, onClose, onEdit }) => {
+const ReadingDetails = ({ reading, onClose, onEdit, onGenerateBill }) => {
   const [historicalReadings] = useState([]);
   const [associatedBills] = useState([]);
   const [loading] = useState(false);
@@ -46,8 +46,10 @@ const ReadingDetails = ({ reading, onClose, onEdit }) => {
     : 0;
 
   const handleGenerateBill = () => {
-    console.log('Generate bill for reading:', reading.reading_id);
-    // TODO: Implement bill generation logic
+    if (onGenerateBill) {
+      onGenerateBill();
+    }
+    onClose();
   };
 
   const handleEditReading = () => {

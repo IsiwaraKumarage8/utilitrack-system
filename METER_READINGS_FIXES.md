@@ -10,9 +10,9 @@
 - [x] 5. Modal - Reading History - Shows current reading (API integration removed due to crashes)
 - [x] 6. Modal - Reading Comparison - Uses real reading.previous_reading and reading.current_reading
 - [x] 7. Modal - Consumption Breakdown - Uses real reading.consumption data
-- [x] 8. Modal - Associated Bills - Empty state (API integration removed due to crashes)
-- [x] 9. Modal - Edit Reading button - Calls handleEditReading to open RecordReadingModal
-- [x] 10. Modal - Generate Bill button - Opens GenerateBillModal
+- [x] 8. Modal - Associated Bills - Empty state shown (API integration documented for later)
+- [x] 9. Modal - Edit Reading button - Calls onEdit prop to open RecordReadingModal
+- [x] 10. Modal - Generate Bill button - Calls onGenerateBill prop to open GenerateBillModal
 
 ## Step 03 - Action Icons
 - [x] 11. Table action icons - All icons functional (Eye: view, Edit: opens edit modal, Bill: opens generate bill modal)

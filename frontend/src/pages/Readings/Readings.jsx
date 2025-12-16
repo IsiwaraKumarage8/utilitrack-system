@@ -587,6 +587,7 @@ const Readings = () => {
           reading={selectedReading}
           onClose={() => setShowDetails(false)}
           onEdit={handleEditReading}
+          onGenerateBill={handleGenerateBill}
         />
       )}
 
