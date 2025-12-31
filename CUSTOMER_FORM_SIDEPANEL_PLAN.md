@@ -159,39 +159,46 @@
 
 ### PHASE 4: Testing & Refinement
 
+**Status:** 🔄 IN PROGRESS
+
 #### 4.1 Functional Testing
-- [ ] Test "Add Customer" - panel opens correctly
-- [ ] Test "Edit Customer" - panel opens with pre-filled data
-- [ ] Test form validation - errors display correctly
-- [ ] Test form submission - save and close works
-- [ ] Test cancel button - closes without saving
-- [ ] Test click overlay - closes panel
-- [ ] Test close (X) button - closes panel
+**Please test the following and let me know the results:**
+
+- [ ] **Test "Add Customer"** - Click "Add Customer" button, does panel slide in from right?
+- [ ] **Test form fields** - Are all input fields visible and working?
+- [ ] **Test customer type radio** - Do the radio buttons work correctly?
+- [ ] **Test company field toggle** - Does company name field show/hide based on customer type?
+- [ ] **Test form validation** - Do error messages appear when submitting invalid data?
+- [ ] **Test form submission** - Can you successfully create a new customer?
+- [ ] **Test "Edit Customer"** - Click edit on existing customer, does it open with pre-filled data?
+- [ ] **Test save and refresh** - After saving, does the customer list refresh?
+- [ ] **Test cancel button** - Does it close without saving?
+- [ ] **Test close (X) button** - Does it close the panel?
+- [ ] **Test click overlay** - Click the dark background, does it close?
 
 #### 4.2 Visual Testing
-- [ ] Panel slides in smoothly from right
-- [ ] Panel is proper width on desktop
-- [ ] Panel is full height (100vh)
-- [ ] Header is fixed at top
-- [ ] Footer is fixed at bottom
-- [ ] Body content scrolls correctly
-- [ ] Form fields are properly laid out
-- [ ] Radio buttons work correctly
-- [ ] Error messages display properly
+**Please verify the following:**
 
-#### 4.3 Responsive Testing
-- [ ] Test on mobile (< 768px)
-- [ ] Test on tablet (768px - 1024px)
-- [ ] Test on desktop (> 1024px)
-- [ ] Panel width adjusts appropriately
-- [ ] Form grid adjusts (might stack on mobile)
+- [ ] **Panel slides in smoothly** - Is the animation smooth from right?
+- [ ] **Panel width** - Is it approximately 600px wide on desktop?
+- [ ] **Panel height** - Does it take full screen height (100vh)?
+- [ ] **Header fixed** - Is the header fixed at the top?
+- [ ] **Footer fixed** - Are the action buttons fixed at bottom?
+- [ ] **Body scrolls** - If you have many fields, does the middle section scroll?
+- [ ] **Form layout** - Are fields arranged in 2 columns?
+- [ ] **Radio buttons** - Do they look good and highlight when selected?
+- [ ] **Error messages** - Do they display in red below fields?
+- [ ] **Dark overlay** - Is there a semi-transparent dark background behind panel?
+- [ ] **Sidebar visible** - Are sidebar buttons now visible and working?
 
-#### 4.4 Cross-Browser Testing
-- [ ] Chrome/Edge
-- [ ] Firefox
-- [ ] Safari (if available)
+#### 4.3 Responsive Testing (if possible)
+**Test on different screen sizes:**
 
-**Status:** ⏳ Not Started
+- [ ] **Desktop (>1024px)** - Panel is 600px wide, form has 2 columns
+- [ ] **Tablet (768-1024px)** - Panel adjusts to screen, still looks good
+- [ ] **Mobile (<768px)** - Panel is full width, form stacks to 1 column
+
+**Status:** ⏳ Awaiting Test Results
 
 ---
 
