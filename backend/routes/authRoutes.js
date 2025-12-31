@@ -31,4 +31,11 @@ router.get('/verify', authenticate, authController.verifyToken);
  */
 router.post('/change-password', authenticate, authController.changePassword);
 
+/**
+ * @route   POST /api/auth/logout
+ * @desc    Logout user
+ * @access  Private
+ */
+router.post('/logout', authenticate, authController.logout);
+
 module.exports = router;

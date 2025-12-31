@@ -372,14 +372,16 @@ const Customers = () => {
       </div>
 
       {/* Data Table */}
-      <div className="table-container">
-        {filteredCustomers.length === 0 ? (
+      {filteredCustomers.length === 0 ? (
+        <div className="table-container">
           <div className="empty-state">
             <p className="empty-state-text">No customers found</p>
             <p className="empty-state-subtext">Try adjusting your search or filters</p>
           </div>
-        ) : (
-          <>
+        </div>
+      ) : (
+        <>
+          <div className="table-container">
             <table className="data-table customers-table">
               <thead>
                 <tr>
@@ -467,42 +469,42 @@ const Customers = () => {
                 ))}
               </tbody>
             </table>
+          </div>
 
-            {/* Pagination */}
-            {totalPages > 1 && (
-              <div className="pagination">
-                <button
-                  className="pagination-btn"
-                  onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
-                  disabled={currentPage === 1}
-                >
-                  Previous
-                </button>
-                
-                <div className="pagination-pages">
-                  {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
-                    <button
-                      key={page}
-                      className={`pagination-page ${currentPage === page ? 'active' : ''}`}
-                      onClick={() => setCurrentPage(page)}
-                    >
-                      {page}
-                    </button>
-                  ))}
-                </div>
-
-                <button
-                  className="pagination-btn"
-                  onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
-                  disabled={currentPage === totalPages}
-                >
-                  Next
-                </button>
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <div className="pagination">
+              <button
+                className="pagination-btn"
+                onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                disabled={currentPage === 1}
+              >
+                Previous
+              </button>
+              
+              <div className="pagination-pages">
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
+                  <button
+                    key={page}
+                    className={`pagination-page ${currentPage === page ? 'active' : ''}`}
+                    onClick={() => setCurrentPage(page)}
+                  >
+                    {page}
+                  </button>
+                ))}
               </div>
-            )}
-          </>
-        )}
-      </div>
+
+              <button
+                className="pagination-btn"
+                onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                disabled={currentPage === totalPages}
+              >
+                Next
+              </button>
+            </div>
+          )}
+        </>
+      )}
 
       {/* Modals */}
       {showForm && (

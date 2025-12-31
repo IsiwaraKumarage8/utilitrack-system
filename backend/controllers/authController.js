@@ -263,6 +263,37 @@ const authController = {
         error: process.env.NODE_ENV === 'development' ? error.message : undefined
       });
     }
+  },
+
+  /**
+   * Logout user
+   * POST /api/auth/logout
+   */
+  logout: async (req, res) => {
+    try {
+      const userId = req.user.userId;
+      const username = req.user.username;
+
+      // Log the logout action
+      console.log(`User logged out: ${username} (ID: ${userId})`);
+
+      // Note: In a production system with token blacklisting or session management,
+      // you would invalidate the token here. For JWT without a blacklist,
+      // the client-side token removal is the primary logout mechanism.
+
+      res.json({
+        success: true,
+        message: 'Logout successful'
+      });
+
+    } catch (error) {
+      console.error('Logout error:', error);
+      // Even if there's an error, return success to ensure client clears token
+      res.status(200).json({
+        success: true,
+        message: 'Logout successful'
+      });
+    }
   }
 };
 

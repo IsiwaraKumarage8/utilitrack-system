@@ -29,9 +29,10 @@ authApi.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      // Token expired or invalid - clear auth data
+      // Token expired or invalid - clear all auth data
       localStorage.removeItem('token');
       localStorage.removeItem('user');
+      localStorage.removeItem('tokenExpiry');
       window.location.href = '/auth';
     }
     return Promise.reject(error);
@@ -47,11 +48,9 @@ authApi.interceptors.response.use(
 export const login = async (username, password) => {
   const response = await authApi.post('/login', { username, password });
   
-  // Store token and user data
-  if (response.data.success) {
-    localStorage.setItem('token', response.data.data.token);
-    localStorage.setItem('user', JSON.stringify(response.data.data.user));
-  }
+  // Note: Do NOT store in localStorage here
+  // The AuthContext.login() function handles all localStorage operations
+  // including token expiry calculation
   
   return response.data;
 };
@@ -90,11 +89,18 @@ export const changePassword = async (currentPassword, newPassword) => {
 };
 
 /**
- * Logout user (clear local storage)
+ * Logout user - call backend endpoint to log the logout action
+ * @returns {Promise} Response from logout endpoint
  */
-export const logout = () => {
-  localStorage.removeItem('token');
-  localStorage.removeItem('user');
+export const logout = async () => {
+  try {
+    const response = await authApi.post('/logout');
+    return response.data;
+  } catch (error) {
+    // Even if backend call fails, we want to clear client-side data
+    console.error('Logout API call failed:', error);
+    return { success: true, message: 'Client-side logout completed' };
+  }
 };
 
 export default {
