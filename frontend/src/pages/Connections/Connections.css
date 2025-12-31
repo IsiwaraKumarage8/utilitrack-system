@@ -628,9 +628,15 @@
 }
 
 .consumption-value {
-  color: #1f2937;
-  font-weight: 500;
-  font-size: 14px;
+  color: #000000 !important;
+  font-weight: 600 !important;
+  font-size: 0.875rem !important;
+}
+
+.connections-page .data-table td .consumption-value {
+  color: #000000 !important;
+  font-weight: 600 !important;
+  font-size: 0.875rem !important;
 }
 
 .text-muted {
