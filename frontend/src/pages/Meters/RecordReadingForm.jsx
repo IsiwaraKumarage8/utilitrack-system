@@ -138,22 +138,22 @@ const RecordReadingForm = ({ meter, onClose, onSave }) => {
   const isConsumptionLow = parseFloat(formData.consumption) < 50 && formData.consumption !== '';
 
   return (
-    <div className="modal-overlay">
-      <div className="modal-container record-reading-modal">
-        {/* Modal Header */}
-        <div className="modal-header">
+    <div className="sidepanel-overlay" onClick={onClose}>
+      <div className="sidepanel-container" onClick={(e) => e.stopPropagation()}>
+        {/* Header */}
+        <div className="sidepanel-header">
           <div>
-            <h2 className="modal-title">Record Meter Reading</h2>
-            <p className="modal-subtitle">{meter.meter_number}</p>
+            <h2 className="sidepanel-title">Record Meter Reading</h2>
+            <p className="sidepanel-subtitle">{meter.meter_number}</p>
           </div>
-          <button className="modal-close" onClick={onClose}>
+          <button className="sidepanel-close" onClick={onClose}>
             <X size={24} />
           </button>
         </div>
 
-        {/* Modal Body */}
+        {/* Body */}
         <form onSubmit={handleSubmit}>
-          <div className="modal-body">
+          <div className="sidepanel-body">
             {/* Meter Information (Read-only) */}
             <div className="info-section">
               <div className="info-grid">
@@ -298,8 +298,8 @@ const RecordReadingForm = ({ meter, onClose, onSave }) => {
             </div>
           </div>
 
-          {/* Modal Footer */}
-          <div className="modal-footer">
+          {/* Footer */}
+          <div className="sidepanel-footer">
             <Button type="button" variant="secondary" size="md" onClick={onClose}>
               Cancel
             </Button>
