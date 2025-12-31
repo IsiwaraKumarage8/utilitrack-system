@@ -127,21 +127,21 @@ const CustomerForm = ({ mode, customer, onClose, onSave }) => {
   const showCompanyField = ['Commercial', 'Industrial', 'Government'].includes(formData.customer_type);
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-content customer-form-modal" onClick={(e) => e.stopPropagation()}>
-        {/* Modal Header */}
-        <div className="modal-header">
-          <h2 className="modal-title">
+    <div className="sidepanel-overlay" onClick={onClose}>
+      <div className="sidepanel-container" onClick={(e) => e.stopPropagation()}>
+        {/* Panel Header */}
+        <div className="sidepanel-header">
+          <h2 className="sidepanel-title">
             {mode === 'add' ? 'Add New Customer' : 'Edit Customer'}
           </h2>
-          <button className="modal-close" onClick={onClose}>
+          <button className="sidepanel-close" onClick={onClose}>
             <X />
           </button>
         </div>
 
-        {/* Modal Body */}
+        {/* Panel Body */}
         <form onSubmit={handleSubmit}>
-          <div className="modal-body">
+          <div className="sidepanel-body">
             {/* Customer Type */}
             <div className="form-section">
               <label className="form-label">Customer Type <span className="required">*</span></label>
@@ -303,8 +303,8 @@ const CustomerForm = ({ mode, customer, onClose, onSave }) => {
             </div>
           </div>
 
-          {/* Modal Footer */}
-          <div className="modal-footer">
+          {/* Panel Footer */}
+          <div className="sidepanel-footer">
             <Button variant="secondary" size="md" type="button" onClick={onClose} disabled={isSubmitting}>
               Cancel
             </Button>
