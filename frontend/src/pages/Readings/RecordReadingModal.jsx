@@ -293,22 +293,22 @@ const RecordReadingModal = ({ onClose, onSave }) => {
   const consumptionLevel = getConsumptionColor();
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-content record-reading-modal" onClick={(e) => e.stopPropagation()}>
-        {/* Modal Header */}
-        <div className="modal-header">
-          <div className="modal-header-content">
-            <Activity className="modal-icon" size={24} />
-            <h2 className="modal-title">Record Meter Reading</h2>
+    <div className="sidepanel-overlay" onClick={onClose}>
+      <div className="sidepanel-content record-reading-sidepanel" onClick={(e) => e.stopPropagation()}>
+        {/* Side Panel Header */}
+        <div className="sidepanel-header">
+          <div className="sidepanel-header-content">
+            <Activity className="sidepanel-icon" size={24} />
+            <h2 className="sidepanel-title">Record Meter Reading</h2>
           </div>
-          <button className="modal-close" onClick={onClose} type="button">
+          <button className="sidepanel-close" onClick={onClose} type="button">
             <X size={24} />
           </button>
         </div>
 
-        {/* Modal Body */}
+        {/* Side Panel Body */}
         <form onSubmit={handleSubmit}>
-          <div className="modal-body">
+          <div className="sidepanel-body">
             {/* SECTION 1: SELECT METER */}
             <div className="form-section">
               <label className="section-label">Select Meter *</label>
@@ -600,8 +600,8 @@ const RecordReadingModal = ({ onClose, onSave }) => {
             )}
           </div>
 
-          {/* Modal Footer */}
-          <div className="modal-footer">
+          {/* Side Panel Footer */}
+          <div className="sidepanel-footer">
             <Button 
               type="button"
               variant="secondary" 

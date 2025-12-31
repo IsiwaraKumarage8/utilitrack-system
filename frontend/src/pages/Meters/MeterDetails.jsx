@@ -77,21 +77,21 @@ const MeterDetails = ({ meter, onClose, onEdit, onRecordReading }) => {
   };
 
   return (
-    <div className="modal-overlay">
-      <div className="modal-container meter-details-modal">
-        {/* Modal Header */}
-        <div className="modal-header">
+    <div className="sidepanel-overlay" onClick={onClose}>
+      <div className="sidepanel-container" onClick={(e) => e.stopPropagation()}>
+        {/* Header */}
+        <div className="sidepanel-header">
           <div>
-            <h2 className="modal-title">Meter Details</h2>
-            <p className="modal-subtitle">{meter.meter_number}</p>
+            <h2 className="sidepanel-title">Meter Details</h2>
+            <p className="sidepanel-subtitle">{meter.meter_number}</p>
           </div>
-          <button className="modal-close" onClick={onClose}>
+          <button className="sidepanel-close" onClick={onClose}>
             <X size={24} />
           </button>
         </div>
 
-        {/* Modal Body */}
-        <div className="modal-body meter-details-body">
+        {/* Body */}
+        <div className="sidepanel-body">
           {/* Left Column - Main Information */}
           <div className="details-left">
             {/* Meter Information */}
@@ -197,7 +197,8 @@ const MeterDetails = ({ meter, onClose, onEdit, onRecordReading }) => {
                   </div>
                 </div>
               </div>
-              <div className="chart-placeholder">
+              {/* Future Feature: Consumption Trend Chart - Currently hidden */}
+              <div className="chart-placeholder" style={{ display: 'none' }}>
                 <p>Consumption Trend Chart</p>
                 <span>(Chart visualization placeholder)</span>
               </div>
@@ -294,8 +295,8 @@ const MeterDetails = ({ meter, onClose, onEdit, onRecordReading }) => {
           </div>
         </div>
 
-        {/* Modal Footer */}
-        <div className="modal-footer">
+        {/* Footer */}
+        <div className="sidepanel-footer">
           <Button variant="secondary" size="md" onClick={onClose}>
             Close
           </Button>

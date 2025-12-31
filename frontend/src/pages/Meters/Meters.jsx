@@ -63,7 +63,7 @@ const Meters = () => {
       
       const matchesStatus = statusFilter === 'All' || meter.meter_status === statusFilter;
       const matchesType = typeFilter === 'All' || meter.meter_type === typeFilter;
-      const matchesUtility = utilityFilter === 'All' || meter.utility_type === utilityFilter;
+      const matchesUtility = utilityFilter === 'All' || meter.utility_name === utilityFilter;
 
       return matchesSearch && matchesStatus && matchesType && matchesUtility;
     });
@@ -126,11 +126,11 @@ const Meters = () => {
   // Utility icon and color mapping
   const getUtilityIcon = (utilityType) => {
     const icons = {
-      'Electricity': <Zap size={18} />,
-      'Water': <Droplet size={18} />,
-      'Gas': <Flame size={18} />
+      'Electricity': <Zap size={16} />,
+      'Water': <Droplet size={16} />,
+      'Gas': <Flame size={16} />
     };
-    return icons[utilityType] || <Zap size={18} />;
+    return icons[utilityType] || <Zap size={16} />;
   };
 
   const getUtilityColor = (utilityType) => {
@@ -282,9 +282,11 @@ const Meters = () => {
                 <tr key={meter.meter_id} className={getStatusRowClass(meter.meter_status)}>
                   <td className="meter-number">{meter.meter_number}</td>
                   <td>
-                    <div className={`utility-badge ${getUtilityColor(meter.utility_type)}`}>
-                      {getUtilityIcon(meter.utility_type)}
-                      <span>{meter.utility_type}</span>
+                    <div className="utility-cell">
+                      <div className={`utility-icon utility-icon--${getUtilityColor(meter.utility_name)}`}>
+                        {getUtilityIcon(meter.utility_name)}
+                      </div>
+                      {meter.utility_name || 'N/A'}
                     </div>
                   </td>
                   <td>{meter.customer_name}</td>

@@ -376,7 +376,42 @@
   color: #1f2937;
 }
 
-/* Utility Badge */
+/* Utility Cell */
+.utility-cell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.utility-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  flex-shrink: 0;
+}
+
+.utility-icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+.utility-icon--electricity {
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+}
+
+.utility-icon--water {
+  background: linear-gradient(135deg, #06b6d4, #0891b2);
+}
+
+.utility-icon--gas {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+}
+
+/* Utility Badge - Old style, keeping for backwards compatibility */
 .utility-badge {
   display: inline-flex;
   align-items: center;
