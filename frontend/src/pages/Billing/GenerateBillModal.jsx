@@ -116,20 +116,20 @@ const GenerateBillModal = ({ isOpen, onClose, onSuccess }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-container generate-bill-modal" onClick={(e) => e.stopPropagation()}>
+    <div className="sidepanel-overlay" onClick={onClose}>
+      <div className="sidepanel-container generate-bill-sidepanel" onClick={(e) => e.stopPropagation()}>
         
-        <div className="modal-header">
-          <div className="modal-header-content">
-            <FileText className="modal-icon" size={24} />
+        <div className="sidepanel-header">
+          <div className="sidepanel-header-content">
+            <FileText className="sidepanel-icon" size={24} />
             <div>
               <h2>Generate Bill</h2>
-              <p className="modal-subtitle">
+              <p className="sidepanel-subtitle">
                 {step === 1 ? 'Select a meter reading to generate bill' : 'Review and confirm bill details'}
               </p>
             </div>
           </div>
-          <button className="modal-close-btn" onClick={onClose}>
+          <button className="sidepanel-close-btn" onClick={onClose}>
             <X size={20} />
           </button>
         </div>
@@ -146,7 +146,7 @@ const GenerateBillModal = ({ isOpen, onClose, onSuccess }) => {
           </div>
         </div>
 
-        <div className="modal-body">
+        <div className="sidepanel-body">
           
           {step === 1 && (
             <div className="step-content">
@@ -354,7 +354,7 @@ const GenerateBillModal = ({ isOpen, onClose, onSuccess }) => {
 
         </div>
 
-        <div className="modal-footer">
+        <div className="sidepanel-footer">
           {step === 1 && (
             <Button variant="secondary" onClick={onClose}>
               Cancel

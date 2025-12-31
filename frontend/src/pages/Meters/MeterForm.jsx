@@ -134,28 +134,28 @@ const MeterForm = ({ mode, meter, onClose, onSave }) => {
   };
 
   return (
-    <div className="modal-overlay">
-      <div className="modal-container meter-form-modal">
-        {/* Modal Header */}
-        <div className="modal-header">
+    <div className="sidepanel-overlay" onClick={onClose}>
+      <div className="sidepanel-container" onClick={(e) => e.stopPropagation()}>
+        {/* Header */}
+        <div className="sidepanel-header">
           <div>
-            <h2 className="modal-title">
+            <h2 className="sidepanel-title">
               {mode === 'add' ? 'Register New Meter' : 'Edit Meter'}
             </h2>
-            <p className="modal-subtitle">
+            <p className="sidepanel-subtitle">
               {mode === 'add' 
                 ? 'Add a new utility meter to the system' 
                 : `Editing ${meter?.meter_number}`}
             </p>
           </div>
-          <button className="modal-close" onClick={onClose}>
+          <button className="sidepanel-close" onClick={onClose}>
             <X size={24} />
           </button>
         </div>
 
-        {/* Modal Body */}
+        {/* Body */}
         <form onSubmit={handleSubmit}>
-          <div className="modal-body">
+          <div className="sidepanel-body">
             {/* Connection Selection */}
             <div className="form-group">
               <label className="form-label required">Service Connection</label>
@@ -302,8 +302,8 @@ const MeterForm = ({ mode, meter, onClose, onSave }) => {
             </div>
           </div>
 
-          {/* Modal Footer */}
-          <div className="modal-footer">
+          {/* Footer */}
+          <div className="sidepanel-footer">
             <Button type="button" variant="secondary" size="md" onClick={onClose}>
               Cancel
             </Button>

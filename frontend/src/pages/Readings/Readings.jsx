@@ -25,7 +25,7 @@ const MOCK_READINGS = [
     meter_number: 'MTR-ELEC-2020-00001',
     customer_name: 'Nuwan Bandara',
     customer_id: 1,
-    utility_type: 'Electricity',
+    utility_name: 'Electricity',
     utility_type_id: 1,
     reader_name: 'John Doe',
     connection_number: 'ELEC-2020-001'
@@ -43,7 +43,7 @@ const MOCK_READINGS = [
     meter_number: 'MTR-WATER-2020-00001',
     customer_name: 'Nuwan Bandara',
     customer_id: 1,
-    utility_type: 'Water',
+    utility_name: 'Water',
     utility_type_id: 2,
     reader_name: 'John Doe',
     connection_number: 'WATER-2020-001'
@@ -61,7 +61,7 @@ const MOCK_READINGS = [
     meter_number: 'MTR-ELEC-2020-00003',
     customer_name: 'Samantha Silva',
     customer_id: 3,
-    utility_type: 'Electricity',
+    utility_name: 'Electricity',
     utility_type_id: 1,
     reader_name: 'Jane Smith',
     connection_number: 'ELEC-2020-003'
@@ -79,7 +79,7 @@ const MOCK_READINGS = [
     meter_number: 'MTR-WATER-2020-00003',
     customer_name: 'Samantha Silva',
     customer_id: 3,
-    utility_type: 'Water',
+    utility_name: 'Water',
     utility_type_id: 2,
     reader_name: 'Jane Smith',
     connection_number: 'WATER-2020-003'
@@ -97,7 +97,7 @@ const MOCK_READINGS = [
     meter_number: 'MTR-ELEC-2020-00005',
     customer_name: 'Rajesh Kumar',
     customer_id: 5,
-    utility_type: 'Electricity',
+    utility_name: 'Electricity',
     utility_type_id: 1,
     reader_name: 'John Doe',
     connection_number: 'ELEC-2020-005'
@@ -115,7 +115,7 @@ const MOCK_READINGS = [
     meter_number: 'MTR-GAS-2023-00001',
     customer_name: 'Samantha Silva',
     customer_id: 3,
-    utility_type: 'Gas',
+    utility_name: 'Gas',
     utility_type_id: 3,
     reader_name: 'Jane Smith',
     connection_number: 'GAS-2023-001'
@@ -133,7 +133,7 @@ const MOCK_READINGS = [
     meter_number: 'MTR-ELEC-2020-00001',
     customer_name: 'Nuwan Bandara',
     customer_id: 1,
-    utility_type: 'Electricity',
+    utility_name: 'Electricity',
     utility_type_id: 1,
     reader_name: 'John Doe',
     connection_number: 'ELEC-2020-001'
@@ -151,7 +151,7 @@ const MOCK_READINGS = [
     meter_number: 'MTR-ELEC-2020-00003',
     customer_name: 'Samantha Silva',
     customer_id: 3,
-    utility_type: 'Electricity',
+    utility_name: 'Electricity',
     utility_type_id: 1,
     reader_name: 'Jane Smith',
     connection_number: 'ELEC-2020-003'
@@ -169,7 +169,7 @@ const MOCK_READINGS = [
     meter_number: 'MTR-WATER-2020-00001',
     customer_name: 'Nuwan Bandara',
     customer_id: 1,
-    utility_type: 'Water',
+    utility_name: 'Water',
     utility_type_id: 2,
     reader_name: 'Self-Reported',
     connection_number: 'WATER-2020-001'
@@ -187,7 +187,7 @@ const MOCK_READINGS = [
     meter_number: 'MTR-ELEC-2020-00005',
     customer_name: 'Rajesh Kumar',
     customer_id: 5,
-    utility_type: 'Electricity',
+    utility_name: 'Electricity',
     utility_type_id: 1,
     reader_name: 'John Doe',
     connection_number: 'ELEC-2020-005'
@@ -246,7 +246,7 @@ const Readings = () => {
         reading.meter_number.toLowerCase().includes(searchQuery.toLowerCase()) ||
         reading.customer_name.toLowerCase().includes(searchQuery.toLowerCase());
       
-      const matchesUtility = utilityFilter === 'All' || reading.utility_type === utilityFilter;
+      const matchesUtility = utilityFilter === 'All' || reading.utility_name === utilityFilter;
       const matchesType = typeFilter === 'All' || reading.reading_type === typeFilter;
 
       let matchesDate = true;
@@ -499,9 +499,11 @@ const Readings = () => {
                   <td className="meter-number">{reading.meter_number}</td>
                   <td>{reading.customer_name}</td>
                   <td>
-                    <div className={`utility-badge ${getUtilityColor(reading.utility_type)}`}>
-                      {getUtilityIcon(reading.utility_type)}
-                      <span>{reading.utility_type}</span>
+                    <div className="utility-cell">
+                      <div className={`utility-icon utility-icon--${getUtilityColor(reading.utility_name)}`}>
+                        {getUtilityIcon(reading.utility_name)}
+                      </div>
+                      {reading.utility_name || 'N/A'}
                     </div>
                   </td>
                   <td>{reading.previous_reading.toFixed(2)}</td>

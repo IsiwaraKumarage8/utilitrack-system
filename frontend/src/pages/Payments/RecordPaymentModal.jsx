@@ -163,18 +163,18 @@ const RecordPaymentModal = ({ isOpen, onClose, onSuccess }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-container record-payment-modal" onClick={(e) => e.stopPropagation()}>
-        {/* Modal Header */}
-        <div className="modal-header">
-          <div className="modal-header-content">
-            <CreditCard className="modal-icon" size={24} />
+    <div className="sidepanel-overlay" onClick={onClose}>
+      <div className="sidepanel-container" onClick={(e) => e.stopPropagation()}>
+        {/* Header */}
+        <div className="sidepanel-header">
+          <div className="header-content">
+            <CreditCard className="header-icon" size={24} />
             <div>
-              <h2>Record Payment</h2>
-              <p className="modal-subtitle">Record a new customer payment</p>
+              <h2 className="sidepanel-title">Record Payment</h2>
+              <p className="sidepanel-subtitle">Record a new customer payment</p>
             </div>
           </div>
-          <button className="modal-close-btn" onClick={onClose}>
+          <button className="sidepanel-close" onClick={onClose}>
             <X size={20} />
           </button>
         </div>
@@ -187,8 +187,8 @@ const RecordPaymentModal = ({ isOpen, onClose, onSuccess }) => {
           </div>
         )}
 
-        {/* Modal Body */}
-        <form onSubmit={handleSubmit} className="modal-body">
+        {/* Body */}
+        <form onSubmit={handleSubmit} className="sidepanel-body">
           <div className="form-grid">
             {/* Customer Selection */}
             <div className="form-group">
@@ -374,8 +374,8 @@ const RecordPaymentModal = ({ isOpen, onClose, onSuccess }) => {
             </div>
           )}
 
-          {/* Modal Footer */}
-          <div className="modal-footer">
+          {/* Footer */}
+          <div className="sidepanel-footer">
             <Button type="button" variant="secondary" size="md" onClick={onClose}>
               Cancel
             </Button>

@@ -1,265 +1,420 @@
-/* Record Reading Form */
-.record-reading-modal {
-  max-width: 700px;
-  width: 90%;
+/* ============================================
+   RECORD READING FORM SIDE PANEL
+   ============================================ */
+
+/* Overlay */
+.sidepanel-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+  display: flex;
+  justify-content: flex-end;
+  align-items: stretch;
+  z-index: 1000;
 }
 
-/* Info Section */
+/* Container */
+.sidepanel-container {
+  background: #1F2937;
+  width: 600px;
+  max-width: 90vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: -4px 0 24px rgba(0, 0, 0, 0.5);
+  animation: recordReadingFormSidePanelSlideIn 0.3s ease-out;
+}
+
+/* Slide-in Animation */
+@keyframes recordReadingFormSidePanelSlideIn {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+/* Header - Fixed */
+.sidepanel-header {
+  padding: 1.5rem;
+  border-bottom: 1px solid #374151;
+  flex-shrink: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%) !important;
+}
+
+.sidepanel-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #FFFFFF !important;
+  margin: 0;
+}
+
+.sidepanel-subtitle {
+  font-size: 0.875rem;
+  color: #FFFFFF !important;
+  margin: 0.25rem 0 0 0;
+  opacity: 1 !important;
+  font-family: 'Courier New', monospace;
+}
+
+.sidepanel-header .sidepanel-subtitle {
+  color: #FFFFFF !important;
+  opacity: 1 !important;
+}
+
+/* Close Button */
+.sidepanel-close {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: #FFFFFF;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sidepanel-close:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Body - Scrollable */
+.sidepanel-body {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 1.5rem;
+  min-height: 0;
+}
+
+/* Footer - Fixed */
+.sidepanel-footer {
+  padding: 1.5rem;
+  border-top: 1px solid #374151;
+  flex-shrink: 0;
+  background: #1F2937;
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+
+/* ============================================
+   INFO SECTION (Read-only meter info)
+   ============================================ */
+
 .info-section {
-  background: #f0f9ff;
-  border: 1px solid #bfdbfe;
-  border-radius: 8px;
-  padding: 16px;
-  margin-bottom: 24px;
+  background: #374151;
+  padding: 1.25rem;
+  border-radius: 0.5rem;
+  border: 1px solid #4B5563;
+  margin-bottom: 1.5rem;
 }
 
 .info-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 16px;
+  gap: 1rem;
 }
 
 .info-item {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 0.375rem;
 }
 
 .info-label {
-  font-size: 12px;
+  font-size: 0.75rem;
   font-weight: 500;
-  color: #6b7280;
+  color: #D1D5DB !important;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.025em;
 }
 
 .info-value {
-  font-size: 14px;
+  font-size: 0.9375rem;
   font-weight: 600;
-  color: #1f2937;
+  color: #FFFFFF !important;
 }
 
-/* Form Section */
+/* ============================================
+   FORM SECTION
+   ============================================ */
+
 .form-section {
   display: flex;
   flex-direction: column;
-  gap: 20px;
-}
-
-.form-row {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 16px;
+  gap: 1.5rem;
 }
 
 .form-group {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 0.5rem;
 }
 
 .form-label {
-  font-size: 14px;
-  font-weight: 500;
-  color: #374151;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #F9FAFB !important;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
 }
 
 .form-label.required::after {
-  content: '*';
-  color: #ef4444;
-  margin-left: 4px;
+  content: ' *';
+  color: #EF4444 !important;
 }
 
-.form-input {
-  padding: 10px 12px;
-  border: 1px solid #d1d5db;
-  border-radius: 8px;
-  font-size: 14px;
-  color: #1f2937;
-  outline: none;
+/* Form Inputs */
+.form-input,
+.form-textarea {
+  width: 100%;
+  padding: 0.75rem;
+  background: #374151 !important;
+  border: 1px solid #4B5563 !important;
+  border-radius: 0.5rem;
+  color: #FFFFFF !important;
+  font-size: 0.9375rem;
   transition: all 0.2s;
-  background: white;
+  font-family: inherit;
 }
 
-.form-input:focus {
-  border-color: #3b82f6;
+.form-input:focus,
+.form-textarea:focus {
+  outline: none;
+  border-color: #3B82F6 !important;
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  background: #374151 !important;
 }
 
-.form-input.error {
-  border-color: #ef4444;
+.form-input::placeholder,
+.form-textarea::placeholder {
+  color: #9CA3AF !important;
 }
 
-.form-input.error:focus {
-  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+.form-input.error,
+.form-textarea.error {
+  border-color: #EF4444 !important;
 }
 
+/* Readonly Inputs */
 .form-input.readonly {
-  background: #f9fafb;
-  color: #6b7280;
+  background: #1F2937 !important;
   cursor: not-allowed;
+  opacity: 0.8;
+  color: #D1D5DB !important;
 }
 
+/* Input with Icon */
 .input-with-icon {
   position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-with-icon .form-input {
+  padding-left: 2.75rem;
 }
 
 .input-icon {
   position: absolute;
-  left: 12px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #9ca3af;
+  left: 0.875rem;
+  color: #93C5FD !important;
   pointer-events: none;
 }
 
-.input-with-icon .form-input {
-  padding-left: 40px;
+/* Form Row (side-by-side fields) */
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
 }
 
+/* Form Textarea */
 .form-textarea {
-  padding: 10px 12px;
-  border: 1px solid #d1d5db;
-  border-radius: 8px;
-  font-size: 14px;
-  color: #1f2937;
-  outline: none;
-  transition: all 0.2s;
   resize: vertical;
+  min-height: 80px;
   font-family: inherit;
+  line-height: 1.5;
 }
 
-.form-textarea:focus {
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+/* Select Dropdowns */
+.form-input option {
+  background: #374151;
+  color: #FFFFFF;
+  padding: 0.5rem;
 }
 
+/* Error Messages */
 .error-message {
-  font-size: 12px;
-  color: #ef4444;
-  margin-top: -4px;
+  display: block;
+  color: #FCA5A5 !important;
+  font-size: 0.8125rem;
+  margin-top: -0.25rem;
+  font-weight: 500;
 }
 
-/* Consumption Display */
+/* ============================================
+   CONSUMPTION DISPLAY
+   ============================================ */
+
 .consumption-display {
-  padding: 20px;
-  border-radius: 8px;
-  border: 2px solid;
-  margin-top: 8px;
+  background: #374151;
+  padding: 1.25rem;
+  border-radius: 0.5rem;
+  border: 2px solid #4B5563;
+  margin-top: 0.5rem;
+  transition: all 0.3s;
 }
 
 .consumption-display.normal {
-  background: rgba(16, 185, 129, 0.05);
-  border-color: #10b981;
+  border-color: #34D399;
+  background: linear-gradient(135deg, rgba(52, 211, 153, 0.1), rgba(16, 185, 129, 0.05));
 }
 
 .consumption-display.high {
-  background: rgba(239, 68, 68, 0.05);
-  border-color: #ef4444;
+  border-color: #FBBF24;
+  background: linear-gradient(135deg, rgba(251, 191, 36, 0.1), rgba(245, 158, 11, 0.05));
 }
 
 .consumption-display.low {
-  background: rgba(245, 158, 11, 0.05);
-  border-color: #f59e0b;
+  border-color: #60A5FA;
+  background: linear-gradient(135deg, rgba(96, 165, 250, 0.1), rgba(59, 130, 246, 0.05));
 }
 
 .consumption-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 8px;
+  margin-bottom: 0.75rem;
 }
 
 .consumption-label {
-  font-size: 12px;
+  font-size: 0.875rem;
   font-weight: 600;
-  color: #6b7280;
+  color: #D1D5DB !important;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.025em;
 }
 
-.consumption-display.normal .consumption-label {
-  color: #059669;
+.consumption-header svg {
+  color: #FBBF24 !important;
 }
 
-.consumption-display.high .consumption-label {
-  color: #dc2626;
-}
-
-.consumption-display.high svg {
-  color: #dc2626;
-}
-
-.consumption-display.low .consumption-label {
-  color: #d97706;
-}
-
-.consumption-display.low svg {
-  color: #d97706;
+.consumption-display.low .consumption-header svg {
+  color: #60A5FA !important;
 }
 
 .consumption-value {
-  font-size: 32px;
+  font-size: 2rem;
   font-weight: 700;
-  margin-bottom: 8px;
+  color: #FFFFFF !important;
+  line-height: 1;
+  margin-bottom: 0.5rem;
 }
 
 .consumption-display.normal .consumption-value {
-  color: #10b981;
+  color: #34D399 !important;
 }
 
 .consumption-display.high .consumption-value {
-  color: #ef4444;
+  color: #FBBF24 !important;
 }
 
 .consumption-display.low .consumption-value {
-  color: #f59e0b;
+  color: #60A5FA !important;
 }
 
 .consumption-warning {
-  font-size: 13px;
-  font-weight: 500;
+  font-size: 0.875rem;
+  color: #E5E7EB !important;
   margin: 0;
+  font-style: italic;
 }
 
-.consumption-display.high .consumption-warning {
-  color: #dc2626;
-}
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
 
-.consumption-display.low .consumption-warning {
-  color: #d97706;
-}
-
-/* Modal Footer */
-.modal-footer {
-  display: flex;
-  justify-content: flex-end;
-  gap: 12px;
-  padding: 20px 24px;
-  border-top: 1px solid #e5e7eb;
-  background: #f9fafb;
-}
-
-/* Responsive */
 @media (max-width: 768px) {
-  .record-reading-modal {
-    width: 95%;
+  .sidepanel-container {
+    width: 100%;
     max-width: 100%;
   }
 
-  .info-grid {
-    grid-template-columns: 1fr;
+  .sidepanel-header {
+    padding: 1rem;
   }
 
+  .sidepanel-title {
+    font-size: 1.25rem;
+  }
+
+  .sidepanel-subtitle {
+    font-size: 0.8125rem;
+  }
+
+  .sidepanel-body {
+    padding: 1rem;
+  }
+
+  .info-grid,
   .form-row {
     grid-template-columns: 1fr;
   }
 
-  .modal-footer {
+  .sidepanel-footer {
+    padding: 1rem;
     flex-direction: column-reverse;
   }
 
-  .modal-footer button {
+  .sidepanel-footer button {
     width: 100%;
+  }
+
+  .consumption-value {
+    font-size: 1.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .sidepanel-header {
+    padding: 0.875rem;
+  }
+
+  .sidepanel-title {
+    font-size: 1.125rem;
+  }
+
+  .sidepanel-body {
+    padding: 0.875rem;
+  }
+
+  .form-input,
+  .form-textarea {
+    padding: 0.625rem;
+    font-size: 0.875rem;
+  }
+
+  .input-with-icon .form-input {
+    padding-left: 2.5rem;
+  }
+
+  .input-icon {
+    left: 0.75rem;
+  }
+
+  .consumption-value {
+    font-size: 1.5rem;
   }
 }
