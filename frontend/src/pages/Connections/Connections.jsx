@@ -59,6 +59,11 @@ const Connections = () => {
     });
   }, [connections, searchQuery, utilityFilter, statusFilter]);
 
+  // Reset to page 1 when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery, utilityFilter, statusFilter]);
+
   // Pagination
   const totalPages = Math.ceil(filteredConnections.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
