@@ -92,27 +92,27 @@ const ConnectionDetails = ({ connection, onClose, onEdit }) => {
   };
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-content connection-details-modal" onClick={(e) => e.stopPropagation()}>
-        {/* Modal Header */}
-        <div className="modal-header">
+    <div className="sidepanel-overlay" onClick={onClose}>
+      <div className="sidepanel-container" onClick={(e) => e.stopPropagation()}>
+        {/* Header */}
+        <div className="sidepanel-header">
           <div className="header-content">
             <div className="utility-badge">
               {getUtilityIcon(connection.utility_name)}
               <span>{connection.utility_name}</span>
             </div>
-            <h2 className="modal-title">{connection.meter_number || connection.connection_number}</h2>
+            <h2 className="sidepanel-title">{connection.meter_number || connection.connection_number}</h2>
             <Badge status={getStatusVariant(connection.connection_status)}>
               {connection.connection_status}
             </Badge>
           </div>
-          <button className="modal-close" onClick={onClose}>
+          <button className="sidepanel-close" onClick={onClose}>
             <X />
           </button>
         </div>
 
-        {/* Modal Body */}
-        <div className="modal-body">
+        {/* Body */}
+        <div className="sidepanel-body">
           {/* Connection Information */}
           <div className="details-section">
             <h3 className="section-title">Connection Information</h3>
@@ -251,8 +251,8 @@ const ConnectionDetails = ({ connection, onClose, onEdit }) => {
           </div>
         </div>
 
-        {/* Modal Footer */}
-        <div className="modal-footer">
+        {/* Footer */}
+        <div className="sidepanel-footer">
           <Button variant="secondary" size="md" onClick={onClose}>
             Close
           </Button>
