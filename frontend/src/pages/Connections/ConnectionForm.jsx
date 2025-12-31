@@ -218,17 +218,17 @@ const ConnectionForm = ({ mode, connection, onClose, onSave }) => {
   ];
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-content connection-form-modal" onClick={(e) => e.stopPropagation()}>
-        {/* Modal Header */}
-        <div className="modal-header">
+    <div className="sidepanel-overlay" onClick={onClose}>
+      <div className="sidepanel-container" onClick={(e) => e.stopPropagation()}>
+        {/* Header */}
+        <div className="sidepanel-header">
           <div>
-            <h2 className="modal-title">
+            <h2 className="sidepanel-title">
               {mode === 'add' ? 'Add New Connection' : 'Edit Connection'}
             </h2>
-            <p className="modal-subtitle">Step {currentStep} of 4: {steps[currentStep - 1].title}</p>
+            <p className="sidepanel-subtitle">Step {currentStep} of 4: {steps[currentStep - 1].title}</p>
           </div>
-          <button className="modal-close" onClick={onClose}>
+          <button className="sidepanel-close" onClick={onClose}>
             <X />
           </button>
         </div>
@@ -246,9 +246,9 @@ const ConnectionForm = ({ mode, connection, onClose, onSave }) => {
           ))}
         </div>
 
-        {/* Modal Body */}
+        {/* Body */}
         <form onSubmit={handleSubmit}>
-          <div className="modal-body">
+          <div className="sidepanel-body">
             {/* Step 1: Customer Selection */}
             {currentStep === 1 && (
               <div className="form-step">
@@ -461,8 +461,8 @@ const ConnectionForm = ({ mode, connection, onClose, onSave }) => {
             )}
           </div>
 
-          {/* Modal Footer */}
-          <div className="modal-footer">
+          {/* Footer */}
+          <div className="sidepanel-footer">
             <div className="footer-actions">
               {currentStep > 1 && (
                 <Button variant="secondary" size="md" type="button" onClick={handlePrevious}>
