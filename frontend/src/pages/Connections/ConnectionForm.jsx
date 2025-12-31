@@ -1,13 +1,16 @@
 import { useState, useEffect } from 'react';
 import { X, ChevronLeft, ChevronRight } from 'lucide-react';
+import toast from 'react-hot-toast';
 import Button from '../../components/common/Button';
 import customerApi from '../../api/customerApi';
+import connectionApi from '../../api/connectionApi';
 import './ConnectionForm.css';
 
 const ConnectionForm = ({ mode, connection, onClose, onSave }) => {
   const [currentStep, setCurrentStep] = useState(1);
   const [customers, setCustomers] = useState([]);
   const [loadingCustomers, setLoadingCustomers] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     // Step 1: Customer Selection
     customer_id: '',
@@ -200,13 +203,30 @@ const ConnectionForm = ({ mode, connection, onClose, onSave }) => {
     setCurrentStep(prev => Math.max(prev - 1, 1));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     
     if (validateStep(4)) {
-      // TODO: Implement API call
-      console.log('Save connection:', formData);
-      onSave(formData);
+      setIsSubmitting(true);
+      
+      try {
+        if (mode === 'add') {
+          // Create new connection
+          await connectionApi.create(formData);
+          toast.success('Connection created successfully!');
+        } else {
+          // Update existing connection
+          await connectionApi.update(connection.connection_id, formData);
+          toast.success('Connection updated successfully!');
+        }
+        
+        onSave(); // Trigger parent refresh
+      } catch (error) {
+        console.error('Error saving connection:', error);
+        toast.error(error.message || 'Failed to save connection');
+      } finally {
+        setIsSubmitting(false);
+      }
     }
   };
 
@@ -311,7 +331,7 @@ const ConnectionForm = ({ mode, connection, onClose, onSave }) => {
                       className={`form-input ${errors.connection_number ? 'error' : ''}`}
                       value={formData.connection_number}
                       onChange={handleChange}
-                      placeholder="e.g., ELEC-2024-001"
+                      placeholder="e.g., CONN-2024-001"
                     />
                     {errors.connection_number && <span className="error-message">{errors.connection_number}</span>}
                   </div>
@@ -326,6 +346,7 @@ const ConnectionForm = ({ mode, connection, onClose, onSave }) => {
                       className={`form-input ${errors.connection_date ? 'error' : ''}`}
                       value={formData.connection_date}
                       onChange={handleChange}
+                      placeholder="YYYY-MM-DD"
                     />
                     {errors.connection_date && <span className="error-message">{errors.connection_date}</span>}
                   </div>
@@ -363,7 +384,7 @@ const ConnectionForm = ({ mode, connection, onClose, onSave }) => {
                       className={`form-input ${errors.meter_number ? 'error' : ''}`}
                       value={formData.meter_number}
                       onChange={handleChange}
-                      placeholder="e.g., MTR-ELC-1001"
+                      placeholder="e.g., MTR-12345"
                     />
                     {errors.meter_number && <span className="error-message">{errors.meter_number}</span>}
                   </div>
@@ -378,7 +399,7 @@ const ConnectionForm = ({ mode, connection, onClose, onSave }) => {
                       value={formData.meter_type}
                       onChange={handleChange}
                     >
-                      <option value="">-- Select Type --</option>
+                      <option value="">Select meter type</option>
                       <option value="Digital">Digital</option>
                       <option value="Analog">Analog</option>
                       <option value="Smart Meter">Smart Meter</option>
@@ -397,7 +418,7 @@ const ConnectionForm = ({ mode, connection, onClose, onSave }) => {
                         className={`form-input ${errors.initial_reading ? 'error' : ''}`}
                         value={formData.initial_reading}
                         onChange={handleChange}
-                        placeholder="0"
+                        placeholder="Enter initial reading"
                         step="0.01"
                       />
                       {errors.initial_reading && <span className="error-message">{errors.initial_reading}</span>}
@@ -422,7 +443,7 @@ const ConnectionForm = ({ mode, connection, onClose, onSave }) => {
                       value={formData.tariff_plan}
                       onChange={handleChange}
                     >
-                      <option value="">-- Select Plan --</option>
+                      <option value="">Select tariff plan</option>
                       {tariffPlanOptions[formData.utility_type].map(plan => (
                         <option key={plan} value={plan}>{plan}</option>
                       ))}
@@ -453,7 +474,7 @@ const ConnectionForm = ({ mode, connection, onClose, onSave }) => {
                       value={formData.notes}
                       onChange={handleChange}
                       rows="3"
-                      placeholder="Add any additional notes (e.g., Single phase meter, Three-phase commercial connection)..."
+                      placeholder="Add any additional notes (optional)"
                     />
                   </div>
                 </div>
@@ -476,8 +497,11 @@ const ConnectionForm = ({ mode, connection, onClose, onSave }) => {
                   <ChevronRight size={20} />
                 </Button>
               ) : (
-                <Button variant="primary" size="md" type="submit">
-                  {mode === 'add' ? 'Create Connection' : 'Update Connection'}
+                <Button variant="primary" size="md" type="submit" disabled={isSubmitting}>
+                  {isSubmitting 
+                    ? (mode === 'add' ? 'Creating...' : 'Updating...') 
+                    : (mode === 'add' ? 'Create Connection' : 'Update Connection')
+                  }
                 </Button>
               )}
             </div>

@@ -1,13 +1,12 @@
 import { useState, useMemo, useEffect } from 'react';
-import { Search, Plus, Zap, Droplet, Flame, Wind, Eye, Edit2, Trash2 } from 'lucide-react';
-import axios from 'axios';
+import { Search, Plus, Zap, Droplet, Flame, Wind, Eye, Edit2, Unplug } from 'lucide-react';
+import toast from 'react-hot-toast';
 import Button from '../../components/common/Button';
 import Badge from '../../components/common/Badge';
 import ConnectionForm from './ConnectionForm';
 import ConnectionDetails from './ConnectionDetails';
+import connectionApi from '../../api/connectionApi';
 import './Connections.css';
-
-const API_URL = 'http://localhost:5000/api';
 
 const Connections = () => {
   const [connections, setConnections] = useState([]);
@@ -33,11 +32,12 @@ const Connections = () => {
     try {
       setLoading(true);
       setError(null);
-      const response = await axios.get(`${API_URL}/connections`);
-      setConnections(response.data.data || []);
+      const response = await connectionApi.getAll();
+      setConnections(response.data || []);
     } catch (err) {
       console.error('Error fetching connections:', err);
       setError('Failed to load connections. Please try again later.');
+      toast.error('Failed to load connections');
     } finally {
       setLoading(false);
     }
@@ -81,20 +81,20 @@ const Connections = () => {
     setSelectedConnection(connection);
     setShowDetails(true);
   };
-async (connection) => {
+
+  const handleDeleteConnection = async (connection) => {
     if (!window.confirm(`Are you sure you want to disconnect ${connection.connection_number}?`)) {
       return;
     }
 
     try {
-      await axios.delete(`${API_URL}/connections/${connection.connection_id}`);
-      // Refresh the list
+      await connectionApi.delete(connection.connection_id);
+      toast.success('Connection deleted successfully!');
       fetchConnections();
     } catch (err) {
       console.error('Error deleting connection:', err);
-      alert('Failed to disconnect service connection');
-    } call
-    console.log('Delete connection:', connection);
+      toast.error(err.message || 'Failed to disconnect service connection');
+    }
   };
 
   // Utility icon and color mapping
@@ -283,9 +283,9 @@ async (connection) => {
                       <button
                         className="action-btn action-btn-delete"
                         onClick={() => handleDeleteConnection(connection)}
-                        title="Delete"
+                        title="Disconnect"
                       >
-                        <Trash2 />
+                        <Unplug />
                       </button>
                     </div>
                   </td>
