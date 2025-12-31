@@ -174,6 +174,7 @@ const CustomerForm = ({ mode, customer, onClose, onSave }) => {
                   className={`form-input ${errors.first_name ? 'error' : ''}`}
                   value={formData.first_name}
                   onChange={handleChange}
+                  placeholder="Enter first name"
                 />
                 {errors.first_name && <span className="error-message">{errors.first_name}</span>}
               </div>
@@ -189,6 +190,7 @@ const CustomerForm = ({ mode, customer, onClose, onSave }) => {
                   className={`form-input ${errors.last_name ? 'error' : ''}`}
                   value={formData.last_name}
                   onChange={handleChange}
+                  placeholder="Enter last name"
                 />
                 {errors.last_name && <span className="error-message">{errors.last_name}</span>}
               </div>
@@ -205,6 +207,7 @@ const CustomerForm = ({ mode, customer, onClose, onSave }) => {
                     className={`form-input ${errors.company_name ? 'error' : ''}`}
                     value={formData.company_name}
                     onChange={handleChange}
+                    placeholder="Enter company name"
                   />
                   {errors.company_name && <span className="error-message">{errors.company_name}</span>}
                 </div>
@@ -221,6 +224,7 @@ const CustomerForm = ({ mode, customer, onClose, onSave }) => {
                   className={`form-input ${errors.email ? 'error' : ''}`}
                   value={formData.email}
                   onChange={handleChange}
+                  placeholder="example@email.com"
                 />
                 {errors.email && <span className="error-message">{errors.email}</span>}
               </div>
@@ -252,6 +256,7 @@ const CustomerForm = ({ mode, customer, onClose, onSave }) => {
                   className={`form-input ${errors.address ? 'error' : ''}`}
                   value={formData.address}
                   onChange={handleChange}
+                  placeholder="Enter street address"
                 />
                 {errors.address && <span className="error-message">{errors.address}</span>}
               </div>
@@ -267,6 +272,7 @@ const CustomerForm = ({ mode, customer, onClose, onSave }) => {
                   className={`form-input ${errors.city ? 'error' : ''}`}
                   value={formData.city}
                   onChange={handleChange}
+                  placeholder="Enter city"
                 />
                 {errors.city && <span className="error-message">{errors.city}</span>}
               </div>
@@ -282,6 +288,7 @@ const CustomerForm = ({ mode, customer, onClose, onSave }) => {
                   className={`form-input ${errors.postal_code ? 'error' : ''}`}
                   value={formData.postal_code}
                   onChange={handleChange}
+                  placeholder="Enter postal code"
                 />
                 {errors.postal_code && <span className="error-message">{errors.postal_code}</span>}
               </div>
