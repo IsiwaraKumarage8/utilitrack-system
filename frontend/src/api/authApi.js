@@ -48,11 +48,9 @@ authApi.interceptors.response.use(
 export const login = async (username, password) => {
   const response = await authApi.post('/login', { username, password });
   
-  // Store token and user data
-  if (response.data.success) {
-    localStorage.setItem('token', response.data.data.token);
-    localStorage.setItem('user', JSON.stringify(response.data.data.user));
-  }
+  // Note: Do NOT store in localStorage here
+  // The AuthContext.login() function handles all localStorage operations
+  // including token expiry calculation
   
   return response.data;
 };

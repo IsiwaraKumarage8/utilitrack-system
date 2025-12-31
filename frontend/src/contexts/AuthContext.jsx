@@ -13,33 +13,63 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     // Check if user is logged in on mount
-    const storedUser = localStorage.getItem('user');
-    const storedToken = localStorage.getItem('token');
-    const storedTokenExpiry = localStorage.getItem('tokenExpiry');
-    
-    if (storedUser && storedToken && storedTokenExpiry) {
-      const expiryTimestamp = parseInt(storedTokenExpiry, 10);
+    const initializeAuth = async () => {
+      const storedUser = localStorage.getItem('user');
+      const storedToken = localStorage.getItem('token');
+      const storedTokenExpiry = localStorage.getItem('tokenExpiry');
       
-      // Check if token has expired (client-side check)
-      if (isTokenExpired(expiryTimestamp)) {
-        console.log('Token expired, clearing storage');
-        clearAuthStorage();
-        setLoading(false);
-        return;
+      if (storedUser && storedToken && storedTokenExpiry) {
+        const expiryTimestamp = parseInt(storedTokenExpiry, 10);
+        
+        // First check: Client-side expiry validation (fast)
+        if (isTokenExpired(expiryTimestamp)) {
+          console.log('Token expired, clearing storage');
+          clearAuthStorage();
+          setLoading(false);
+          return;
+        }
+        
+        // Second check: Backend token validation (authoritative)
+        try {
+          const response = await authApi.verifyToken();
+          
+          if (response.success && response.data?.user) {
+            // Token is valid, restore session
+            const userData = response.data.user;
+            const normalizedUser = {
+              ...userData,
+              role: userData.role || userData.user_role
+            };
+            setUser(normalizedUser);
+            setToken(storedToken);
+            setIsAuthenticated(true);
+          } else {
+            // Invalid response format
+            console.log('Invalid token verification response');
+            clearAuthStorage();
+          }
+        } catch (error) {
+          // Backend validation failed
+          console.log('Token verification failed:', error.message);
+          
+          // Handle specific error cases
+          if (error.response?.status === 401 || error.response?.status === 403) {
+            // Token invalid or user no longer has access
+            console.log('Token invalid or unauthorized');
+          } else {
+            // Network error or server down
+            console.log('Network error during token verification');
+          }
+          
+          // Clear storage and require re-login
+          clearAuthStorage();
+        }
       }
       
-      // Token not expired, restore session
-      const userData = JSON.parse(storedUser);
-      // Normalize user data - ensure 'role' field exists
-      const normalizedUser = {
-        ...userData,
-        role: userData.role || userData.user_role
-      };
-      setUser(normalizedUser);
-      setToken(storedToken);
-      setIsAuthenticated(true);
-    }
-    setLoading(false);
+      setLoading(false);
+    };
+    
+    initializeAuth();
   }, []);
 
   const login = (userData, authToken) => {
