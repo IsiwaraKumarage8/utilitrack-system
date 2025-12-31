@@ -5,6 +5,7 @@ import Button from '../../components/common/Button';
 import Badge from '../../components/common/Badge';
 import billingApi from '../../api/billingApi';
 import GenerateBillModal from './GenerateBillModal';
+import BillingDetails from './BillingDetails';
 import '../../styles/table.css';
 import './Billing.css';
 
@@ -26,6 +27,8 @@ const Billing = () => {
   const [statusFilter, setStatusFilter] = useState('All');
   const [statsPeriod, setStatsPeriod] = useState('all'); // 'all' or 'current'
   const [showGenerateBillModal, setShowGenerateBillModal] = useState(false);
+  const [showBillingDetails, setShowBillingDetails] = useState(false);
+  const [selectedBill, setSelectedBill] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
@@ -39,39 +42,39 @@ const Billing = () => {
   }, [searchQuery]);
 
   // Fetch bills from API
-  useEffect(() => {
-    const fetchBills = async () => {
-      try {
-        setLoading(true);
-        setError(null);
-        
-        console.log('Fetching bills with filters:', { searchQuery: debouncedSearchQuery, statusFilter });
-        
-        let response;
-        if (debouncedSearchQuery) {
-          response = await billingApi.searchBills(debouncedSearchQuery);
-        } else if (statusFilter !== 'All') {
-          response = await billingApi.filterByStatus(statusFilter);
-        } else {
-          response = await billingApi.getAllBills();
-        }
-
-        console.log('Billing API response:', response);
-
-        if (response && response.success) {
-          setBills(response.data || []);
-        } else {
-          setBills([]);
-        }
-      } catch (err) {
-        console.error('Error fetching bills:', err);
-        setError(err.message || 'Failed to load bills. Please ensure the backend server is running.');
-        setBills([]);
-      } finally {
-        setLoading(false);
+  const fetchBills = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      
+      console.log('Fetching bills with filters:', { searchQuery: debouncedSearchQuery, statusFilter });
+      
+      let response;
+      if (debouncedSearchQuery) {
+        response = await billingApi.searchBills(debouncedSearchQuery);
+      } else if (statusFilter !== 'All') {
+        response = await billingApi.filterByStatus(statusFilter);
+      } else {
+        response = await billingApi.getAllBills();
       }
-    };
 
+      console.log('Billing API response:', response);
+
+      if (response && response.success) {
+        setBills(response.data || []);
+      } else {
+        setBills([]);
+      }
+    } catch (err) {
+      console.error('Error fetching bills:', err);
+      setError(err.message || 'Failed to load bills. Please ensure the backend server is running.');
+      setBills([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
     fetchBills();
   }, [debouncedSearchQuery, statusFilter]);
 
@@ -138,8 +141,8 @@ const Billing = () => {
 
   // Action handlers
   const handleViewBill = (bill) => {
-    console.log('View bill:', bill);
-    // TODO: Open bill details modal
+    setSelectedBill(bill);
+    setShowBillingDetails(true);
   };
 
   const handleDownloadBill = (bill) => {
@@ -461,6 +464,15 @@ const Billing = () => {
           fetchBills();
           toast.success('Bill generated successfully!');
         }}
+      />
+
+      <BillingDetails
+        isOpen={showBillingDetails}
+        onClose={() => {
+          setShowBillingDetails(false);
+          setSelectedBill(null);
+        }}
+        bill={selectedBill}
       />
     </div>
   );
