@@ -42,21 +42,21 @@ const PaymentDetails = ({ payment, onClose }) => {
   };
 
   return (
-    <div className="modal-overlay">
-      <div className="modal-container payment-details-modal">
-        {/* Modal Header */}
-        <div className="modal-header">
+    <div className="sidepanel-overlay" onClick={onClose}>
+      <div className="sidepanel-container" onClick={(e) => e.stopPropagation()}>
+        {/* Header */}
+        <div className="sidepanel-header">
           <div>
-            <h2 className="modal-title">Payment Details</h2>
-            <p className="modal-subtitle">{payment.payment_number}</p>
+            <h2 className="sidepanel-title">Payment Details</h2>
+            <p className="sidepanel-subtitle">{payment.payment_number}</p>
           </div>
-          <button className="modal-close" onClick={onClose}>
+          <button className="sidepanel-close" onClick={onClose}>
             <X size={24} />
           </button>
         </div>
 
-        {/* Modal Body */}
-        <div className="modal-body payment-details-body">
+        {/* Body */}
+        <div className="sidepanel-body">
           {/* Payment Information */}
           <div className="detail-section">
             <h3 className="section-title">Payment Information</h3>
@@ -152,8 +152,8 @@ const PaymentDetails = ({ payment, onClose }) => {
           </div>
         </div>
 
-        {/* Modal Footer */}
-        <div className="modal-footer">
+        {/* Footer */}
+        <div className="sidepanel-footer">
           <Button variant="secondary" size="md" onClick={onClose}>
             Close
           </Button>
