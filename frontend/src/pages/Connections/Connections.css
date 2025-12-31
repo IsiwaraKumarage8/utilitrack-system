@@ -285,16 +285,12 @@
 
 /* Filters Section */
 .connections-filters {
-  display: flex;
-  gap: 16px;
-  margin-bottom: 24px;
-  flex-wrap: wrap;
+  margin-bottom: 16px;
 }
 
 .search-bar {
   position: relative;
-  flex: 1;
-  min-width: 300px;
+  width: 100%;
 }
 
 .search-icon {
@@ -323,9 +319,225 @@
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
+/* Filter Buttons Container */
+.filter-buttons-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 24px;
+  padding: 16px;
+  background-color: #f9fafb;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+}
+
 .filter-group {
   display: flex;
+  align-items: center;
   gap: 12px;
+  flex-wrap: wrap;
+}
+
+.filter-group-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  min-width: 100px;
+}
+
+.filter-buttons {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  flex: 1;
+}
+
+.filter-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background-color: #ffffff;
+  color: #4b5563;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.filter-btn:hover {
+  background-color: #f3f4f6;
+  border-color: #9ca3af;
+}
+
+.filter-btn.active {
+  background-color: #3b82f6;
+  border-color: #3b82f6;
+  color: #ffffff;
+}
+
+.filter-btn svg {
+  flex-shrink: 0;
+}
+
+/* Utility-specific filter button colors */
+.filter-btn--electricity {
+  border-color: #fbbf24 !important;
+  color: #d97706 !important;
+  background-color: #fef3c7;
+}
+
+.filter-btn--electricity:hover {
+  background-color: #fef3c7 !important;
+  border-color: #f59e0b !important;
+}
+
+.filter-btn--electricity.active {
+  background-color: #fbbf24 !important;
+  border-color: #f59e0b !important;
+  color: #ffffff !important;
+}
+
+.filter-btn--water {
+  border-color: #60a5fa !important;
+  color: #2563eb !important;
+  background-color: #dbeafe;
+}
+
+.filter-btn--water:hover {
+  background-color: #dbeafe !important;
+  border-color: #3b82f6 !important;
+}
+
+.filter-btn--water.active {
+  background-color: #3b82f6 !important;
+  border-color: #2563eb !important;
+  color: #ffffff !important;
+}
+
+.filter-btn--gas {
+  border-color: #fb923c !important;
+  color: #ea580c !important;
+  background-color: #fed7aa;
+}
+
+.filter-btn--gas:hover {
+  background-color: #fed7aa !important;
+  border-color: #f97316 !important;
+}
+
+.filter-btn--gas.active {
+  background-color: #f97316 !important;
+  border-color: #ea580c !important;
+  color: #ffffff !important;
+}
+
+.filter-btn--sewage {
+  border-color: #a3a3a3 !important;
+  color: #525252 !important;
+  background-color: #f5f5f5;
+}
+
+.filter-btn--sewage:hover {
+  background-color: #e5e5e5 !important;
+  border-color: #737373 !important;
+}
+
+.filter-btn--sewage.active {
+  background-color: #737373 !important;
+  border-color: #525252 !important;
+  color: #ffffff !important;
+}
+
+.filter-btn--lighting {
+  border-color: #fde047 !important;
+  color: #ca8a04 !important;
+  background-color: #fef9c3;
+}
+
+.filter-btn--lighting:hover {
+  background-color: #fef9c3 !important;
+  border-color: #eab308 !important;
+}
+
+.filter-btn--lighting.active {
+  background-color: #eab308 !important;
+  border-color: #ca8a04 !important;
+  color: #ffffff !important;
+}
+
+/* Status-specific filter button colors */
+.filter-btn--success {
+  border-color: #10b981 !important;
+  color: #059669 !important;
+  background-color: #d1fae5;
+}
+
+.filter-btn--success:hover {
+  background-color: #a7f3d0 !important;
+  border-color: #059669 !important;
+}
+
+.filter-btn--success.active {
+  background-color: #10b981 !important;
+  border-color: #059669 !important;
+  color: #ffffff !important;
+}
+
+.filter-btn--danger {
+  border-color: #ef4444 !important;
+  color: #dc2626 !important;
+  background-color: #fee2e2;
+}
+
+.filter-btn--danger:hover {
+  background-color: #fecaca !important;
+  border-color: #dc2626 !important;
+}
+
+.filter-btn--danger.active {
+  background-color: #ef4444 !important;
+  border-color: #dc2626 !important;
+  color: #ffffff !important;
+}
+
+.filter-btn--warning {
+  border-color: #f59e0b !important;
+  color: #d97706 !important;
+  background-color: #fef3c7;
+}
+
+.filter-btn--warning:hover {
+  background-color: #fde68a !important;
+  border-color: #d97706 !important;
+}
+
+.filter-btn--warning.active {
+  background-color: #f59e0b !important;
+  border-color: #d97706 !important;
+  color: #ffffff !important;
+}
+
+.filter-btn--info {
+  border-color: #3b82f6 !important;
+  color: #2563eb !important;
+  background-color: #dbeafe;
+}
+
+.filter-btn--info:hover {
+  background-color: #bfdbfe !important;
+  border-color: #2563eb !important;
+}
+
+.filter-btn--info.active {
+  background-color: #3b82f6 !important;
+  border-color: #2563eb !important;
+  color: #ffffff !important;
 }
 
 .filter-select {

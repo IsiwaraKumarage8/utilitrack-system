@@ -182,31 +182,94 @@ const Connections = () => {
             className="search-input"
           />
         </div>
+      </div>
 
-        <select
-          value={utilityFilter}
-          onChange={(e) => setUtilityFilter(e.target.value)}
-          className="filter-select"
-        >
-          <option value="All">All Utilities</option>
-          <option value="Electricity">Electricity</option>
-          <option value="Water">Water</option>
-          <option value="Gas">Gas</option>
-          <option value="Sewage">Sewage</option>
-          <option value="Street Lighting">Street Lighting</option>
-        </select>
+      {/* Filter Buttons */}
+      <div className="filter-buttons-container">
+        {/* Utility Type Filters */}
+        <div className="filter-group">
+          <span className="filter-group-label">Utility Type:</span>
+          <div className="filter-buttons">
+            <button 
+              className={`filter-btn ${utilityFilter === 'All' ? 'active' : ''}`}
+              onClick={() => setUtilityFilter('All')}
+            >
+              All
+            </button>
+            <button 
+              className={`filter-btn filter-btn--electricity ${utilityFilter === 'Electricity' ? 'active' : ''}`}
+              onClick={() => setUtilityFilter('Electricity')}
+            >
+              <Zap size={16} />
+              <span>Electricity</span>
+            </button>
+            <button 
+              className={`filter-btn filter-btn--water ${utilityFilter === 'Water' ? 'active' : ''}`}
+              onClick={() => setUtilityFilter('Water')}
+            >
+              <Droplet size={16} />
+              <span>Water</span>
+            </button>
+            <button 
+              className={`filter-btn filter-btn--gas ${utilityFilter === 'Gas' ? 'active' : ''}`}
+              onClick={() => setUtilityFilter('Gas')}
+            >
+              <Flame size={16} />
+              <span>Gas</span>
+            </button>
+            <button 
+              className={`filter-btn filter-btn--sewage ${utilityFilter === 'Sewage' ? 'active' : ''}`}
+              onClick={() => setUtilityFilter('Sewage')}
+            >
+              <Wind size={16} />
+              <span>Sewage</span>
+            </button>
+            <button 
+              className={`filter-btn filter-btn--lighting ${utilityFilter === 'Street Lighting' ? 'active' : ''}`}
+              onClick={() => setUtilityFilter('Street Lighting')}
+            >
+              <Zap size={16} />
+              <span>Street Lighting</span>
+            </button>
+          </div>
+        </div>
 
-        <select
-          value={statusFilter}
-          onChange={(e) => setStatusFilter(e.target.value)}
-          className="filter-select"
-        >
-          <option value="All">All Status</option>
-          <option value="Active">Active</option>
-          <option value="Disconnected">Disconnected</option>
-          <option value="Suspended">Suspended</option>
-          <option value="Pending">Pending</option>
-        </select>
+        {/* Status Filters */}
+        <div className="filter-group">
+          <span className="filter-group-label">Status:</span>
+          <div className="filter-buttons">
+            <button 
+              className={`filter-btn ${statusFilter === 'All' ? 'active' : ''}`}
+              onClick={() => setStatusFilter('All')}
+            >
+              All
+            </button>
+            <button 
+              className={`filter-btn filter-btn--success ${statusFilter === 'Active' ? 'active' : ''}`}
+              onClick={() => setStatusFilter('Active')}
+            >
+              Active
+            </button>
+            <button 
+              className={`filter-btn filter-btn--danger ${statusFilter === 'Disconnected' ? 'active' : ''}`}
+              onClick={() => setStatusFilter('Disconnected')}
+            >
+              Disconnected
+            </button>
+            <button 
+              className={`filter-btn filter-btn--warning ${statusFilter === 'Suspended' ? 'active' : ''}`}
+              onClick={() => setStatusFilter('Suspended')}
+            >
+              Suspended
+            </button>
+            <button 
+              className={`filter-btn filter-btn--info ${statusFilter === 'Pending' ? 'active' : ''}`}
+              onClick={() => setStatusFilter('Pending')}
+            >
+              Pending
+            </button>
+          </div>
+        </div>
       </div>
 
       {/* Connections Table */}
@@ -233,8 +296,8 @@ const Connections = () => {
               </tr>
             </thead>
             <tbody>
-              {paginatedConnections.map(connection => (
-                <tr key={connection.connection_id}>
+              {paginatedConnections.map((connection, index) => (
+                <tr key={`${connection.connection_id}-${connection.connection_number}-${index}`}>
                   <td>
                     <div className="utility-cell">
                       <div className={`utility-icon utility-icon--${getUtilityColor(connection.utility_name)}`}>
