@@ -83,6 +83,14 @@
   padding: 1.5rem;
 }
 
+/* Form container - ensure it fills the panel properly */
+.sidepanel-container form {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
+
 /* Form Section */
 .form-section {
   margin-bottom: 1.5rem;
