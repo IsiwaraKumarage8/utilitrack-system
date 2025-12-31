@@ -66,7 +66,7 @@ const ReadingDetails = ({ reading, onClose, onEdit, onGenerateBill }) => {
         <div className="sidepanel-header">
           <div>
             <h2 className="sidepanel-title">Reading Details</h2>
-            <p className="sidepanel-subtitle">{reading.meter_number}</p>
+            <p className="sidepanel-subtitle" style={{ color: '#FFFFFF', opacity: 1 }}>{reading.meter_number}</p>
           </div>
           <button className="sidepanel-close" onClick={onClose}>
             <X size={24} />

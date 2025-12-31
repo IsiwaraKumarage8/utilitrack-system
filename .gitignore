@@ -250,7 +250,6 @@ docs/.doctrees/
 # MUST HAVE - Security & Size
 node_modules/
 .env
-.env.*
 
 # MUST HAVE - OS files
 .DS_Store
