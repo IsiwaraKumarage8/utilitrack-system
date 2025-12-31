@@ -108,18 +108,18 @@ const CustomerDetails = ({ customer, onClose, onEdit }) => {
   };
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-content customer-details-modal" onClick={(e) => e.stopPropagation()}>
-        {/* Modal Header */}
-        <div className="modal-header">
-          <h2 className="modal-title">Customer Details</h2>
-          <button className="modal-close" onClick={onClose}>
+    <div className="sidepanel-overlay" onClick={onClose}>
+      <div className="sidepanel-content customer-details-sidepanel" onClick={(e) => e.stopPropagation()}>
+        {/* Side Panel Header */}
+        <div className="sidepanel-header">
+          <h2 className="sidepanel-title">Customer Details</h2>
+          <button className="sidepanel-close" onClick={onClose}>
             <X />
           </button>
         </div>
 
-        {/* Modal Body */}
-        <div className="modal-body">
+        {/* Side Panel Body */}
+        <div className="sidepanel-body">
           <div className="details-layout">
             {/* Left Column - Customer Information */}
             <div className="details-main">
@@ -269,8 +269,8 @@ const CustomerDetails = ({ customer, onClose, onEdit }) => {
           </div>
         </div>
 
-        {/* Modal Footer */}
-        <div className="modal-footer">
+        {/* Side Panel Footer */}
+        <div className="sidepanel-footer">
           <Button variant="secondary" size="md" onClick={onClose}>
             Close
           </Button>
