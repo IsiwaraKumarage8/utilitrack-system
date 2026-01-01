@@ -1,13 +1,11 @@
-# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 # UtiliTrack System
-# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# ━━━━━━━━━━━━━━━━━━━━━━━━━
 
 A comprehensive **Utility Management System** for managing electricity, water, and gas utilities. This full-stack application handles customer management, billing, payments, meter readings, service connections, and complaint tracking for residential, commercial, industrial, and government customers.
 
 ---
-# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ## 📋 Prerequisites
-# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# ━━━━━━━━━━━━━━━━━━━━━━━━━
 
 Before starting, make sure you have these installed:
 
@@ -20,15 +18,13 @@ node --version
 npm --version
 ```
 ---
-# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ## 🚀 Quick Start Guide
-# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# ━━━━━━━━━━━━━━━━━━━━━━━━━
 
 Follow these 4 simple steps to get the system running:
 
-# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ### Step 1: Setup the Database
-# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# ━━━━━━━━━━━━━━━━━━━━━━━━━
 
 1. Open **SQL Server Management Studio (SSMS)**
 
@@ -43,9 +39,8 @@ Follow these 4 simple steps to get the system running:
 - Password: `admin123`
 
 ---
-# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ### Step 2: Setup the Backend
-# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# ━━━━━━━━━━━━━━━━━━━━━━━━━
 
 1. Open a terminal and navigate to the backend folder:
    ```powershell
@@ -151,9 +146,8 @@ Follow these 4 simple steps to get the system running:
    ✅ Backend running at `http://localhost:5000`
 
 ---
-# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ### Step 3: Setup the Frontend
-# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# ━━━━━━━━━━━━━━━━━━━━━━━━━
 
 1. Open a **new terminal** (keep the backend running)
 
@@ -180,11 +174,14 @@ Follow these 4 simple steps to get the system running:
 ---
 
 ### Step 4: Login and Test
+# ━━━━━━━━━━━━━━━━━━━━━━━━━
 
 1. Open your browser and go to `http://localhost:5173`
+
 2. Login with:
    - **Username:** `admin`
    - **Password:** `admin123`
+
 3. You should see the dashboard!
 
 ---
@@ -194,6 +191,7 @@ Follow these 4 simple steps to get the system running:
 ---
 
 # 🔧 Complete Configuration Reference
+# ━━━━━━━━━━━━━━━━━━━━━━━━━
 
 If you need to customize other settings, here's what each variable in `.env` does:
 
@@ -215,6 +213,7 @@ If you need to customize other settings, here's what each variable in `.env` doe
 ---
 
 ## 📚 Project Structure
+# ━━━━━━━━━━━━━━━━━━━━━━━━━
 
 ```
 UtiliTrack/
