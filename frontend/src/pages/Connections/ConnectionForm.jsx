@@ -97,15 +97,15 @@ const ConnectionForm = ({ mode, connection, onClose, onSave }) => {
         customer_id: connection.customer_id,
         customer_name: connection.customer_name,
         utility_type_id: connection.utility_type_id,
-        utility_type: connection.utility_type,
+        utility_type: connection.utility_name || connection.utility_type,
         connection_number: connection.connection_number,
         connection_date: connection.connection_date,
         property_address: connection.property_address,
-        meter_number: connection.meter_number,
-        meter_type: connection.meter_type || '',
+        meter_number: connection.meter_number || '',
+        meter_type: connection.meter_type || 'Digital',
         initial_reading: '',
         tariff_id: connection.tariff_id || '',
-        tariff_plan: connection.tariff_plan,
+        tariff_plan: connection.tariff_name || connection.tariff_plan || '',
         connection_status: connection.connection_status,
         notes: connection.notes || ''
       });
@@ -172,10 +172,10 @@ const ConnectionForm = ({ mode, connection, onClose, onSave }) => {
     }
 
     if (step === 3) {
-      if (!formData.meter_number.trim()) {
+      if (!formData.meter_number || !formData.meter_number.trim()) {
         newErrors.meter_number = 'Meter number is required';
       }
-      if (!formData.meter_type) {
+      if (!formData.meter_type || !formData.meter_type.trim()) {
         newErrors.meter_type = 'Meter type is required';
       }
       if (mode === 'add' && !formData.initial_reading) {
@@ -193,18 +193,40 @@ const ConnectionForm = ({ mode, connection, onClose, onSave }) => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleNext = () => {
-    if (validateStep(currentStep)) {
-      setCurrentStep(prev => Math.min(prev + 1, 4));
+  const handleNext = (e) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    console.log('Current step:', currentStep);
+    console.log('Form data:', formData);
+    const isValid = validateStep(currentStep);
+    console.log('Step validation result:', isValid);
+    if (isValid) {
+      const nextStep = Math.min(currentStep + 1, 4);
+      console.log('Moving to step:', nextStep);
+      setCurrentStep(nextStep);
+    } else {
+      console.log('Validation errors:', errors);
     }
   };
 
-  const handlePrevious = () => {
+  const handlePrevious = (e) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
     setCurrentStep(prev => Math.max(prev - 1, 1));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log('handleSubmit called, current step:', currentStep);
+    
+    if (currentStep !== 4) {
+      console.log('Prevented submit - not on step 4');
+      return;
+    }
     
     if (validateStep(4)) {
       setIsSubmitting(true);
@@ -267,7 +289,12 @@ const ConnectionForm = ({ mode, connection, onClose, onSave }) => {
         </div>
 
         {/* Body */}
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} onKeyDown={(e) => {
+          if (e.key === 'Enter' && currentStep < 4) {
+            e.preventDefault();
+            console.log('Enter key pressed, preventing default submission');
+          }
+        }}>
           <div className="sidepanel-body">
             {/* Step 1: Customer Selection */}
             {currentStep === 1 && (
@@ -444,7 +471,7 @@ const ConnectionForm = ({ mode, connection, onClose, onSave }) => {
                       onChange={handleChange}
                     >
                       <option value="">Select tariff plan</option>
-                      {tariffPlanOptions[formData.utility_type].map(plan => (
+                      {formData.utility_type && tariffPlanOptions[formData.utility_type] && tariffPlanOptions[formData.utility_type].map(plan => (
                         <option key={plan} value={plan}>{plan}</option>
                       ))}
                     </select>
