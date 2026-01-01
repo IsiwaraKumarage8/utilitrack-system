@@ -259,4 +259,7 @@ Thumbs.db
 *.log
 logs/
 
+# Documentation - Internal only
+CSS_ARCHITECTURE_ISSUES.md
+
 utility-management-frontend/prompt.md
