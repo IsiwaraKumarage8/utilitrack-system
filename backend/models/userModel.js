@@ -1,5 +1,4 @@
 const { query } = require('../config/database');
-const bcrypt = require('bcryptjs');
 
 const userModel = {
   // Get all users
@@ -64,7 +63,7 @@ const userModel = {
       SELECT 
         user_id,
         username,
-        password_hash,
+        password,
         full_name,
         email,
         phone,
@@ -185,20 +184,16 @@ const userModel = {
   create: async (userData) => {
     const { username, password, full_name, email, phone, user_role, department } = userData;
 
-    // Hash password
-    const salt = await bcrypt.genSalt(10);
-    const password_hash = await bcrypt.hash(password, salt);
-
     const queryString = `
-      INSERT INTO [User] (username, password_hash, full_name, email, phone, user_role, department, hire_date, user_status)
+      INSERT INTO [User] (username, password, full_name, email, phone, user_role, department, hire_date, user_status)
       OUTPUT INSERTED.*
-      VALUES (@username, @password_hash, @full_name, @email, @phone, @user_role, @department, GETDATE(), 'Active')
+      VALUES (@username, @password, @full_name, @email, @phone, @user_role, @department, GETDATE(), 'Active')
     `;
 
     try {
       const result = await query(queryString, {
         username,
-        password_hash,
+        password,
         full_name,
         email: email || null,
         phone: phone || null,
@@ -206,9 +201,9 @@ const userModel = {
         department: department || null
       });
 
-      // Return user without password_hash
+      // Return user without password
       const user = result.recordset[0];
-      delete user.password_hash;
+      delete user.password;
       return user;
     } catch (error) {
       throw new Error(`Error creating user: ${error.message}`);
@@ -250,17 +245,17 @@ const userModel = {
   },
 
   // Update password
-  updatePassword: async (userId, password_hash) => {
+  updatePassword: async (userId, password) => {
     const queryString = `
       UPDATE [User]
       SET 
-        password_hash = @password_hash,
+        password = @password,
         updated_at = GETDATE()
       WHERE user_id = @userId
     `;
 
     try {
-      await query(queryString, { userId, password_hash });
+      await query(queryString, { userId, password });
       return true;
     } catch (error) {
       throw new Error(`Error updating password: ${error.message}`);
@@ -296,11 +291,6 @@ const userModel = {
     } catch (error) {
       throw new Error(`Error deleting user: ${error.message}`);
     }
-  },
-
-  // Verify password
-  verifyPassword: async (plainPassword, hashedPassword) => {
-    return await bcrypt.compare(plainPassword, hashedPassword);
   },
 
   // Get active staff (users who logged in recently)

@@ -185,8 +185,8 @@ const userController = {
         return next(new AppError('User account is not active', 403));
       }
 
-      // Verify password
-      const isPasswordValid = await userModel.verifyPassword(password, user.password_hash);
+      // Verify password (plain text comparison)
+      const isPasswordValid = password === user.password;
 
       if (!isPasswordValid) {
         return next(new AppError('Invalid credentials', 401));
@@ -206,8 +206,8 @@ const userController = {
         { expiresIn: process.env.JWT_EXPIRES_IN || '24h' }
       );
 
-      // Remove password_hash from response
-      delete user.password_hash;
+      // Remove password from response
+      delete user.password;
 
       res.status(200).json({
         success: true,
