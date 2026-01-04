@@ -14,8 +14,8 @@ CREATE TABLE [User] (
     username VARCHAR(50) NOT NULL UNIQUE,
     -- Login username
     
-    password_hash VARCHAR(255) NOT NULL,
-    -- Hashed password (never store plain text!)
+    password VARCHAR(255) NOT NULL,
+    -- Password (plain text for demo purposes only)
     
     full_name VARCHAR(100) NOT NULL,
     
@@ -335,20 +335,21 @@ GO
 -- Sample Data
 
 -- Sample data for [User] table
--- NOTE: All passwords are hashed with bcrypt (12 rounds)
--- Default password for all sample users: password123
-INSERT INTO [User] (username, password_hash, full_name, email, phone, user_role, department, hire_date, user_status, last_login)
+-- NOTE: All passwords are now plain text: password123
+-- WARNING: This is insecure and only for coursework/demo purposes
+INSERT INTO [User] (username, password, full_name, email, phone, user_role, department, hire_date, user_status, last_login)
 VALUES
-('jsmith', '$2a$12$J0GyTBjNgg.ZOLopeE//Xec9N4jdTjTp0M9AEoZLPxzBioYh/f5e6', 'John Smith', 'john.smith@utilityco.com', '0771234567', 'Admin', 'Operations', '2020-01-15', 'Active', '2024-12-10 09:30:00'),
-('mjohnson', '$2a$12$J0GyTBjNgg.ZOLopeE//Xec9N4jdTjTp0M9AEoZLPxzBioYh/f5e6', 'Mary Johnson', 'mary.johnson@utilityco.com', '0772345678', 'Manager', 'Finance', '2020-03-22', 'Active', '2024-12-11 08:15:00'),
-('rperera', '$2a$12$J0GyTBjNgg.ZOLopeE//Xec9N4jdTjTp0M9AEoZLPxzBioYh/f5e6', 'Ruwan Perera', 'ruwan.perera@utilityco.com', '0773456789', 'Field Officer', 'Operations', '2021-06-10', 'Active', '2024-12-10 16:45:00'),
-('sfernando', '$2a$12$WZrPFCL3DVh9WkWNgHVkEu24xh0pV/teQ538vkmHawoOzWFy6hQ4a', 'Shalini Fernando', 'shalini.fernando@utilityco.com', '0774567890', 'Cashier', 'Finance', '2021-09-05', 'Active', '2024-12-11 10:20:00'),
-('asilva', '$2a$12$SvGjYREVnjrL5C7qys9wtuViG66b1fsN8/69T16I6CBbb4MZg.wuy', 'Anton Silva', 'anton.silva@utilityco.com', '0775678901', 'Field Officer', 'Operations', '2022-01-12', 'Active', '2024-12-09 14:30:00'),
-('ndias', '$2a$12$UuOfkATWZAoOzh/dzqn0Qe.dqOMOOVU4iG43dJKlVmjzTWXpBYYuC', 'Nimal Dias', 'nimal.dias@utilityco.com', '0776789012', 'Billing Clerk', 'Finance', '2022-04-18', 'Active', '2024-12-11 11:00:00'),
-('kwijesinghe', '$2a$12$wxMS1vEDRE2YqDCxsXCi6OPNtrj3OJ9B/JXRBswH83Op/UzI8UFSm', 'Kumari Wijesinghe', 'kumari.w@utilityco.com', '0777890123', 'Cashier', 'Finance', '2022-07-25', 'Active', '2024-12-10 15:10:00'),
-('pweerasinghe', '$2a$12$KbFpUGquNpK/076Lz0LES.DUEKzMd9SPZmgHyRMoaBFnzm.gh1AAu', 'Priya Weerasinghe', 'priya.weerasinghe@utilityco.com', '0778901234', 'Field Officer', 'Operations', '2023-02-14', 'Active', '2024-12-11 07:50:00'),
-('dbandara', '$2a$12$2a3qN.KAjDiy//LwLAmRgOeAEVKbbci9GTUmznf7mcNwkvou3Vh5G', 'Dinesh Bandara', 'dinesh.bandara@utilityco.com', '0770123456', 'Manager', 'Customer Service', '2023-05-08', 'Active', '2024-12-11 09:00:00'),
-('tgunasekara', '$2a$12$MZRyU1uNvKO8jE3Xii138e2gRiWcpWXMLunBG7ZKEizwaMW.2m.sC', 'Thilini Gunasekara', 'thilini.g@utilityco.com', '0771234568', 'Billing Clerk', 'Finance', '2023-08-20', 'Active', '2024-12-10 13:25:00'),
+('admin', 'admin123', 'System Administrator', 'admin@utilityco.com', '0770000000', 'Admin', 'IT', '2020-01-15', 'Active', '2024-12-10 09:30:00'),
+('jsmith', 'password123', 'John Smith', 'john.smith@utilityco.com', '0771234567', 'Admin', 'Operations', '2020-01-15', 'Active', '2024-12-10 09:30:00'),
+('mjohnson', 'password123', 'Mary Johnson', 'mary.johnson@utilityco.com', '0772345678', 'Manager', 'Finance', '2020-03-22', 'Active', '2024-12-11 08:15:00'),
+('rperera', 'password123', 'Ruwan Perera', 'ruwan.perera@utilityco.com', '0773456789', 'Field Officer', 'Operations', '2021-06-10', 'Active', '2024-12-10 16:45:00'),
+('sfernando', 'password123', 'Shalini Fernando', 'shalini.fernando@utilityco.com', '0774567890', 'Cashier', 'Finance', '2021-09-05', 'Active', '2024-12-11 10:20:00'),
+('asilva', 'password123', 'Anton Silva', 'anton.silva@utilityco.com', '0775678901', 'Field Officer', 'Operations', '2022-01-12', 'Active', '2024-12-09 14:30:00'),
+('ndias', 'password123', 'Nimal Dias', 'nimal.dias@utilityco.com', '0776789012', 'Billing Clerk', 'Finance', '2022-04-18', 'Active', '2024-12-11 11:00:00'),
+('kwijesinghe', 'password123', 'Kumari Wijesinghe', 'kumari.w@utilityco.com', '0777890123', 'Cashier', 'Finance', '2022-07-25', 'Active', '2024-12-10 15:10:00'),
+('pweerasinghe', 'password123', 'Priya Weerasinghe', 'priya.weerasinghe@utilityco.com', '0778901234', 'Field Officer', 'Operations', '2023-02-14', 'Active', '2024-12-11 07:50:00'),
+('dbandara', 'password123', 'Dinesh Bandara', 'dinesh.bandara@utilityco.com', '0770123456', 'Manager', 'Customer Service', '2023-05-08', 'Active', '2024-12-11 09:00:00'),
+('tgunasekara', 'password123', 'Thilini Gunasekara', 'thilini.g@utilityco.com', '0771234568', 'Billing Clerk', 'Finance', '2023-08-20', 'Active', '2024-12-10 13:25:00'),
 ('lranasinghe', '$2a$12$n75G2PWkljGwzgtSVLb3jeGEGozqXYnyDcixVpRTYb6bnp1jqrEP2', 'Lakshan Ranasinghe', 'lakshan.r@utilityco.com', '0772345679', 'Field Officer', 'Operations', '2024-01-10', 'Active', '2024-12-09 12:40:00'),
 ('mgamage', '$2a$12$bvwAdwFJB2hssDoUCKVOfeA4s6StFUcnAQ4qofHV8OcNl9ScZxkJW', 'Madhavi Gamage', 'madhavi.gamage@utilityco.com', '0773456780', 'Cashier', 'Finance', '2024-03-15', 'Active', '2024-12-11 08:45:00');
 

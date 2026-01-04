@@ -1,4 +1,3 @@
-const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const userModel = require('../models/userModel');
 
@@ -27,7 +26,7 @@ const authController = {
       if (user) {
         console.log('DEBUG: User role:', user.user_role);
         console.log('DEBUG: User status:', user.user_status);
-        console.log('DEBUG: Password hash length:', user.password_hash ? user.password_hash.length : 0);
+        console.log('DEBUG: Password length:', user.password ? user.password.length : 0);
       }
 
       if (!user) {
@@ -45,9 +44,9 @@ const authController = {
         });
       }
 
-      // Compare password with hash
+      // Compare password directly (plain text)
       console.log('DEBUG: Comparing password...');
-      const isPasswordValid = await bcrypt.compare(password, user.password_hash);
+      const isPasswordValid = password === user.password;
       console.log('DEBUG: Password valid:', isPasswordValid);
 
       if (!isPasswordValid) {
@@ -72,8 +71,8 @@ const authController = {
         { expiresIn: process.env.JWT_EXPIRE || '7d' }
       );
 
-      // Remove password_hash from response
-      const { password_hash, ...userWithoutPassword } = user;
+      // Remove password from response
+      const { password: userPassword, ...userWithoutPassword } = user;
 
       res.json({
         success: true,
@@ -128,14 +127,10 @@ const authController = {
         });
       }
 
-      // Hash password
-      const salt = await bcrypt.genSalt(12);
-      const password_hash = await bcrypt.hash(password, salt);
-
       // Create user data object
       const userData = {
         username,
-        password_hash,
+        password,
         full_name,
         email,
         phone: phone || null,
@@ -195,8 +190,8 @@ const authController = {
         });
       }
 
-      // Remove password_hash
-      const { password_hash, ...userWithoutPassword } = user;
+      // Remove password
+      const { password: userPassword, ...userWithoutPassword } = user;
 
       res.json({
         success: true,
@@ -231,11 +226,11 @@ const authController = {
         });
       }
 
-      // Get user with password hash
-      const user = await userModel.findById(userId);
+      // Get user with password (need to fetch with password included)
+      const user = await userModel.findByUsername(req.user.username);
       
-      // Verify current password
-      const isPasswordValid = await bcrypt.compare(currentPassword, user.password_hash);
+      // Verify current password (plain text comparison)
+      const isPasswordValid = currentPassword === user.password;
       if (!isPasswordValid) {
         return res.status(401).json({
           success: false,
@@ -243,12 +238,8 @@ const authController = {
         });
       }
 
-      // Hash new password
-      const salt = await bcrypt.genSalt(12);
-      const newPasswordHash = await bcrypt.hash(newPassword, salt);
-
-      // Update password
-      await userModel.updatePassword(userId, newPasswordHash);
+      // Update password (plain text)
+      await userModel.updatePassword(userId, newPassword);
 
       res.json({
         success: true,
