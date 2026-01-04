@@ -679,19 +679,9 @@ BEGIN
     -- Calculate late fee if overdue
     IF @days_overdue > 0 AND @outstanding_balance > 0
     BEGIN
-        -- Option 1: Fixed fee of Rs. 100 per month overdue
+
         SET @late_fee = CEILING(@days_overdue / 30.0) * 100.00;
         
-        -- Option 2: 2% of outstanding balance per month (uncomment to use)
-        -- SET @late_fee = (@outstanding_balance * 0.02) * CEILING(@days_overdue / 30.0);
-        
-        -- Option 3: Tiered approach (uncomment to use)
-        -- IF @days_overdue <= 30
-        --     SET @late_fee = 100.00;
-        -- ELSE IF @days_overdue <= 60
-        --     SET @late_fee = 250.00;
-        -- ELSE
-        --     SET @late_fee = 500.00;
     END
     
     RETURN @late_fee;
@@ -960,10 +950,6 @@ BEGIN
             @received_by, 'Completed'
         );
         
-        -- Note: The trg_UpdateBillAfterPayment trigger will automatically
-        -- update the Billing table (amount_paid, outstanding_balance, bill_status)
-        
-        -- Return the payment number
         SET @payment_number_out = @payment_number;
         
         SELECT 
