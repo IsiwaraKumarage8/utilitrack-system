@@ -54,7 +54,7 @@ export const usePermissions = () => {
       
       // Readings
       viewReadings: permissions.canView(userRole, 'READINGS'),
-      recordReading: permissions.canAdd(userRole, 'READINGS'),
+      recordReading: permissions.hasPermission(userRole, permissions.PERMISSIONS.READINGS.RECORD),
       editReading: permissions.canEdit(userRole, 'READINGS'),
       deleteReading: permissions.canDelete(userRole, 'READINGS'),
       

@@ -3,6 +3,7 @@ import { Search, AlertCircle, AlertTriangle, Clock, CheckCircle, Plus, Eye, User
 import Button from '../../components/common/Button';
 import Badge from '../../components/common/Badge';
 import complaintApi from '../../api/complaintApi';
+import LogComplaintForm from './LogComplaintForm';
 import './Complaints.css';
 
 const Complaints = () => {
@@ -13,6 +14,7 @@ const Complaints = () => {
   const [statusFilter, setStatusFilter] = useState('All');
   const [priorityFilter, setPriorityFilter] = useState('All');
   const [typeFilter, setTypeFilter] = useState('All');
+  const [showLogComplaintForm, setShowLogComplaintForm] = useState(false);
 
   // Fetch complaints from API
   useEffect(() => {
@@ -198,7 +200,11 @@ const Complaints = () => {
           <h1 className="complaints-title">Complaint Management</h1>
           <p className="complaints-subtitle">Track and resolve customer complaints</p>
         </div>
-        <Button variant="primary" size="md">
+        <Button 
+          variant="primary" 
+          size="md"
+          onClick={() => setShowLogComplaintForm(true)}
+        >
           <Plus size={20} />
           <span>Log Complaint</span>
         </Button>
@@ -405,6 +411,17 @@ const Complaints = () => {
             </div>
           ))}
         </div>
+      )}
+
+      {/* Log Complaint Form Modal */}
+      {showLogComplaintForm && (
+        <LogComplaintForm
+          onClose={() => setShowLogComplaintForm(false)}
+          onSave={() => {
+            setShowLogComplaintForm(false);
+            fetchComplaints(); // Refresh the complaints list
+          }}
+        />
       )}
     </div>
   );

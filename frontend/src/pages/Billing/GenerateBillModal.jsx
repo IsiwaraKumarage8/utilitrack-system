@@ -34,11 +34,12 @@ const GenerateBillModal = ({ isOpen, onClose, onSuccess }) => {
     try {
       setLoading(true);
       const response = await billingApi.getUnprocessedReadings(utilityFilter);
-      setUnprocessedReadings(response.data);
+      setUnprocessedReadings(response.data || []);
       setLoading(false);
     } catch (error) {
       console.error('Error fetching readings:', error);
-      toast.error('Failed to load meter readings');
+      toast.error(error.response?.data?.message || 'Failed to load meter readings. Please ensure backend is running.');
+      setUnprocessedReadings([]);
       setLoading(false);
     }
   };
@@ -54,7 +55,8 @@ const GenerateBillModal = ({ isOpen, onClose, onSuccess }) => {
       setLoading(false);
     } catch (error) {
       console.error('Error fetching preview:', error);
-      toast.error('Failed to load bill preview');
+      toast.error(error.response?.data?.message || 'Failed to load bill preview. Reading may not exist or bill already generated.');
+      setSelectedReading(null);
       setLoading(false);
     }
   };
@@ -80,7 +82,13 @@ const GenerateBillModal = ({ isOpen, onClose, onSuccess }) => {
       }, 500);
 
     } catch (error) {
-      console.error('Error generating bill:', error);
+      const errorMessage = error.response?.data?.message || error.message || 'Failed to generate bill';
+      toast.error(errorMessage);
+      
+      // Show more detailed error in console for debugging
+      if (error.response) {
+        console.error('Response error:', error.response.data);
+      }
       toast.error(error.response?.data?.message || 'Failed to generate bill');
     } finally {
       setGenerating(false);

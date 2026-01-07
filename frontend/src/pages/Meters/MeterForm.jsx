@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
 import Button from '../../components/common/Button';
 import axios from 'axios';
+import meterApi from '../../api/meterApi';
 import './MeterForm.css';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
@@ -22,6 +23,7 @@ const MeterForm = ({ mode, meter, onClose, onSave }) => {
   const [errors, setErrors] = useState({});
   const [selectedConnection, setSelectedConnection] = useState(null);
   const [loadingConnections, setLoadingConnections] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
 
   // Fetch connections from API
   useEffect(() => {
@@ -113,23 +115,37 @@ const MeterForm = ({ mode, meter, onClose, onSave }) => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     
     if (validateForm()) {
-      // TODO: Make API call to POST /api/meters or PUT /api/meters/:id
-      const meterData = {
-        ...formData,
-        connection_id: parseInt(formData.connection_id),
-        initial_reading: parseFloat(formData.initial_reading)
-      };
+      setSubmitting(true);
+      
+      try {
+        const meterData = {
+          ...formData,
+          connection_id: parseInt(formData.connection_id),
+          initial_reading: parseFloat(formData.initial_reading)
+        };
 
-      if (mode === 'edit') {
-        meterData.meter_id = meter.meter_id;
+        if (mode === 'edit') {
+          // Update existing meter
+          await meterApi.updateMeter(meter.meter_id, meterData);
+        } else {
+          // Create new meter
+          await meterApi.createMeter(meterData);
+        }
+
+        // Success - close form and refresh table
+        onSave();
+      } catch (error) {
+        console.error('Error saving meter:', error);
+        setErrors({ 
+          submit: error.response?.data?.message || 'Failed to save meter. Please try again.' 
+        });
+      } finally {
+        setSubmitting(false);
       }
-
-      console.log('Submitting meter:', meterData);
-      onSave(meterData);
     }
   };
 
@@ -300,15 +316,22 @@ const MeterForm = ({ mode, meter, onClose, onSave }) => {
                 className="form-textarea"
               />
             </div>
+
+            {/* Submit Error */}
+            {errors.submit && (
+              <div className="error-banner">
+                {errors.submit}
+              </div>
+            )}
           </div>
 
           {/* Footer */}
           <div className="sidepanel-footer">
-            <Button type="button" variant="secondary" size="md" onClick={onClose}>
+            <Button type="button" variant="secondary" size="md" onClick={onClose} disabled={submitting}>
               Cancel
             </Button>
-            <Button type="submit" variant="primary" size="md">
-              {mode === 'add' ? 'Register Meter' : 'Save Changes'}
+            <Button type="submit" variant="primary" size="md" disabled={submitting}>
+              {submitting ? 'Saving...' : (mode === 'add' ? 'Register Meter' : 'Save Changes')}
             </Button>
           </div>
         </form>

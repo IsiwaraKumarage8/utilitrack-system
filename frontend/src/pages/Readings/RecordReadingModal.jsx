@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { X, Activity, Calendar, User, CheckCircle, TrendingUp, AlertCircle, Zap, Droplet, Flame } from 'lucide-react';
 import Button from '../../components/common/Button';
 import Badge from '../../components/common/Badge';
+import meterReadingApi from '../../api/meterReadingApi';
 import './RecordReadingModal.css';
 
 // Mock meters data - TODO: Replace with API call
@@ -260,20 +261,15 @@ const RecordReadingModal = ({ onClose, onSave }) => {
     setIsSubmitting(true);
     
     try {
-      // TODO: Replace with actual API call
-      // await axios.post('/api/meter-readings', formData);
+      // Save reading to API
+      await meterReadingApi.createReading(formData);
       
-      // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      console.log('Submitting reading:', formData);
-      
-      // Success
-      onSave?.(formData);
+      // Success - close modal and trigger refresh
+      onSave?.();
       onClose();
     } catch (error) {
       console.error('Error saving reading:', error);
-      setErrors({ submit: 'Failed to record reading. Please try again.' });
+      setErrors({ submit: error.response?.data?.message || 'Failed to record reading. Please try again.' });
     } finally {
       setIsSubmitting(false);
     }

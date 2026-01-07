@@ -1,4 +1,4 @@
-const { query } = require('../config/database');
+const { query, sql } = require('../config/database');
 
 const paymentModel = {
   // Get all payments with customer and bill details
@@ -222,30 +222,46 @@ const paymentModel = {
   create: async (paymentData) => {
     const { bill_id, payment_amount, payment_method, received_by, transaction_reference, notes } = paymentData;
 
-    const queryString = `
-      DECLARE @payment_number_out VARCHAR(50);
-      
-      EXEC sp_ProcessPayment 
-        @bill_id = @billId,
-        @payment_amount = @paymentAmount,
-        @payment_method = @paymentMethod,
-        @received_by = @receivedBy,
-        @transaction_reference = @transactionReference,
-        @payment_number_out = @payment_number_out OUTPUT;
-      
-      SELECT @payment_number_out AS payment_number;
-    `;
+    console.log('=== PAYMENT MODEL CREATE ===');
+    console.log('Payment Data:', JSON.stringify(paymentData, null, 2));
 
     try {
-      const result = await query(queryString, {
-        billId: bill_id,
-        paymentAmount: payment_amount,
-        paymentMethod: payment_method,
-        receivedBy: received_by,
-        transactionReference: transaction_reference || null
+      // Get database pool and create request
+      const { getPool } = require('../config/database');
+      const pool = await getPool();
+      const request = pool.request();
+
+      // Add input parameters with proper types
+      request.input('bill_id', sql.Int, bill_id);
+      request.input('payment_amount', sql.Decimal(10, 2), payment_amount);
+      request.input('payment_method', sql.VarChar(20), payment_method);
+      request.input('received_by', sql.Int, received_by);
+      request.input('transaction_reference', sql.VarChar(100), transaction_reference || null);
+      
+      // Add output parameter
+      request.output('payment_number_out', sql.VarChar(50));
+
+      console.log('Executing sp_ProcessPayment with params:', {
+        bill_id,
+        payment_amount,
+        payment_method,
+        received_by,
+        transaction_reference: transaction_reference || null
       });
 
-      const paymentNumber = result.recordset[0]?.payment_number;
+      // Execute stored procedure
+      const result = await request.execute('sp_ProcessPayment');
+
+      console.log('SP Result:', result);
+      
+      // Get the output parameter value
+      const paymentNumber = result.output.payment_number_out;
+      
+      console.log('Payment Number:', paymentNumber);
+
+      if (!paymentNumber) {
+        throw new Error('Failed to generate payment number');
+      }
 
       // If notes are provided, update the payment record
       if (notes && paymentNumber) {
@@ -272,8 +288,10 @@ const paymentModel = {
       `;
       
       const paymentResult = await query(selectQuery, { paymentNumber });
+      console.log('Final Payment Result:', paymentResult.recordset[0]);
       return paymentResult.recordset[0];
     } catch (error) {
+      console.error('Error in payment model create:', error);
       throw new Error(`Error creating payment: ${error.message}`);
     }
   },

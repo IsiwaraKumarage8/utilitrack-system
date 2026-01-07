@@ -39,7 +39,7 @@ const meterReadingApi = {
    */
   getReadingsByMeterId: async (meterId) => {
     try {
-      const response = await axios.get(`${API_URL}/meter-readings/meter/${meterId}`);
+      const response = await axios.get(`${API_URL}/meters/${meterId}/readings`);
       return response.data;
     } catch (error) {
       console.error(`Error fetching readings for meter ${meterId}:`, error);
@@ -55,7 +55,7 @@ const meterReadingApi = {
    */
   getHistoricalReadings: async (meterId, limit = 12) => {
     try {
-      const response = await axios.get(`${API_URL}/meter-readings/meter/${meterId}/history`, {
+      const response = await axios.get(`${API_URL}/meters/${meterId}/readings/history`, {
         params: { limit }
       });
       return response.data;
@@ -90,7 +90,7 @@ const meterReadingApi = {
    */
   filterByDateRange: async (startDate, endDate) => {
     try {
-      const response = await axios.get(`${API_URL}/meter-readings/filter/date-range`, {
+      const response = await axios.get(`${API_URL}/meters/readings/filter/date-range`, {
         params: { start: startDate, end: endDate }
       });
       return response.data;
@@ -107,7 +107,7 @@ const meterReadingApi = {
    */
   filterByType: async (readingType) => {
     try {
-      const response = await axios.get(`${API_URL}/meter-readings/filter/type/${readingType}`);
+      const response = await axios.get(`${API_URL}/meters/readings/filter/type/${readingType}`);
       return response.data;
     } catch (error) {
       console.error('Error filtering readings by type:', error);
@@ -122,7 +122,7 @@ const meterReadingApi = {
    */
   createReading: async (readingData) => {
     try {
-      const response = await axios.post(`${API_URL}/meter-readings`, readingData);
+      const response = await axios.post(`${API_URL}/meters/readings`, readingData);
       return response.data;
     } catch (error) {
       console.error('Error creating meter reading:', error);
@@ -138,7 +138,7 @@ const meterReadingApi = {
    */
   updateReading: async (readingId, readingData) => {
     try {
-      const response = await axios.put(`${API_URL}/meter-readings/${readingId}`, readingData);
+      const response = await axios.put(`${API_URL}/meters/readings/${readingId}`, readingData);
       return response.data;
     } catch (error) {
       console.error(`Error updating reading ${readingId}:`, error);
@@ -153,7 +153,7 @@ const meterReadingApi = {
    */
   deleteReading: async (readingId) => {
     try {
-      const response = await axios.delete(`${API_URL}/meter-readings/${readingId}`);
+      const response = await axios.delete(`${API_URL}/meters/readings/${readingId}`);
       return response.data;
     } catch (error) {
       console.error(`Error deleting reading ${readingId}:`, error);
@@ -168,7 +168,7 @@ const meterReadingApi = {
    */
   getLastReading: async (meterId) => {
     try {
-      const response = await axios.get(`${API_URL}/meter-readings/meter/${meterId}/last`);
+      const response = await axios.get(`${API_URL}/meters/${meterId}/readings/last`);
       return response.data;
     } catch (error) {
       console.error(`Error fetching last reading for meter ${meterId}:`, error);
@@ -182,7 +182,7 @@ const meterReadingApi = {
    */
   getReadingStats: async () => {
     try {
-      const response = await axios.get(`${API_URL}/meter-readings/stats`);
+      const response = await axios.get(`${API_URL}/meters/readings/stats`);
       return response.data;
     } catch (error) {
       console.error('Error fetching reading stats:', error);
