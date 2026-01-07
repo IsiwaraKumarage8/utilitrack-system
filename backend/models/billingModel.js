@@ -305,11 +305,10 @@ const billingModel = {
       const pool = await require('../config/database').getPool();
       const sql = require('../config/database').sql;
       
-      const finalDueDate = dueDate || new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+      // Note: dueDate parameter is ignored - stored procedure calculates it as 30 days from bill_date
       
       const request = pool.request();
       request.input('reading_id', sql.Int, readingId);
-      request.input('due_date', sql.Date, finalDueDate);
       request.output('bill_number_out', sql.VarChar(50));
       
       const result = await request.execute('sp_GenerateBill');

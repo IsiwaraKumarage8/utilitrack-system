@@ -43,15 +43,16 @@ api.interceptors.response.use(
     if (error.response) {
       // Server responded with error
       console.error('API Error:', error.response.data);
-      throw new Error(error.response.data.message || 'An error occurred');
+      // Return the error instead of throwing to allow component to handle it
+      return Promise.reject(error);
     } else if (error.request) {
       // Request made but no response
       console.error('Network Error:', error.request);
-      throw new Error('Network error - please check your connection');
+      return Promise.reject(new Error('Network error - please check your connection'));
     } else {
       // Something else happened
       console.error('Error:', error.message);
-      throw new Error('An unexpected error occurred');
+      return Promise.reject(error);
     }
   }
 );

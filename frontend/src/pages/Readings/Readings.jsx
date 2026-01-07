@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Search, Plus, Zap, Droplet, Flame, Download, Eye, Edit2, FileText, Calendar, Lock } from 'lucide-react';
 import { usePermissions } from '../../hooks/usePermissions';
 import Button from '../../components/common/Button';
@@ -6,6 +6,7 @@ import Badge from '../../components/common/Badge';
 import ReadingDetails from './ReadingDetails';
 import RecordReadingModal from './RecordReadingModal';
 import GenerateBillModal from '../Billing/GenerateBillModal';
+import meterReadingApi from '../../api/meterReadingApi';
 import './Readings.css';
 
 // Mock data - TODO: Replace with API call
@@ -600,10 +601,21 @@ const Readings = () => {
             setShowRecordModal(false);
             setSelectedReading(null);
           }}
-          onSave={(data) => {
-            console.log('Reading recorded:', data);
-            // Refresh the page to show updated data
-            window.location.reload();
+          onSave={async () => {
+            setShowRecordModal(false);
+            setSelectedReading(null);
+            // Fetch fresh data from API
+            try {
+              const response = await meterReadingApi.getAllReadings();
+              if (response && response.success) {
+                // Since this is using mock data, we'll keep it as is
+                // In production, you'd update the readings state here
+                window.location.reload();
+              }
+            } catch (error) {
+              console.error('Error refreshing readings:', error);
+              window.location.reload();
+            }
           }}
         />
       )}
