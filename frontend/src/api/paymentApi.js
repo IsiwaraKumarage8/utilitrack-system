@@ -2,6 +2,28 @@ import axios from 'axios';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
+// Create axios instance with default config
+const api = axios.create({
+  baseURL: API_URL,
+  headers: {
+    'Content-Type': 'application/json'
+  }
+});
+
+// Add request interceptor for auth token
+api.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
 const paymentApi = {
   /**
    * Get all payments
@@ -9,7 +31,7 @@ const paymentApi = {
    */
   getAllPayments: async () => {
     try {
-      const response = await axios.get(`${API_URL}/payments`);
+      const response = await api.get('/payments');
       return response.data;
     } catch (error) {
       console.error('Error fetching payments:', error);
@@ -24,7 +46,7 @@ const paymentApi = {
    */
   getPaymentById: async (paymentId) => {
     try {
-      const response = await axios.get(`${API_URL}/payments/${paymentId}`);
+      const response = await api.get(`/payments/${paymentId}`);
       return response.data;
     } catch (error) {
       console.error(`Error fetching payment ${paymentId}:`, error);
@@ -39,7 +61,7 @@ const paymentApi = {
    */
   getPaymentsByBillId: async (billId) => {
     try {
-      const response = await axios.get(`${API_URL}/payments/bill/${billId}`);
+      const response = await api.get(`/payments/bill/${billId}`);
       return response.data;
     } catch (error) {
       console.error(`Error fetching payments for bill ${billId}:`, error);
@@ -54,7 +76,7 @@ const paymentApi = {
    */
   getPaymentsByCustomerId: async (customerId) => {
     try {
-      const response = await axios.get(`${API_URL}/payments/customer/${customerId}`);
+      const response = await api.get(`/payments/customer/${customerId}`);
       return response.data;
     } catch (error) {
       console.error(`Error fetching payments for customer ${customerId}:`, error);
@@ -69,7 +91,7 @@ const paymentApi = {
    */
   searchPayments: async (searchTerm) => {
     try {
-      const response = await axios.get(`${API_URL}/payments`, {
+      const response = await api.get('/payments', {
         params: { search: searchTerm }
       });
       return response.data;
@@ -86,7 +108,7 @@ const paymentApi = {
    */
   filterByStatus: async (status) => {
     try {
-      const response = await axios.get(`${API_URL}/payments/filter/status/${status}`);
+      const response = await api.get(`/payments/filter/status/${status}`);
       return response.data;
     } catch (error) {
       console.error('Error filtering payments by status:', error);
@@ -101,7 +123,7 @@ const paymentApi = {
    */
   filterByMethod: async (method) => {
     try {
-      const response = await axios.get(`${API_URL}/payments`, {
+      const response = await api.get('/payments', {
         params: { method }
       });
       return response.data;
@@ -119,7 +141,7 @@ const paymentApi = {
    */
   filterByDateRange: async (startDate, endDate) => {
     try {
-      const response = await axios.get(`${API_URL}/payments/filter/date-range`, {
+      const response = await api.get('/payments/filter/date-range', {
         params: { start: startDate, end: endDate }
       });
       return response.data;
@@ -136,7 +158,7 @@ const paymentApi = {
    */
   createPayment: async (paymentData) => {
     try {
-      const response = await axios.post(`${API_URL}/payments`, paymentData);
+      const response = await api.post('/payments', paymentData);
       return response.data;
     } catch (error) {
       console.error('Error creating payment:', error);
@@ -152,7 +174,7 @@ const paymentApi = {
    */
   updatePayment: async (paymentId, paymentData) => {
     try {
-      const response = await axios.put(`${API_URL}/payments/${paymentId}`, paymentData);
+      const response = await api.put(`/payments/${paymentId}`, paymentData);
       return response.data;
     } catch (error) {
       console.error(`Error updating payment ${paymentId}:`, error);
@@ -167,7 +189,7 @@ const paymentApi = {
    */
   deletePayment: async (paymentId) => {
     try {
-      const response = await axios.delete(`${API_URL}/payments/${paymentId}`);
+      const response = await api.delete(`/payments/${paymentId}`);
       return response.data;
     } catch (error) {
       console.error(`Error deleting payment ${paymentId}:`, error);
@@ -182,7 +204,7 @@ const paymentApi = {
    */
   verifyPayment: async (paymentId) => {
     try {
-      const response = await axios.put(`${API_URL}/payments/${paymentId}/verify`);
+      const response = await api.put(`/payments/${paymentId}/verify`);
       return response.data;
     } catch (error) {
       console.error(`Error verifying payment ${paymentId}:`, error);
@@ -198,7 +220,7 @@ const paymentApi = {
    */
   refundPayment: async (paymentId, reason) => {
     try {
-      const response = await axios.put(`${API_URL}/payments/${paymentId}/refund`, {
+      const response = await api.put(`/payments/${paymentId}/refund`, {
         refund_reason: reason
       });
       return response.data;
@@ -215,7 +237,7 @@ const paymentApi = {
    */
   getPaymentStats: async (period = 'this_month') => {
     try {
-      const response = await axios.get(`${API_URL}/payments/stats/summary`, {
+      const response = await api.get('/payments/stats/summary', {
         params: { period }
       });
       return response.data;

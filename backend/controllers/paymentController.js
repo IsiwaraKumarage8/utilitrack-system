@@ -100,10 +100,22 @@ const paymentController = {
   // POST /api/payments - Create new payment
   createPayment: async (req, res, next) => {
     try {
+      console.log('=== CREATE PAYMENT REQUEST ===');
+      console.log('Request Body:', JSON.stringify(req.body, null, 2));
+      
       const { bill_id, payment_amount, payment_method, received_by, transaction_reference, notes } = req.body;
+
+      console.log('Extracted values:');
+      console.log('- bill_id:', bill_id, typeof bill_id);
+      console.log('- payment_amount:', payment_amount, typeof payment_amount);
+      console.log('- payment_method:', payment_method, typeof payment_method);
+      console.log('- received_by:', received_by, typeof received_by);
+      console.log('- transaction_reference:', transaction_reference);
+      console.log('- notes:', notes);
 
       // Validate required fields
       if (!bill_id || !payment_amount || !payment_method || !received_by) {
+        console.log('Validation failed - missing required fields');
         return next(new AppError('Bill ID, payment amount, payment method, and received by are required', 400));
       }
 
@@ -116,12 +128,15 @@ const paymentController = {
         notes
       });
 
+      console.log('Payment created successfully:', payment);
+
       res.status(201).json({
         success: true,
         message: 'Payment processed successfully',
         data: payment
       });
     } catch (error) {
+      console.error('Error in createPayment:', error);
       next(error);
     }
   },

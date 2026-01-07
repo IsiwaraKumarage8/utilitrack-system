@@ -4,9 +4,12 @@ import Button from '../../components/common/Button';
 import customerApi from '../../api/customerApi';
 import billingApi from '../../api/billingApi';
 import paymentApi from '../../api/paymentApi';
+import { useAuth } from '../../contexts/AuthContext';
 import './RecordPaymentModal.css';
 
 const RecordPaymentModal = ({ isOpen, onClose, onSuccess }) => {
+  const { user } = useAuth();
+  
   const [formData, setFormData] = useState({
     customer_id: '',
     bill_id: '',
@@ -14,7 +17,7 @@ const RecordPaymentModal = ({ isOpen, onClose, onSuccess }) => {
     payment_method: 'Cash',
     transaction_reference: '',
     payment_date: new Date().toISOString().split('T')[0],
-    received_by: ''
+    received_by: user?.user_id || ''
   });
 
   const [customers, setCustomers] = useState([]);
@@ -31,6 +34,13 @@ const RecordPaymentModal = ({ isOpen, onClose, onSuccess }) => {
       fetchCustomers();
     }
   }, [isOpen]);
+
+  // Update received_by when user context changes
+  useEffect(() => {
+    if (user?.user_id) {
+      setFormData(prev => ({ ...prev, received_by: user.user_id }));
+    }
+  }, [user]);
 
   // Fetch bills when customer is selected
   useEffect(() => {
@@ -97,8 +107,14 @@ const RecordPaymentModal = ({ isOpen, onClose, onSuccess }) => {
     e.preventDefault();
     
     // Validate required fields
-    if (!formData.customer_id || !formData.bill_id || !formData.payment_amount || !formData.received_by) {
+    if (!formData.customer_id || !formData.bill_id || !formData.payment_amount) {
       setError('Please fill in all required fields');
+      return;
+    }
+
+    // Validate that user is logged in
+    if (!user?.user_id) {
+      setError('User not authenticated. Please log in again.');
       return;
     }
 
@@ -119,7 +135,7 @@ const RecordPaymentModal = ({ isOpen, onClose, onSuccess }) => {
         payment_method: formData.payment_method,
         transaction_reference: formData.transaction_reference || null,
         payment_date: formData.payment_date,
-        received_by: formData.received_by
+        received_by: user.user_id
       };
       
       // Create payment via API
@@ -133,7 +149,7 @@ const RecordPaymentModal = ({ isOpen, onClose, onSuccess }) => {
         payment_method: 'Cash',
         transaction_reference: '',
         payment_date: new Date().toISOString().split('T')[0],
-        received_by: ''
+        received_by: user?.user_id || ''
       });
       setSelectedBill(null);
       setBills([]);
@@ -332,18 +348,18 @@ const RecordPaymentModal = ({ isOpen, onClose, onSuccess }) => {
             <div className="form-group">
               <label htmlFor="received_by" className="form-label">
                 <User size={16} />
-                Received By *
+                Received By
               </label>
               <input
                 type="text"
                 id="received_by"
                 name="received_by"
-                value={formData.received_by}
-                onChange={handleChange}
+                value={user?.full_name || 'Current User'}
                 className="form-input"
-                placeholder="Enter staff name"
-                required
+                disabled
+                readOnly
               />
+              <p className="form-hint">Payment will be recorded under your user account</p>
             </div>
           </div>
 
