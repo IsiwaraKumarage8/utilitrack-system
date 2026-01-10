@@ -34,12 +34,61 @@ Follow these 4 simple steps to get the system running:
 
 3. Execute it to create the database, all tables, and initial data
 
-**Default Login Created:**
-- Username: `admin`
-- Password: `admin123`
+   **Default Login Created:**
+   - Username: `admin`
+   - Password: `admin123`
+
+### Step 2: Setup new Login
+# ━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. In the "Object Explorer", right-click on the Microsoft Server and click on "Properties".
+
+2. Under "Select a page", go to "Security".
+
+3. Under "Server authentication", select "SQL Server and Windows Authentication mode" and click "OK".
+
+4. In the "Object Explorer", under the "Security" folder, right-click on the "Logins" folder and select "New Login...".
+
+5. Enter a Login name in the "Login name:" field.
+
+6. Select "SQL authentication" and enter a password.
+
+7. Uncheck "Enforce password expiration" and "User must change password at next login".
+
+8. Select "ums_db" database in the "Default database:" field.
+
+9. Under "Select a page", go to "User Mapping". 
+
+10. Under "Users mapped to this login:", check the box next to "ums_db".
+
+11. Under "Database role membership for master", check "db_owner", "db_datawriter", and "db_datareader".
+
+12. Press "OK".
+
+
+### Step 3: Configure Port
+# ━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. Open "Sql Server Configuration Manager" using Windows Search.
+
+2. Under "SQL Server Network Configuration", click on "Protocols for MSSQLSERVER".
+
+3. Make sure "TCP/IP" is "Enabled".
+
+4. Right-click on "TCP/IP" and click "Properties".
+
+5. Go to "IP Addresses" tab in the "TCP/IP Properties" window.
+
+6. Scroll down to "IPAII" and make sure that "TCP Dynamic Ports" is empty and "TCP Port" is set to "1433".
+
+7. Click "OK".
+
+8. Go to "SQL Server Services" in the "Sql Server Configuration Manager" window. 
+
+9. Restart the SQL Server (e.g. "SQL Server (MSSQLSERVER)").
 
 ---
-### Step 2: Setup the Backend
+### Step 4: Setup the Backend
 # ━━━━━━━━━━━━━━━━━━━━━━━━━
 
 1. Open a terminal and navigate to the backend folder:
@@ -61,41 +110,13 @@ Follow these 4 simple steps to get the system running:
 
 4. Open the `.env` file:
 
-   - **Option 1:** If you have setup **SQL Server Express** with **Windows Authentication**, your `DATABASE CONFIGURATION` in the `.env` file should be:
       ```env
       DB_SERVER=localhost\\SQLEXPRESS
       DB_DATABASE=ums_db
-      DB_USER=
-      DB_PASSWORD=
+      DB_USER=<Login Name here>
+      DB_PASSWORD=<Password here>
       DB_PORT=1433
       ```
-
-   - **Option 2:** If you have setup Any SQL Server edition with **Windows Authentication**, your `DATABASE CONFIGURATION` in the `.env` file should be:
-      ```env
-      DB_SERVER=localhost
-      DB_DATABASE=ums_db
-      DB_USER=
-      DB_PASSWORD=
-      DB_PORT=1433
-      ```
-   
-   - **Option 3:** If you have setup **SQL Server Express** with **SQL Authentication**, your `DATABASE CONFIGURATION` in the `.env` file should be:
-      ```env
-      DB_SERVER=localhost\\SQLEXPRESS
-      DB_DATABASE=ums_db
-      DB_USER=sa
-      DB_PASSWORD=<your_password_here>
-      DB_PORT=1433
-      ```
-
-   - **Option 4:** If you have setup **SQL Server** Default Instance with **SQL Authentication**, your `DATABASE CONFIGURATION` in the `.env` file should be:
-      ```env
-      DB_SERVER=localhost
-      DB_DATABASE=ums_db
-      DB_USER=sa
-      DB_PASSWORD=<your_password_here>
-      DB_PORT=1433
-      ``` 
 
 5. Generate a secure JWT secret:
 
